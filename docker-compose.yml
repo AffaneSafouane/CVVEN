@@ -1,0 +1,39 @@
+services:
+    db:
+        build:
+            context: .
+            dockerfile: docker/mysql/Dockerfile
+        environment: 
+            MYSQL_DATABASE: ${MYSQL_DATABASE}
+            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+        container_name: "mysql_db"
+        restart: unless-stopped
+        volumes:
+            - ./db_data:/var/lib/mysql
+        ports:
+            - "3306:3306"
+        networks: 
+            - sf
+
+    web:
+        build:
+            context: .
+            dockerfile: docker/apache/Dockerfile
+        restart: unless-stopped
+        container_name: "php_web"
+        volumes: 
+            - ./src:/var/www/html
+            - ./apache_log:/var/log/apache2
+        ports:
+            - 8080:80
+        depends_on: 
+            - db
+        networks: 
+            - sf
+volumes:
+    db_data:
+        driver: local
+
+networks:
+    sf: 
+        driver: bridge
