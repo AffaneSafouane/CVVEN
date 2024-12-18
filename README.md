@@ -13,7 +13,7 @@ Pour Windows :
 ## Importer projet Docker
 
 ```bash
-git clone [https://github.com/AffaneSafouane/CVVEN.git](https://github.com/AffaneSafouane/CVVEN.git) 
+git clone https://github.com/AffaneSafouane/CVVEN.git 
 ```
 
 Ouvrez un terminal dans votre projet et lancer la commande :
