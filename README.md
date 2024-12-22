@@ -22,7 +22,6 @@ Ouvrez un terminal dans votre projet et lancer la commande :
 docker compose up -d
 ```
 
-<<<<<<< HEAD
 L’utilisateur mysql est *root* et le mot de passe est : *adminSQL1234ADC+*
 
 Si vous souhaitez exécuter des commandes depuis le terminal d'un conteneur vous devez exécuter les commandes suivantes : 
