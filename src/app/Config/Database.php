@@ -29,7 +29,7 @@ class Database extends Config
         'hostname'     => 'mysql_db',
         'username'     => 'root',
         'password'     => 'adminSQL1234ADC+',
-        'database'     => 'cvven_db',
+        'database'     => 'cvven',
         'DBDriver'     => 'MySQLi',
         'DBPrefix'     => '',
         'pConnect'     => false,

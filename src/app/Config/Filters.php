@@ -70,7 +70,7 @@ class Filters extends BaseFilters
     public array $globals = [
         'before' => [
             // 'honeypot',
-            // 'csrf',
+            'csrf', // Ajouter ['except' => ['api/record/save']], lors de l'implémentation de l'api de paiement
             // 'invalidchars',
         ],
         'after' => [

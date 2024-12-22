@@ -2,118 +2,109 @@
 #        Script MySQL.
 #------------------------------------------------------------
 
-CREATE DATABASE IF NOT EXISTS cvven_db;
+CREATE DATABASE IF NOT EXISTS cvven;
 
-USE cvven_db;
+USE cvven;
 
 #------------------------------------------------------------
-# Table: clients
+# Table: utilisateur
 #------------------------------------------------------------
 
-CREATE TABLE clients(
-        id_client        Int  Auto_increment  NOT NULL ,
-        nom_client       Varchar (150) NOT NULL ,
-        prenom_client    Varchar (150) NOT NULL ,
-        adresse_client   Varchar (150) NOT NULL ,
-        password_client  Varchar (255) NOT NULL ,
-        admin            Bool NOT NULL ,
-        email_client     Varchar (150) NOT NULL ,
-        telephone_client Varchar (10) NOT NULL 
-	,CONSTRAINT clients_AK UNIQUE (email_client,telephone_client)
-	,CONSTRAINT clients_PK PRIMARY KEY (id_client)
+CREATE TABLE utilisateur(
+        u_id        Int  Auto_increment  NOT NULL ,
+        u_nom       Varchar (150) NOT NULL ,
+        u_prenom    Varchar (150) NOT NULL ,
+        u_adresse   Varchar (150) NOT NULL ,
+        u_mot_de_passe  Varchar (255) NOT NULL ,
+        u_admin     Boolean NOT NULL ,
+        u_email     Varchar (150) NOT NULL ,
+        u_telephone Varchar (10) NOT NULL,
+        u_date_creation DATETIME DEFAULT CURRENT_TIMESTAMP,
+        u_derniere_connexion DATETIME DEFAULT NULL 
+	,CONSTRAINT utilisateur_AK UNIQUE (u_email, u_telephone)
+	,CONSTRAINT utilisateur_PK PRIMARY KEY (u_id)
 )ENGINE=InnoDB;
-
 
 #------------------------------------------------------------
 # Table: reservation
 #------------------------------------------------------------
 
 CREATE TABLE reservation(
-        id_reservation           Int  Auto_increment  NOT NULL ,
-        date_debut_reservation   Date NOT NULL ,
-        date_fin_reservation     Date NOT NULL ,
-        type_pension_reservation Varchar (255) NOT NULL ,
-        nb_personnes_reservation Int NOT NULL ,
-        id_client                Int NOT NULL
-	,CONSTRAINT reservation_PK PRIMARY KEY (id_reservation)
-
-	,CONSTRAINT reservation_clients_FK FOREIGN KEY (id_client) REFERENCES clients(id_client)
+        r_id            Int  Auto_increment  NOT NULL ,
+        r_date_debut    Date NOT NULL ,
+        r_date_fin      Date NOT NULL ,
+        r_type_pension  Varchar (255) NOT NULL ,
+        r_nb_personnes  Int NOT NULL ,
+        r_date          DATE DEFAULT (CURRENT_DATE),
+        u_fk_id         Int NOT NULL
+	,CONSTRAINT reservation_PK PRIMARY KEY (r_id)
+	,CONSTRAINT client_reservation_FK FOREIGN KEY (u_fk_id) REFERENCES utilisateur(u_id)
 )ENGINE=InnoDB;
-
 
 #------------------------------------------------------------
 # Table: salle_reunion
 #------------------------------------------------------------
 
 CREATE TABLE salle_reunion(
-        num_salle_reunion   Int NOT NULL ,
-        type_salle_reunion  Varchar (150) NOT NULL ,
-        description_reunion Varchar (255) NOT NULL ,
-        tarif_reunion       Float NOT NULL ,
-        id_reservation      Int
-	,CONSTRAINT salle_reunion_PK PRIMARY KEY (num_salle_reunion)
-
-	,CONSTRAINT salle_reunion_reservation_FK FOREIGN KEY (id_reservation) REFERENCES reservation(id_reservation)
+        sr_num          Int NOT NULL ,
+        sr_type         Varchar (150) NOT NULL ,
+        sr_description  Varchar (255) NOT NULL ,
+        sr_tarif        Float NOT NULL ,
+        r_fk_id         Int
+	,CONSTRAINT salle_reunion_PK PRIMARY KEY (sr_num)
+	,CONSTRAINT salle_reunion_reservation_FK FOREIGN KEY (r_fk_id) REFERENCES reservation(r_id)
 )ENGINE=InnoDB;
 
-
 #------------------------------------------------------------
-# Table: activités
+# Table: activite
 #------------------------------------------------------------
 
-CREATE TABLE activites(
-        id_activite          Int  Auto_increment  NOT NULL ,
-        nom_activite         Varchar (150) NOT NULL ,
-        date_debut_activite  Datetime NOT NULL ,
-        date_fin_activite    Datetime NOT NULL ,
-        description_activite Varchar (255) NOT NULL ,
-        tarif_activite       Float NOT NULL
-	,CONSTRAINT activites_PK PRIMARY KEY (id_activite)
+CREATE TABLE activite(
+        a_id          Int  Auto_increment  NOT NULL ,
+        a_nom         Varchar (150) NOT NULL ,
+        a_date_debut  Datetime NOT NULL ,
+        a_date_fin    Datetime NOT NULL ,
+        a_description Varchar (255) NOT NULL ,
+        a_tarif       Float NOT NULL
+	,CONSTRAINT activite_PK PRIMARY KEY (a_id)
 )ENGINE=InnoDB;
 
-
 #------------------------------------------------------------
-# Table: hebergements
+# Table: chambre
 #------------------------------------------------------------
 
-CREATE TABLE hebergements(
-        numero_chambre          Int NOT NULL ,
-        type_hebergement        Varchar (150) NOT NULL ,
-        descritpion_hebergement Varchar (255) NOT NULL ,
-        tarif_hebergement       Float NOT NULL ,
-        option_menage           Bool DEFAULT false ,
-        id_reservation          Int
-	,CONSTRAINT hebergements_PK PRIMARY KEY (numero_chambre)
-
-	,CONSTRAINT hebergements_reservation_FK FOREIGN KEY (id_reservation) REFERENCES reservation(id_reservation)
+CREATE TABLE chambre(
+        ch_numero               Int NOT NULL ,
+        ch_type                 Varchar (150) NOT NULL ,
+        ch_descritption         Varchar (255) NOT NULL ,
+        ch_tarif                Float NOT NULL ,
+        ch_option_menage        Boolean DEFAULT false ,
+        r_fk_id                 Int
+	,CONSTRAINT chambre_PK PRIMARY KEY (ch_numero)
+	,CONSTRAINT chambre_reservation_FK FOREIGN KEY (r_fk_id) REFERENCES reservation(r_id)
 )ENGINE=InnoDB;
-
 
 #------------------------------------------------------------
 # Table: transport
 #------------------------------------------------------------
 
 CREATE TABLE transport(
-        id_transport    Int  Auto_increment  NOT NULL ,
-        type_transport  Varchar (150) NOT NULL ,
-        tarif_transport Float NOT NULL ,
-        id_reservation  Int
-	,CONSTRAINT transport_PK PRIMARY KEY (id_transport)
-
-	,CONSTRAINT transport_reservation_FK FOREIGN KEY (id_reservation) REFERENCES reservation(id_reservation)
+        t_id    Int  Auto_increment  NOT NULL ,
+        t_type  Varchar (150) NOT NULL ,
+        t_tarif Float NOT NULL ,
+        r_fk_id Int
+	,CONSTRAINT transport_PK PRIMARY KEY (t_id)
+	,CONSTRAINT transport_reservation_FK FOREIGN KEY (r_fk_id) REFERENCES reservation(r_id)
 )ENGINE=InnoDB;
-
 
 #------------------------------------------------------------
 # Table: participer
 #------------------------------------------------------------
 
 CREATE TABLE participer(
-        id_reservation Int NOT NULL ,
-        id_activite    Int NOT NULL
-	,CONSTRAINT participer_PK PRIMARY KEY (id_reservation,id_activite)
-
-	,CONSTRAINT participer_reservation_FK FOREIGN KEY (id_reservation) REFERENCES reservation(id_reservation)
-	,CONSTRAINT participer_activites0_FK FOREIGN KEY (id_activite) REFERENCES activites(id_activite)
+        r_fk_id    Int NOT NULL ,
+        a_fk_id    Int NOT NULL
+	,CONSTRAINT participer_PK PRIMARY KEY (r_fk_id ,a_fk_id)
+	,CONSTRAINT participer_reservation_FK FOREIGN KEY (r_fk_id) REFERENCES reservation(r_id)
+	,CONSTRAINT participer_activite_FK FOREIGN KEY (a_fk_id) REFERENCES activite(a_id)
 )ENGINE=InnoDB;
-

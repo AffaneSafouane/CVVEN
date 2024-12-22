@@ -7,13 +7,13 @@ use CodeIgniter\Router\RouteCollection;
  */
 $routes->get('/', 'Home::index');
 
-use App\Controllers\Clients;
+use App\Controllers\UserController;
 use App\Controllers\Pages;
 
-$routes->get('clients', [Clients::class, 'index']);
-$routes->get('clients/new', [Clients::class, 'new']);
-$routes->post('clients', [Clients::class, 'create']);
-$routes->get('clients/(:segment)', [Clients::class, 'show']);
+$routes->get('user', [UserController::class, 'index']);
+$routes->get('user/new', [UserController::class, 'new']);
+$routes->post('user', [UserController::class, 'create']);
+$routes->get('user/(:segment)', [UserController::class, 'show']);
 
 $routes->get('pages', [Pages::class, 'index']);
 $routes->get('(:segment)', [Pages::class, 'view']);
