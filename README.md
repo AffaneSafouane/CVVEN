@@ -22,7 +22,6 @@ Ouvrez un terminal dans votre projet et lancer la commande :
 docker compose up -d
 ```
 
-<<<<<<< HEAD
 L’utilisateur mysql est *root* et le mot de passe est : *adminSQL1234ADC+*
 
 Si vous souhaitez exécuter des commandes depuis le terminal d'un conteneur vous devez exécuter les commandes suivantes : 
@@ -47,6 +46,3 @@ Vous pouvez également accéder à la console depuis l'application docker deskto
 - Enfin cliquer sur l'onglet exec et exécuter la commande souhaiter
 ![alt text](image-3.png)
 
-=======
-L’utilisateur mysql est *root* et le mot de passe est : *adminSQL1234ADC+*
->>>>>>> 16a98b320261924cfc816be7c9bfee7c62e1d70a
