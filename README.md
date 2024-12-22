@@ -47,6 +47,5 @@ Vous pouvez également accéder à la console depuis l'application docker deskto
 - Enfin cliquer sur l'onglet exec et exécuter la commande souhaiter
 ![alt text](image-3.png)
 
-=======
 L’utilisateur mysql est *root* et le mot de passe est : *adminSQL1234ADC+*
->>>>>>> 16a98b320261924cfc816be7c9bfee7c62e1d70a
+
