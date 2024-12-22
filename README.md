@@ -45,4 +45,3 @@ Vous pouvez également accéder à la console depuis l'application docker deskto
 
 - Enfin cliquer sur l'onglet exec et exécuter la commande souhaiter
 ![alt text](image-3.png)
-
