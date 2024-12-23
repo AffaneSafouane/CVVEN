@@ -30,9 +30,9 @@ class UserController extends BaseController {
         // @TODO rendre accessible uniquement au client concerné
         $model = model(UserModel::class);
 
-        $data['users'] = $model->getUsers($user_id);
+        $data['user'] = $model->getUsers($user_id);
 
-        if ($data['users'] === null) {
+        if ($data['user'] === null) {
             throw new PageNotFoundException('Impossible de trouver l\'utilisateur');
         }
 
