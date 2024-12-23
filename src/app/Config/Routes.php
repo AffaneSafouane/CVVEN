@@ -10,10 +10,10 @@ $routes->get('/', 'Home::index');
 use App\Controllers\UserController;
 use App\Controllers\Pages;
 
-$routes->get('user', [UserController::class, 'index']);
-$routes->get('user/new', [UserController::class, 'new']);
-$routes->post('user', [UserController::class, 'create']);
-$routes->get('user/(:segment)', [UserController::class, 'show']);
+$routes->get('users', [UserController::class, 'index']);
+$routes->get('users/new', [UserController::class, 'new']);
+$routes->post('users', [UserController::class, 'create']);
+$routes->get('users/(:segment)', [UserController::class, 'show']);
 
 $routes->get('pages', [Pages::class, 'index']);
 $routes->get('(:segment)', [Pages::class, 'view']);

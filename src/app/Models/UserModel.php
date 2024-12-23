@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use CodeIgniter\Model;
-use App\Entities\Users;
 
 /**
  * Description of UsersModel

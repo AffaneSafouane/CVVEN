@@ -14,22 +14,20 @@ use ReflectionException;
 class UserController extends BaseController {
     public function index(): string
     {
-        // TODO rendre accessible uniquement aux administrateurs
+        // @TODO rendre accessible uniquement aux administrateurs
         $model = model(UserModel::class);
 
         $data = [
             'users' => $model->getUsers(null),
-            'title'     => 'Liste utilisateurs',
+            'title'     => 'Liste des utilisateurs',
         ];
 
-        return view('templates/header', $data)
-            . view('user/index')
-            . view('templates/footer');
+        return view('users/index', $data);
     }
 
     public function show(?int $user_id): string
     {
-        // TODO rendre accessible uniquement au client concerné
+        // @TODO rendre accessible uniquement au client concerné
         $model = model(UserModel::class);
 
         $data['users'] = $model->getUsers($user_id);
@@ -40,9 +38,7 @@ class UserController extends BaseController {
 
         $data['title'] = "Informations utilisateur";
 
-        return view('templates/header', $data)
-            . view('user/view')
-            . view('templates/footer');
+        return view('users/view', $data);
     }
 
     public function new(): string
@@ -50,9 +46,7 @@ class UserController extends BaseController {
         helper('form');
 
         $data = ["title" => 'Créer un nouvel utilisateur'];
-        return view('templates/header', $data)
-            . view('user/create')
-            . view('templates/footer');
+        return view('users/create', $data);
     }
 
     /**
@@ -92,8 +86,6 @@ class UserController extends BaseController {
             'u_adresse' => $post['address']
         ]);
 
-        return view('templates/header', ['title' => 'Créer un nouvel utilisateur'])
-            . view('user/success')
-            . view('templates/footer');
+        return view('users/success', ['title' => 'Créer un nouvel utilisateur']);
     }
 }
