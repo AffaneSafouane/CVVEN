@@ -30,6 +30,17 @@ services:
             - db
         networks: 
             - sf
+    
+    phpmyadmin:
+        image: phpmyadmin
+        restart: always
+        ports:
+            - 80:80
+        environment:
+            PMA_HOST: db
+            PMA_PORT: 3306
+        networks: 
+            - sf
 volumes:
     db_data:
         driver: local

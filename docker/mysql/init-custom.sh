@@ -7,8 +7,9 @@ if [ -z "$(ls -A /var/lib/mysql)" ]; then
     docker-entrypoint.sh mysqld & sleep 10
 
     echo "Importing initialization scripts..."
-    mysql -uroot -p${MYSQL_ROOT_PASSWORD} < /docker-scripts/01_init.sql
-    mysql -uroot -p${MYSQL_ROOT_PASSWORD} < /docker-scripts/02_data.sql
+    # mysql -uroot -p${MYSQL_ROOT_PASSWORD} < /docker-scripts/01_init.sql
+    # mysql -uroot -p${MYSQL_ROOT_PASSWORD} < /docker-scripts/02_data.sql
+    mysql -uroot -p${MYSQL_ROOT_PASSWORD} < /docker-scripts/init.sql
     echo "Database initialized."
 
     killall mysqld
