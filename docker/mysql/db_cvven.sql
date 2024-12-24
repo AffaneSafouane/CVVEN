@@ -11,16 +11,18 @@ USE cvven;
 #------------------------------------------------------------
 
 CREATE TABLE utilisateur(
-        u_id        Int  Auto_increment  NOT NULL ,
-        u_nom       Varchar (150) NOT NULL ,
-        u_prenom    Varchar (150) NOT NULL ,
-        u_adresse   Varchar (150) NOT NULL ,
-        u_mot_de_passe  Varchar (255) NOT NULL ,
-        u_admin     Boolean NOT NULL ,
-        u_email     Varchar (150) NOT NULL ,
-        u_telephone Varchar (10) NOT NULL,
-        u_date_creation DATETIME DEFAULT CURRENT_TIMESTAMP,
-        u_derniere_connexion DATETIME DEFAULT NULL 
+        u_id                    Int Auto_increment NOT NULL ,
+        u_nom                   Varchar (150) NOT NULL ,
+        u_prenom                Varchar (150) NOT NULL ,
+        u_adresse               Varchar (150) NOT NULL ,
+        u_mot_de_passe          Varchar (255) NOT NULL ,
+        u_admin                 Boolean DEFAULT FALSE ,
+        u_email                 Varchar (150) NOT NULL ,
+        u_telephone             Varchar (10) NULL,
+        u_date_creation         DATE DEFAULT (CURRENT_DATE),
+        u_verifie               BOOLEAN DEFAULT FALSE,
+        u_derniere_connexion    DATETIME DEFAULT NULL,
+        u_date_naissance        DATE NOT NULL 
 	,CONSTRAINT utilisateur_AK UNIQUE (u_email, u_telephone)
 	,CONSTRAINT utilisateur_PK PRIMARY KEY (u_id)
 )ENGINE=InnoDB;
@@ -33,9 +35,10 @@ CREATE TABLE reservation(
         r_id            Int  Auto_increment  NOT NULL ,
         r_date_debut    Date NOT NULL ,
         r_date_fin      Date NOT NULL ,
-        r_type_pension  Varchar (255) NOT NULL ,
+        r_type_pension  Varchar (50) NOT NULL ,
         r_nb_personnes  Int NOT NULL ,
         r_date          DATE DEFAULT (CURRENT_DATE),
+        r_statut        VARCHAR(50)  DEFAULT "En attente",
         u_fk_id         Int NOT NULL
 	,CONSTRAINT reservation_PK PRIMARY KEY (r_id)
 	,CONSTRAINT client_reservation_FK FOREIGN KEY (u_fk_id) REFERENCES utilisateur(u_id)
@@ -47,9 +50,10 @@ CREATE TABLE reservation(
 
 CREATE TABLE salle_reunion(
         sr_num          Int NOT NULL ,
-        sr_type         Varchar (150) NOT NULL ,
+        sr_type         Varchar (50) NOT NULL ,
         sr_description  Varchar (255) NOT NULL ,
         sr_tarif        Float NOT NULL ,
+        sr_disponible   BOOLEAN NOT NULL,
         r_fk_id         Int
 	,CONSTRAINT salle_reunion_PK PRIMARY KEY (sr_num)
 	,CONSTRAINT salle_reunion_reservation_FK FOREIGN KEY (r_fk_id) REFERENCES reservation(r_id)
@@ -76,9 +80,10 @@ CREATE TABLE activite(
 CREATE TABLE chambre(
         ch_numero               Int NOT NULL ,
         ch_type                 Varchar (150) NOT NULL ,
-        ch_descritption         Varchar (255) NOT NULL ,
+        ch_description         Varchar (255) NOT NULL ,
         ch_tarif                Float NOT NULL ,
         ch_option_menage        Boolean DEFAULT false ,
+        ch_disponible           BOOLEAN NOT NULL,
         r_fk_id                 Int
 	,CONSTRAINT chambre_PK PRIMARY KEY (ch_numero)
 	,CONSTRAINT chambre_reservation_FK FOREIGN KEY (r_fk_id) REFERENCES reservation(r_id)
