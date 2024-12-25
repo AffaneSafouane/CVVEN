@@ -1,4 +1,4 @@
-FROM mysql:8.0
+FROM mysql:8.4
 
 # Copy SQL files for database creation and data insertion
 # COPY ./docker/mysql/db_cvven.sql /docker-entrypoint-initdb.d/01_init.sql

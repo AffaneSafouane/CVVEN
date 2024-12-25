@@ -37,7 +37,7 @@
 
             <div class="mb-3">
                 <label class="form-label" for="phone">Téléphone</label>
-                <input class="form-control" type="tel" name="phone" id="phone" pattern="[0-9]{2}[0-9]{2}[0-9]{2}[0-9]{2}[0-9]{2}" value="<?= set_value('phone'); ?>" required/>
+                <input class="form-control" type="tel" name="phone" id="phone" pattern="[0-9]{2}[0-9]{2}[0-9]{2}[0-9]{2}[0-9]{2}" value="<?= set_value('phone'); ?>"/>
             </div>
 
             <div class="mb-3">

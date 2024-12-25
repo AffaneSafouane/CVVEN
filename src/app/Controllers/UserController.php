@@ -58,16 +58,18 @@ class UserController extends BaseController {
 
         $data = $this->request->getPost(['lastName', 'name', 'address', 'password', 'password_conf', 'phone', 'email']);
 
-        // Checks whether the submitted data passed the validation rules.
-        if (!$this->validateData($data, [
+        $rules = [
             'lastName' => 'required|trim|max_length[255]|min_length[3]',
             'name' => 'required|trim|max_length[255]|min_length[3]',
             'address'  => 'required|trim|max_length[255]|min_length[10]',
             'password'  => 'required|trim|matches[password_conf]|max_length[255]|min_length[6]',
             'password_conf' => 'trim|required|matches[password]',
-            'phone'  => 'required|trim|is_unique[utilisateur.u_telephone]|max_length[10]|min_length[10]',
+            'phone'  => 'trim|is_unique[utilisateur.u_telephone]|max_length[10]|min_length[10]',
             "email" => "required|trim|valid_email|is_unique[utilisateur.u_email]|max_length[255]|min_length[10]",
-        ])) {
+        ];
+
+        // Checks whether the submitted data passed the validation rules.
+        if (!$this->validateData($data, $rules)) {
             // The validation fails, so returns the form.
             return $this->new();
         }

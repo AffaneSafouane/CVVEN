@@ -1,4 +1,4 @@
-FROM php:8.3-apache
+FROM php:8.4.2-apache
 
 # Activer ServerName pour Apache
 RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
