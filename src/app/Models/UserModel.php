@@ -1,31 +1,24 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
-use CodeIgniter\Model;
+use CodeIgniter\Shield\Models\UserModel as ShieldUserModel;
 
-/**
- * Description of UsersModel
- *
- * @author Affane Safouane, Sisakoun Matthew, Ghouas Ilyes, Krouch Kellyann
- */
-class UserModel extends Model {
-    protected $table = 'utilisateur';
-    protected $primaryKey = 'u_id';
-
-    protected $allowedFields = ['u_nom', 'u_prenom', 'u_email', 'u_adresse', 'u_mot_de_passe', "u_telephone", "u_admin", "u_date_creation"];
-
-    /**
-     * @param ?int $user_id
-     *
-     * @return ?array
-     */
-    public function getUsers(?int $user_id): ?array
+class UserModel extends ShieldUserModel
+{
+    protected function initialize(): void
     {
-        if (!$user_id) {
-            return $this->findAll();
-        }
+        parent::initialize();
 
-        return $this->find($user_id);
+        $this->allowedFields = [
+            ...$this->allowedFields,
+            'name',
+            'last_name',
+            'address',
+            'phone',
+            'birth_date',
+        ];
     }
 }

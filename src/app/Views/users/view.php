@@ -4,9 +4,9 @@
  * @var string $title
  */
 ?>
-<?= $this->extend('base'); ?>
+<?= $this->extend('layout'); ?>
 
-<?= $this->section('content'); ?>
+<?= $this->section('main'); ?>
 <section class="container px-4">
     <div class="d-flex justify-content-between">
         <h1><?= esc($title); ?></h1>

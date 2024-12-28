@@ -1,7 +1,9 @@
 <?php /** @var string $title */; ?>
-<?= $this->extend('base'); ?>
+<?= $this->extend('layout'); ?>
 
-<?= $this->section('content'); ?>
+<?= $this->section('title') ?><?= esc($title) ?><?= $this->endSection() ?>
+
+<?= $this->section('main'); ?>
 <section class="container px-4">
     <div class="alert alert-success">
         <h2><?= esc($title); ?></h2>

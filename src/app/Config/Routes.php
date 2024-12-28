@@ -7,13 +7,9 @@ use CodeIgniter\Router\RouteCollection;
  */
 $routes->get('/', 'Home::index');
 
-use App\Controllers\UserController;
-use App\Controllers\Pages;
+//use App\Controllers\UserController;
 
-$routes->get('users', [UserController::class, 'index']);
-$routes->get('users/new', [UserController::class, 'new']);
-$routes->post('users', [UserController::class, 'create']);
-$routes->get('users/(:segment)', [UserController::class, 'show']);
+service('auth')->routes($routes);
 
-$routes->get('pages', [Pages::class, 'index']);
-$routes->get('(:segment)', [Pages::class, 'view']);
+//$routes->get('admin/users', [UserController::class, 'index']);
+//$routes->get('users/(:segment)', [UserController::class, 'show']);

@@ -1,5 +1,5 @@
-<header class="bg-dark mb-auto">
-    <nav class="navbar navbar-expand-lg sticky-top">
+<header class="mb-auto shadow-sm sticky-top bg-dark-subtle">
+    <nav class="navbar navbar-expand-lg">
         <div class="container px-4">
             <a class="navbar-brand" href="<?= site_url('/') ?>">CVVEN</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
@@ -12,8 +12,6 @@
                     <!-- @TODO Vérifier si l'utilisateur est connecté ou non, si oui se déconnecter, si non se connecter -->
                     <!-- <a class="nav-link" href="#">Se connecter</a> -->
                     <!-- <a class="nav-link" href="#">Se déconnecter</a> -->
-                    <!-- @TODO le lien pour l'inscription sera dans la page de login -->
-                    <a class="nav-link" href="<?= site_url('users/new'); ?>">Inscription</a>
                 </div>
             </div>
         </div>

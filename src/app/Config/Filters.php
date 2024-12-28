@@ -12,6 +12,7 @@ use CodeIgniter\Filters\InvalidChars;
 use CodeIgniter\Filters\PageCache;
 use CodeIgniter\Filters\PerformanceMetrics;
 use CodeIgniter\Filters\SecureHeaders;
+use App\Filters\TrimFilter;
 
 class Filters extends BaseFilters
 {
@@ -34,6 +35,7 @@ class Filters extends BaseFilters
         'forcehttps'    => ForceHTTPS::class,
         'pagecache'     => PageCache::class,
         'performance'   => PerformanceMetrics::class,
+        'trim'          => TrimFilter::class,
     ];
 
     /**
@@ -70,7 +72,8 @@ class Filters extends BaseFilters
     public array $globals = [
         'before' => [
             // 'honeypot',
-            'csrf', // Ajouter ['except' => ['api/record/save']], lors de l'implémentation de l'api de paiement
+            'csrf', // @TODO Ajouter ['except' => ['api/record/save']], lors de l'implémentation de l'api de paiement
+            'session' => ['except' => ['login*', 'register', 'auth/a/*']],
             // 'invalidchars',
         ],
         'after' => [
@@ -93,7 +96,7 @@ class Filters extends BaseFilters
      * @var array<string, list<string>>
      */
     public array $methods = [
-        'POST' => ['csrf'],
+        'POST' => ['csrf', 'trim'],
     ];
 
     /**

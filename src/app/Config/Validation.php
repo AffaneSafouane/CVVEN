@@ -41,4 +41,79 @@ class Validation extends BaseConfig
     // --------------------------------------------------------------------
     // Rules
     // --------------------------------------------------------------------
+    public array $registration = [
+        'username' => [
+            'label' => 'Auth.username',
+            'rules' => [
+                'max_length[30]',
+                'min_length[3]',
+                'regex_match[/\A[a-zA-Z0-9\.]+\z/]',
+                'is_unique[users.username]',
+            ],
+        ],
+        'phone' => [
+            'label' => 'Téléphone',
+            'rules' => [
+                'max_length[10]',
+                'min_length[10]',
+                'regex_match[/\A[0-9]+\z/]',
+                'is_unique[users.phone]',
+            ],
+        ],
+        'email' => [
+            'label' => 'Auth.email',
+            'rules' => [
+                'required',
+                'max_length[254]',
+                'valid_email',
+                'is_unique[auth_identities.secret]',
+            ],
+        ],
+        'password' => [
+            'label' => 'Auth.password',
+            'rules' => [
+                'required',
+                'max_byte[72]',
+                'strong_password[]',
+            ],
+            'errors' => [
+                'max_byte' => 'Auth.errorPasswordTooLongBytes',
+            ]
+        ],
+        'password_confirm' => [
+            'label' => 'Auth.passwordConfirm',
+            'rules' => 'trim|required|matches[password]',
+        ],
+        'last_name' => [
+            'label' => 'Nom de famille',
+            'rules' => [
+                'required',
+                'max_length[100]',
+                'min_length[3]',
+                'regex_match[/\A[a-zA-Z]+\z/]',
+            ]
+        ],
+        'name' => [
+            'label' => 'Prénom',
+            'rules' => [
+                'required',
+                'max_length[100]',
+                'min_length[3]',
+                'regex_match[/\A[a-zA-Z]+\z/]',
+            ]
+        ],
+        'address' => [
+            'label' => 'Adresse',
+            'rules' => [
+                'required',
+                'max_length[150]',
+                'min_length[10]',
+                'regex_match[/^[\w\s\.,-]+$/]',
+            ]
+        ],
+        'birth_date' => [
+            'label' => 'Date de naissance',
+            'rules' => 'valid_date[Y-m-d]'
+        ]
+    ];
 }

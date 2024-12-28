@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Models\OldUserModel;
 use App\Models\UserModel;
 use CodeIgniter\Exceptions\PageNotFoundException;
 use ReflectionException;
@@ -18,7 +19,7 @@ class UserController extends BaseController {
         $model = model(UserModel::class);
 
         $data = [
-            'users' => $model->getUsers(null),
+            'users' => $model->findAll(10),
             'title'     => 'Liste des utilisateurs',
         ];
 
@@ -30,7 +31,7 @@ class UserController extends BaseController {
         // @TODO rendre accessible uniquement au client concerné
         $model = model(UserModel::class);
 
-        $data['user'] = $model->getUsers($user_id);
+        $data['user'] = $model->findById($user_id);
 
         if ($data['user'] === null) {
             throw new PageNotFoundException('Impossible de trouver l\'utilisateur');
@@ -41,53 +42,53 @@ class UserController extends BaseController {
         return view('users/view', $data);
     }
 
-    public function new(): string
-    {
-        helper('form');
-
-        $data = ["title" => 'Créer un nouvel utilisateur'];
-        return view('users/create', $data);
-    }
-
-    /**
-     * @throws ReflectionException
-     */
-    public function create(): string
-    {
-        helper('form');
-
-        $data = $this->request->getPost(['lastName', 'name', 'address', 'password', 'password_conf', 'phone', 'email']);
-
-        $rules = [
-            'lastName' => 'required|trim|max_length[255]|min_length[3]',
-            'name' => 'required|trim|max_length[255]|min_length[3]',
-            'address'  => 'required|trim|max_length[255]|min_length[10]',
-            'password'  => 'required|trim|matches[password_conf]|max_length[255]|min_length[6]',
-            'password_conf' => 'trim|required|matches[password]',
-            'phone'  => 'trim|is_unique[utilisateur.u_telephone]|max_length[10]|min_length[10]',
-            "email" => "required|trim|valid_email|is_unique[utilisateur.u_email]|max_length[255]|min_length[10]",
-        ];
-
-        // Checks whether the submitted data passed the validation rules.
-        if (!$this->validateData($data, $rules)) {
-            // The validation fails, so returns the form.
-            return $this->new();
-        }
-
-        // Gets the validated data.
-        $post = $this->validator->getValidated();
-
-        $model = model(UserModel::class);
-
-        $model->save([
-            'u_nom' => $post['lastName'],
-            'u_prenom' => $post['name'],
-            'u_email' => $post['email'],
-            'u_password' => password_hash($post['password'], PASSWORD_DEFAULT),
-            'u_telephone' => $post['phone'],
-            'u_adresse' => $post['address']
-        ]);
-
-        return view('users/success', ['title' => 'Créer un nouvel utilisateur']);
-    }
+//    public function new(): string
+//    {
+//        helper('form');
+//
+//        $data = ["title" => 'Créer un nouvel utilisateur'];
+//        return view('users/create', $data);
+//    }
+//
+//    /**
+//     * @throws ReflectionException
+//     */
+//    public function create(): string
+//    {
+//        helper('form');
+//
+//        $data = $this->request->getPost(['lastName', 'name', 'address', 'password', 'password_conf', 'phone', 'email']);
+//
+//        $rules = [
+//            'lastName' => 'required|max_length[255]|min_length[3]',
+//            'name' => 'required|max_length[255]|min_length[3]',
+//            'address'  => 'required|max_length[255]|min_length[10]',
+//            'password'  => 'required|matches[password_conf]|max_length[255]|min_length[6]',
+//            'password_conf' => 'required|matches[password]',
+//            'phone'  => 'is_unique[utilisateur.u_telephone]|max_length[10]|min_length[10]',
+//            "email" => "required|valid_email|is_unique[utilisateur.u_email]|max_length[255]|min_length[10]",
+//        ];
+//
+//        // Checks whether the submitted data passed the validation rules.
+//        if (!$this->validateData($data, $rules)) {
+//            // The validation fails, so returns the form.
+//            return $this->new();
+//        }
+//
+//        // Gets the validated data.
+//        $post = $this->validator->getValidated();
+//
+//        $model = model(UserModel::class);
+//
+//        $model->save([
+//            'u_nom' => $post['lastName'],
+//            'u_prenom' => $post['name'],
+//            'u_email' => $post['email'],
+//            'u_password' => password_hash($post['password'], PASSWORD_DEFAULT),
+//            'u_telephone' => $post['phone'],
+//            'u_adresse' => $post['address']
+//        ]);
+//
+//        return view('users/success', ['title' => 'Créer un nouvel utilisateur']);
+//    }
 }
