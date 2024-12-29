@@ -7,6 +7,7 @@ use CodeIgniter\Validation\StrictRules\CreditCardRules;
 use CodeIgniter\Validation\StrictRules\FileRules;
 use CodeIgniter\Validation\StrictRules\FormatRules;
 use CodeIgniter\Validation\StrictRules\Rules;
+use App\Validation\DateValidation;
 
 class Validation extends BaseConfig
 {
@@ -25,6 +26,7 @@ class Validation extends BaseConfig
         FormatRules::class,
         FileRules::class,
         CreditCardRules::class,
+        DateValidation::class,
     ];
 
     /**
@@ -113,7 +115,11 @@ class Validation extends BaseConfig
         ],
         'birth_date' => [
             'label' => 'Date de naissance',
-            'rules' => 'valid_date[Y-m-d]'
+            'rules' => [
+                'required',
+                'valid_date[Y-m-d]',
+                'isValidBirthDate',
+            ]
         ]
     ];
 }
