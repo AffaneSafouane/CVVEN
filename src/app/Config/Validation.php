@@ -47,6 +47,7 @@ class Validation extends BaseConfig
         'username' => [
             'label' => 'Auth.username',
             'rules' => [
+                'permit_empty',
                 'max_length[30]',
                 'min_length[3]',
                 'regex_match[/\A[a-zA-Z0-9\.]+\z/]',
@@ -56,6 +57,7 @@ class Validation extends BaseConfig
         'phone' => [
             'label' => 'Téléphone',
             'rules' => [
+                'permit_empty',
                 'max_length[10]',
                 'min_length[10]',
                 'regex_match[/\A[0-9]+\z/]',
@@ -92,7 +94,7 @@ class Validation extends BaseConfig
                 'required',
                 'max_length[100]',
                 'min_length[3]',
-                'regex_match[/\A[a-zA-Z]+\z/]',
+                'regex_match[/^[a-zA-Zàâäéèêëîïôöùûüç\'\-]+$/]',
             ]
         ],
         'name' => [
@@ -101,7 +103,7 @@ class Validation extends BaseConfig
                 'required',
                 'max_length[100]',
                 'min_length[3]',
-                'regex_match[/\A[a-zA-Z]+\z/]',
+                'regex_match[/^[a-zA-Zàâäéèêëîïôöùûüç\'\-]+$/]',
             ]
         ],
         'address' => [
@@ -110,7 +112,6 @@ class Validation extends BaseConfig
                 'required',
                 'max_length[150]',
                 'min_length[10]',
-                'regex_match[/^[\w\s\.,-]+$/]',
             ]
         ],
         'birth_date' => [

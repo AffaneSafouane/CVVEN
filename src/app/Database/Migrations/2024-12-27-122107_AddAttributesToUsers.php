@@ -30,6 +30,7 @@ class AddAttributesToUsers extends Migration
             'birth_date' => ['type' => 'DATE', 'null' => false],
         ];
         $this->forge->addColumn($this->tables['users'], $fields);
+        $this->forge->addUniqueKey('phone');
     }
 
     public function down()

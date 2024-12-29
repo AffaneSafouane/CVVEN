@@ -35,7 +35,7 @@ $maxDate = date('Y-m-d', strtotime('18 years ago'));
                     <!-- Email -->
                     <div class="form-floating mb-2">
                         <input type="email" class="form-control" id="floatingEmailInput" name="email" inputmode="email" autocomplete="email" placeholder="<?= lang('Auth.email') ?>" value="<?= old('email') ?>" required>
-                        <label for="floatingEmailInput"><?= lang('Auth.email') ?></label>
+                        <label for="floatingEmailInput"><?= lang('Auth.email') ?>*</label>
                     </div>
 
                     <!-- Username -->
@@ -47,19 +47,19 @@ $maxDate = date('Y-m-d', strtotime('18 years ago'));
                     <!-- Last Name -->
                     <div class="form-floating mb-2">
                         <input class="form-control" type="text" name="last_name" id="floatingLastNameInput" inputmode="text" autocomplete="lastName" placeholder="Nom de famille" value="<?= old('last_name'); ?>" required/>
-                        <label for="floatingLastNameInput">Nom de famille</label>
+                        <label for="floatingLastNameInput">Nom de famille*</label>
                     </div>
 
                     <!-- Name -->
                     <div class="form-floating mb-2">
                         <input class="form-control" type="text" name="name" id="floatingNameInput" inputmode="text" autocomplete="name" placeholder="Prénom" value="<?= old('name'); ?>" required/>
-                        <label for="floatingNameInput">Prénom</label>
+                        <label for="floatingNameInput">Prénom*</label>
                     </div>
 
                     <!-- Address -->
                     <div class="form-floating mb-2">
                         <input class="form-control" type="text" name="address" id="floatingAddressInput" inputmode="text" autocomplete="address" placeholder="Adresse" value="<?= old('address'); ?>" required/>
-                        <label for="floatingAddressInput">Adresse</label>
+                        <label for="floatingAddressInput">Adresse*</label>
                     </div>
 
                     <!-- Phone -->
@@ -70,20 +70,20 @@ $maxDate = date('Y-m-d', strtotime('18 years ago'));
 
                     <!-- Birth Date -->
                     <div class="form-floating mb-4">
-                        <input class="form-control" type="date" name="birthDate" id="floatingBirthDateInput" inputmode="text" value="<?= old('birthDate'); ?>" min="<?= $minDate; ?>" max="<?= $maxDate; ?>"/>
-                        <label for="floatingBirthDateInput">Date de naissance</label>
+                        <input class="form-control" type="date" name="birth_date" id="floatingBirthDateInput" inputmode="text" value="<?= old('birthDate'); ?>" min="<?= $minDate; ?>" max="<?= $maxDate; ?>" required/>
+                        <label for="floatingBirthDateInput">Date de naissance*</label>
                     </div>
 
                     <!-- Password -->
                     <div class="form-floating mb-2">
                         <input type="password" class="form-control" id="floatingPasswordInput" name="password" inputmode="text" autocomplete="new-password" placeholder="<?= lang('Auth.password') ?>" required>
-                        <label for="floatingPasswordInput"><?= lang('Auth.password') ?></label>
+                        <label for="floatingPasswordInput"><?= lang('Auth.password') ?>*</label>
                     </div>
 
                     <!-- Password (Again) -->
                     <div class="form-floating mb-5">
                         <input type="password" class="form-control" id="floatingPasswordConfirmInput" name="password_confirm" inputmode="text" autocomplete="new-password" placeholder="<?= lang('Auth.passwordConfirm') ?>" required>
-                        <label for="floatingPasswordConfirmInput"><?= lang('Auth.passwordConfirm') ?></label>
+                        <label for="floatingPasswordConfirmInput"><?= lang('Auth.passwordConfirm') ?>*</label>
                     </div>
 
                     <div class="d-grid col-12 col-md-8 mx-auto m-3">
