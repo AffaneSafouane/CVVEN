@@ -17,6 +17,8 @@ class UserModel extends ShieldUserModel
             'name',
             'last_name',
             'address',
+            'city',
+            'postal_code',
             'phone',
             'birth_date',
         ];

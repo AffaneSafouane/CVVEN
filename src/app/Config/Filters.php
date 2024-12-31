@@ -73,7 +73,7 @@ class Filters extends BaseFilters
         'before' => [
             // 'honeypot',
             'csrf', // @TODO Ajouter ['except' => ['api/record/save']], lors de l'implémentation de l'api de paiement
-            'session' => ['except' => ['login*', 'register', 'auth/a/*']],
+            'session' => ['except' => ['login*', 'register', 'auth/a/*', '/', 'test*']],
             // 'invalidchars',
         ],
         'after' => [

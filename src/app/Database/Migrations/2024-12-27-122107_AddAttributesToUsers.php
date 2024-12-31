@@ -26,7 +26,9 @@ class AddAttributesToUsers extends Migration
             'phone' => ['type' => 'VARCHAR', 'constraint' => '10', 'null' => true],
             'last_name' => ['type' => 'VARCHAR', 'constraint' => '100', 'null' => false],
             'name' => ['type' => 'VARCHAR', 'constraint' => '100', 'null' => false],
-            'address' => ['type' => 'VARCHAR', 'constraint' => '150', 'null' => false],
+            'address' => ['type' => 'VARCHAR', 'constraint' => '50', 'null' => false],
+            'city' => ['type' => 'VARCHAR', 'constraint' => '50', 'null' => false],
+            'postal_code' => ['type' => 'VARCHAR', 'constraint' => '5', 'null' => false],
             'birth_date' => ['type' => 'DATE', 'null' => false],
         ];
         $this->forge->addColumn($this->tables['users'], $fields);
@@ -40,6 +42,8 @@ class AddAttributesToUsers extends Migration
             'last_name',
             'name',
             'address',
+            'city',
+            'postal_code',
             'birth_date',
         ];
         $this->forge->dropColumn($this->tables['users'], $fields);

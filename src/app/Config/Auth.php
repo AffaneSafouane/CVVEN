@@ -26,6 +26,7 @@ use CodeIgniter\Shield\Authentication\Passwords\NothingPersonalValidator;
 use CodeIgniter\Shield\Authentication\Passwords\PwnedValidator;
 use CodeIgniter\Shield\Authentication\Passwords\ValidatorInterface;
 use CodeIgniter\Shield\Models\UserModel;
+use CodeIgniter\Shield\Authentication\Actions\EmailActivator;
 
 class Auth extends ShieldAuth
 {
@@ -98,7 +99,7 @@ class Auth extends ShieldAuth
      * @var array<string, class-string<ActionInterface>|null>
      */
     public array $actions = [
-        'register' => null,
+        'register' => EmailActivator::class,
         'login'    => null,
     ];
 

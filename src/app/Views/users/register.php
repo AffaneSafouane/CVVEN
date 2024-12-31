@@ -46,20 +46,32 @@ $maxDate = date('Y-m-d', strtotime('18 years ago'));
 
                     <!-- Last Name -->
                     <div class="form-floating mb-2">
-                        <input class="form-control" type="text" name="last_name" id="floatingLastNameInput" inputmode="text" autocomplete="lastName" placeholder="Nom de famille" value="<?= old('last_name'); ?>" required/>
+                        <input class="form-control" type="text" name="last_name" id="floatingLastNameInput" inputmode="text" autocomplete="lastName" placeholder="Nom de famille" value="<?= old('last_name'); ?>" minlength="3" maxlength="50" required/>
                         <label for="floatingLastNameInput">Nom de famille*</label>
                     </div>
 
                     <!-- Name -->
                     <div class="form-floating mb-2">
-                        <input class="form-control" type="text" name="name" id="floatingNameInput" inputmode="text" autocomplete="name" placeholder="Prénom" value="<?= old('name'); ?>" required/>
+                        <input class="form-control" type="text" name="name" id="floatingNameInput" inputmode="text" autocomplete="name" placeholder="Prénom" value="<?= old('name'); ?>" minlength="3" maxlength="50" required/>
                         <label for="floatingNameInput">Prénom*</label>
                     </div>
 
                     <!-- Address -->
                     <div class="form-floating mb-2">
-                        <input class="form-control" type="text" name="address" id="floatingAddressInput" inputmode="text" autocomplete="address" placeholder="Adresse" value="<?= old('address'); ?>" required/>
+                        <input class="form-control" type="text" name="address" id="floatingAddressInput" inputmode="text" autocomplete="address" placeholder="Adresse" value="<?= old('address'); ?>" minlength="3" maxlength="50" required/>
                         <label for="floatingAddressInput">Adresse*</label>
+                    </div>
+
+                    <!-- City -->
+                    <div class="form-floating mb-2">
+                        <input class="form-control" type="text" name="city" id="floatingCityInput" inputmode="text" autocomplete="city" placeholder="Ville" value="<?= old('city'); ?>" minlength="1" maxlength="50" required/>
+                        <label for="floatingCityInput">Ville*</label>
+                    </div>
+
+                    <!-- Postal Code -->
+                    <div class="form-floating mb-2">
+                        <input class="form-control" type="text" name="postal_code" id="floatingPostalCodeInput" inputmode="text" autocomplete="postal_code" placeholder="Code Postal" pattern="[0-9]{5}" value="<?= old('postal_code'); ?>" required/>
+                        <label for="floatingPostalCodeInput">Code Postal*</label>
                     </div>
 
                     <!-- Phone -->
@@ -97,4 +109,4 @@ $maxDate = date('Y-m-d', strtotime('18 years ago'));
         </div>
     </div>
 
-<?= $this->endSection() ?>
+<?= $this->endSection(); ?>

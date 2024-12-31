@@ -2,11 +2,12 @@
 /**
  * @var ?array $users
  * @var string $title
+ * @var \CodeIgniter\Pager\Pager $pager
  */
 ?>
 <?= $this->extend('layout'); ?>
 
-<?= $this->section('title') ?><?= esc($title); ?> <?= $this->endSection() ?>
+<?= $this->section('title'); ?><?= esc($title); ?><?= $this->endSection(); ?>
 
 <?= $this->section('main'); ?>
 <section class="container px-4">
@@ -34,5 +35,6 @@
         <h3>Aucun utilisateurs</h3>
         <p>Aucun utilisateurs n'est repertoriés pour le moment.</p>
     <?php endif; ?>
+    <?= $pager->links(); ?>
 </section>
 <?= $this->endSection(); ?>

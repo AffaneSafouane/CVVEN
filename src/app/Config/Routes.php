@@ -7,9 +7,12 @@ use CodeIgniter\Router\RouteCollection;
  */
 $routes->get('/', 'Home::index');
 
-//use App\Controllers\UserController;
+service('auth')->routes($routes, ['except' => ['register']]);
 
-service('auth')->routes($routes);
+use App\Controllers\UserController;
+use App\Controllers\Auth\RegisterController;
 
 //$routes->get('admin/users', [UserController::class, 'index']);
-//$routes->get('users/(:segment)', [UserController::class, 'show']);
+$routes->get('users/(:segment)', [UserController::class, 'show']);
+$routes->get('register', [RegisterController::class, 'registerView']);
+$routes->post('register', [RegisterController::class, 'registerAction']);

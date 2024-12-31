@@ -92,7 +92,7 @@ class Validation extends BaseConfig
             'label' => 'Nom de famille',
             'rules' => [
                 'required',
-                'max_length[100]',
+                'max_length[50]',
                 'min_length[3]',
                 'regex_match[/^[a-zA-Zàâäéèêëîïôöùûüç\'\-]+$/]',
             ]
@@ -101,7 +101,7 @@ class Validation extends BaseConfig
             'label' => 'Prénom',
             'rules' => [
                 'required',
-                'max_length[100]',
+                'max_length[50]',
                 'min_length[3]',
                 'regex_match[/^[a-zA-Zàâäéèêëîïôöùûüç\'\-]+$/]',
             ]
@@ -110,8 +110,24 @@ class Validation extends BaseConfig
             'label' => 'Adresse',
             'rules' => [
                 'required',
-                'max_length[150]',
-                'min_length[10]',
+                'max_length[50]',
+                'min_length[5]',
+            ]
+        ],
+        'city' => [
+            'label' => 'Ville',
+            'rules' => [
+                'required',
+                'max_length[50]',
+                'min_length[1]',
+            ]
+        ],
+        'postal_code' => [
+            'label' => 'Code postal',
+            'rules' => [
+                'required',
+                'max_length[5]',
+                'min_length[5]',
             ]
         ],
         'birth_date' => [
