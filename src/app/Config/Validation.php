@@ -86,7 +86,7 @@ class Validation extends BaseConfig
         ],
         'password_confirm' => [
             'label' => 'Auth.passwordConfirm',
-            'rules' => 'trim|required|matches[password]',
+            'rules' => 'required|matches[password]',
         ],
         'last_name' => [
             'label' => 'Nom de famille',
@@ -120,6 +120,7 @@ class Validation extends BaseConfig
                 'required',
                 'max_length[50]',
                 'min_length[1]',
+                'regex_match[/^[a-zA-Zàâäéèêëîïôöùûüç\'\-]+$/]',
             ]
         ],
         'postal_code' => [
@@ -128,6 +129,7 @@ class Validation extends BaseConfig
                 'required',
                 'max_length[5]',
                 'min_length[5]',
+                'regex_match[/\A[0-9]+\z/]',
             ]
         ],
         'birth_date' => [

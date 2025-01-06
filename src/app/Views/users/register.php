@@ -70,7 +70,7 @@ $maxDate = date('Y-m-d', strtotime('18 years ago'));
 
                     <!-- Postal Code -->
                     <div class="form-floating mb-2">
-                        <input class="form-control" type="text" name="postal_code" id="floatingPostalCodeInput" inputmode="text" autocomplete="postal_code" placeholder="Code Postal" pattern="[0-9]{5}" value="<?= old('postal_code'); ?>" required/>
+                        <input class="form-control" type="text" name="postal_code" id="floatingPostalCodeInput" inputmode="numeric" autocomplete="postal_code" placeholder="Code Postal" pattern="[0-9]{5}" value="<?= old('postal_code'); ?>" required/>
                         <label for="floatingPostalCodeInput">Code Postal*</label>
                     </div>
 
