@@ -1,6 +1,6 @@
 <?php
 /**
- * @var ?\App\Entities\MeetingRoom $meetingRooms
+ * @var ?\App\Entities\MeetingRoom[] $meetingRooms
  * @var string $title
  */
 ?>

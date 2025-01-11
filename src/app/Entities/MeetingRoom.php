@@ -2,20 +2,21 @@
 
 namespace App\Entities;
 
+use App\Models\ReservationModel;
 use CodeIgniter\Entity\Entity;
+
+/**
+ * @property ?int $id
+ * @property ?string $type
+ * @property ?string $description
+ * @property ?int $capacity
+ * @property ?float $price
+ * @property ?bool $available
+ * @property ?int $reservation
+ */
 
 class MeetingRoom extends Entity
 {
-    protected $attributes = [
-        'mr_number' => null,
-        'mr_type' => null,
-        'mr_description' => null,
-        'mr_capacity' => null,
-        'mr_price' => null,
-        'mr_available' => null,
-        'r_fk_id' => null,
-    ];
-
     protected $datamap = [
         'id' => 'mr_number',
         'type' => 'mr_type',
@@ -33,7 +34,7 @@ class MeetingRoom extends Entity
         'capacity' => 'integer',
         'price' => 'integer',
         'available' => 'int-bool',
-        'reservation' => 'class[App\Entities\Reservation]',
+        'reservation' => 'int',
     ];
 
     public function getId(): ?int
@@ -66,14 +67,15 @@ class MeetingRoom extends Entity
         return $this->available;
     }
 
-    public function getReservation(): ?Reservation
+    public function getReservation(): array|Reservation|null
     {
-        return $this->reservation;
+        $reservationModel = new ReservationModel();
+        return $reservationModel->find($this->reservation);
     }
 
-    public function setNumber(int $number): static
+    public function setId(int $id): static
     {
-        $this->number = $number;
+        $this->id = $id;
         return $this;
     }
 
@@ -107,7 +109,7 @@ class MeetingRoom extends Entity
         return $this;
     }
 
-    public function setReservation(Reservation $reservation): static
+    public function setReservation(int $reservation): static
     {
         $this->reservation = $reservation;
         return $this;

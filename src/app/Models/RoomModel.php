@@ -49,4 +49,13 @@ class RoomModel extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
+    /**
+     * @param int $reservationId
+     * @return Room[]
+     */
+    public function getRoomsByReservation(int $reservationId): array
+    {
+        return $this->where('r_fk_id', $reservationId)->findAll();
+    }
 }

@@ -18,7 +18,7 @@
                     </ul>
                 </li>
                 <?php if (auth()->loggedIn()): ?>
-                    <li class="nav-item"><a class="nav-link" href="<?= site_url('user/' . auth()->id()); ?>">Profil</a></li>
+                    <li class="nav-item"><a class="nav-link" href="<?= site_url('users/' . auth()->id()); ?>">Profil</a></li>
                 <?php endif; ?>
             </ul>
             <ul class="navbar-nav d-flex">

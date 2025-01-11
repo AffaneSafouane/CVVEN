@@ -6,23 +6,24 @@ use App\Enum\MealOption;
 use App\Enum\ReservationStatus;
 use App\Models\MeetingRoomModel;
 use App\Models\RoomModel;
+use CodeIgniter\Entity\Cast\DatetimeCast;
 use CodeIgniter\Entity\Entity;
 use CodeIgniter\I18n\Time;
 use Exception;
 
+/**
+ * @property ?int $id
+ * @property ?DatetimeCast $startingDate
+ * @property ?DatetimeCast $endingDate
+ * @property ?MealOption $mealOption
+ * @property ?int $numberOfPeople
+ * @property ?float $totalPrice
+ * @property ?ReservationStatus $status
+ * @property ?int $user
+ */
+
 class Reservation extends Entity
 {
-    protected $attributes = [
-        'r_id' => null,
-        'r_starting_date' => null,
-        'r_ending_date' => null,
-        'r_meal_option' => null,
-        'r_number_people' => null,
-        'r_total_price' => null,
-        'r_status' => null,
-        'u_fk_id' => null,
-    ];
-
     protected $datamap = [
         'r_id' => 'id',
         'r_starting_date' => 'startingDate',
@@ -34,21 +35,17 @@ class Reservation extends Entity
         'u_fk_id' => 'user',
     ];
 
-    /** @var list<string>  */
-    protected $dates   = ['r_created_at', 'r_updated_at', 'r_deleted_at'];
+    protected $dates   = ['r_created_at', 'r_updated_at', 'r_deleted_at', 'r_starting_date', 'r_ending_date'];
 
-    /**
-     * @var array<string, string>
-     */
     protected $casts   = [
-        'id'  => 'int',
+        'id'             => 'int',
         'startingDate'   => 'datetime',
         'endingDate'     => 'datetime',
         'mealOption'     => 'class[App\Enum\MealOption]',
         'numberOfPeople' => 'int',
         'totalPrice'     => 'float',
         'status'         => 'class[App\Enum\ReservationStatus]',
-        'user'           => 'class[CodeIgniter\Shield\Entities\User]',
+        'user'           => 'int',
     ];
 
     public function getId(): ?int
@@ -104,16 +101,16 @@ class Reservation extends Entity
         return $this->status;
     }
 
-    public function getRoom(): ?array
+    public function getRooms(): ?array
     {
         $roomModel = new RoomModel();
-        return $roomModel->find($this->id);
+        return $roomModel->getRoomsByReservation($this->id);
     }
 
-    public function getMeetingRoom(): ?array
+    public function getMeetingRooms(): ?array
     {
         $meetingRoomModel = new MeetingRoomModel();
-        return $meetingRoomModel->find($this->id);
+        return $meetingRoomModel->getMeetingRoomsByReservation($this->id);
     }
 
     /**

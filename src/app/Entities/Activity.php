@@ -2,22 +2,22 @@
 
 namespace App\Entities;
 
+use CodeIgniter\Entity\Cast\DatetimeCast;
 use CodeIgniter\Entity\Entity;
 use CodeIgniter\I18n\Time;
 use Exception;
 
+/**
+ * @property ?int $id
+ * @property ?string $name
+ * @property ?string $description
+ * @property ?DatetimeCast $startingDate
+ * @property ?DatetimeCast $endingDate
+ * @property ?float $price
+ */
+
 class Activity extends Entity
 {
-    protected $attributes = [
-        'a_id' => null,
-        'a_name' => null,
-        'a_description' => null,
-        'a_starting_date' => null,
-        'a_ending_date' => null,
-        'a_price' => null,
-    ];
-
-    /** @var array<string, string>  */
     protected $datamap = [
         'id' => 'a_id',
         'name' => 'a_name',
@@ -27,10 +27,8 @@ class Activity extends Entity
         'price' => 'a_price',
     ];
 
-    /** @var list<string>  */
     protected $dates   = ['a_starting_date', 'a_ending_date'];
 
-    /** @var array<string, string>  */
     protected $casts   = [
         'id'              => 'integer',
         'startingDate'    => 'datetime',

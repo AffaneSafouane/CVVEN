@@ -13,7 +13,7 @@ class MeetingRoomModel extends Model
     protected $returnType       = MeetingRoom::class;
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['mr_number', 'mr_type', 'mr_description', 'mr_capacity', 'mr_price', 'mr_available'];
+    protected $allowedFields    = ['mr_number', 'mr_type', 'mr_description', 'mr_capacity', 'mr_price', 'mr_available', 'r_fk_id'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -32,7 +32,8 @@ class MeetingRoomModel extends Model
         'mr_description' => 'required|min_length[10]|max_length[255]',
         'mr_capacity' => 'required|integer|greater_than[0]|less_than[200]',
         'mr_price' => 'required|decimal|greater_than[0]|less_than[1000]',
-        'mr_available' => 'required|in_list[0,1]'
+        'mr_available' => 'required|in_list[0,1]',
+        'r_fk_id' => 'is_natural_no_zero'
     ];
     protected $validationMessages   = [];
     protected $skipValidation       = false;
@@ -48,4 +49,13 @@ class MeetingRoomModel extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
+    /**
+     * @param int $reservationId
+     * @return MeetingRoom[]
+     */
+    public function getMeetingRoomsByReservation(int $reservationId): array
+    {
+        return $this->where('r_fk_id', $reservationId)->findAll();
+    }
 }

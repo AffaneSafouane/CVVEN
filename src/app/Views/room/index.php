@@ -1,6 +1,6 @@
 <?php
 /**
- * @var ?array $rooms
+ * @var ?\App\Entities\Room[] $rooms
  * @var string $title
  */
 ?>

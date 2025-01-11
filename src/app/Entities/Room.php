@@ -5,18 +5,18 @@ namespace App\Entities;
 use App\Models\ReservationModel;
 use CodeIgniter\Entity\Entity;
 
+/**
+ * @property ?int $id
+ * @property ?string $type
+ * @property ?string $description
+ * @property ?float $price
+ * @property ?bool $cleaningOption
+ * @property ?bool $available
+ * @property ?int $reservation
+ */
+
 class Room extends Entity
 {
-    protected $attributes = [
-        'ro_nuumber' => null,
-        'ro_type' => null,
-        'ro_description' => null,
-        'ro_price' => null,
-        'ro_cleaning_option' => null,
-        'ro_available' => null,
-        'r_fk_id' => null,
-    ];
-
     protected $datamap = [
         'id' => 'ro_number',
         'type' => 'ro_type',
@@ -103,7 +103,7 @@ class Room extends Entity
         return $this;
     }
 
-    public function getReservation(): Reservation|array|null
+    public function getReservation(): array|Reservation|null
     {
         $reservationModel = new ReservationModel();
         return $reservationModel->find($this->reservation);
