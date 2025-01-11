@@ -40,6 +40,7 @@
                 </ul>
                 <p><small><?= !$user['active'] ? "Votre compte n'est pas activé." : "Votre compte est activé."; ?></small></p>
             </div>
+            <!-- Ajouter les boutons pour la suppression et la modification du compte -->
         </div>
     </div>
 </section>

@@ -19,11 +19,11 @@
                     <div class="card-body">
                         <div class="card-title d-flex justify-content-between">
                             <li class="list-group-item text-white">
-                                <a href="<?= site_url('users/' . esc($user['u_id'], 'url')); ?>">
-                                    <h3><?= esc($user['u_email']) ?></h3>
+                                <a href="<?= site_url('users/' . esc($user->id, 'url')); ?>">
+                                    <h3><?= esc($user->getEmail()) ?></h3>
                                 </a>
                                 <small class="text-muted">
-                                    <?= esc($user['u_nom'] . " " . $user['u_prenom']); ?>
+                                    <?= esc($user->last_name . " " . $user->name); ?>
                                 </small>
                             </li>
                         </div>

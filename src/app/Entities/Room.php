@@ -1,0 +1,117 @@
+<?php
+
+namespace App\Entities;
+
+use App\Models\ReservationModel;
+use CodeIgniter\Entity\Entity;
+
+class Room extends Entity
+{
+    protected $attributes = [
+        'ro_nuumber' => null,
+        'ro_type' => null,
+        'ro_description' => null,
+        'ro_price' => null,
+        'ro_cleaning_option' => null,
+        'ro_available' => null,
+        'r_fk_id' => null,
+    ];
+
+    protected $datamap = [
+        'id' => 'ro_number',
+        'type' => 'ro_type',
+        'description' => 'ro_description',
+        'price' => 'ro_price',
+        'cleaningOption' => 'ro_cleaning_option',
+        'available' => 'ro_available',
+        'reservation' => 'r_fk_id',
+    ];
+
+    protected $casts   = [
+        'id' => 'integer',
+        'type' => 'string',
+        'description' => 'string',
+        'price' => 'float',
+        'cleaningOption' => 'int-bool',
+        'available' => 'int-bool',
+        'reservation' => 'int',
+    ];
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function setId(?int $id): static
+    {
+        $this->id = $id;
+        return $this;
+    }
+
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    public function setType(?string $type): static
+    {
+        $this->type = $type;
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): static
+    {
+        $this->description = $description;
+        return $this;
+    }
+
+    public function getPrice(): ?float
+    {
+        return $this->price;
+    }
+
+    public function setPrice(?float $price): static
+    {
+        $this->price = $price;
+        return $this;
+    }
+
+    public function getCleaningOption(): ?bool
+    {
+        return $this->cleaningOption;
+    }
+
+    public function setCleaningOption(?bool $cleaningOption): static
+    {
+        $this->cleaningOption = $cleaningOption;
+        return $this;
+    }
+
+    public function getAvailable(): ?bool
+    {
+        return $this->available;
+    }
+
+    public function setAvailable(?bool $available): static
+    {
+        $this->available = $available;
+        return $this;
+    }
+
+    public function getReservation(): Reservation|array|null
+    {
+        $reservationModel = new ReservationModel();
+        return $reservationModel->find($this->reservation);
+    }
+
+    public function setReservation(?int $reservation): static
+    {
+        $this->reservation = $reservation;
+        return $this;
+    }
+}
