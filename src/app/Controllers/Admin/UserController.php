@@ -6,7 +6,7 @@ use App\Controllers\BaseController;
 use App\Models\UserModel;
 use CodeIgniter\Shield\Exceptions\UserNotFoundException;
 
-class AdminUserController extends BaseController
+class UserController extends BaseController
 {
     // @TODO rendre cette classe uniquement accessible aux administrateurs
     public function index(): string

@@ -14,17 +14,8 @@
     <?php if ($meetingRooms !== []): ?>
         <?php foreach ($meetingRooms as $meetingRoom): ?>
             <ul class="list-group list-group-flush mb-3">
-                <li class="list-group-item"><?= $meetingRoom->id; ?></li>
                 <li class="list-group-item"><?= $meetingRoom->type; ?></li>
                 <li class="list-group-item"><?= $meetingRoom->description; ?></li>
-                <li class="list-group-item"><?= $meetingRoom->price; ?></li>
-                <li class="list-group-item"><?= $meetingRoom->capacity; ?></li>
-                <li class="list-group-item"><?= $meetingRoom->available ? 'Disponible' : 'Indisponible'; ?></li>
-                <?php if ($meetingRoom->reservation): ?>
-                    <li class="list-group-item">
-                        <a class="link-primary" href="#">Réservation</a>
-                    </li>
-                <?php endif; ?>
             </ul>
         <?php endforeach; ?>
     <?php endif; ?>

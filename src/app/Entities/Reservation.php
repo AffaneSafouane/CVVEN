@@ -2,19 +2,24 @@
 
 namespace App\Entities;
 
+use App\Entities\Cast\EnumCast;
 use App\Enum\MealOption;
 use App\Enum\ReservationStatus;
 use App\Models\MeetingRoomModel;
 use App\Models\RoomModel;
-use CodeIgniter\Entity\Cast\DatetimeCast;
+use App\Models\UserModel;
 use CodeIgniter\Entity\Entity;
 use CodeIgniter\I18n\Time;
+use CodeIgniter\Shield\Entities\User;
 use Exception;
 
 /**
  * @property ?int $id
- * @property ?DatetimeCast $startingDate
- * @property ?DatetimeCast $endingDate
+ * @property ?Time $startingDate
+ * @property ?Time $endingDate
+ * @property ?Time $createdAt
+ * @property ?Time $updatedAt
+ * @property ?Time $deletedAt
  * @property ?MealOption $mealOption
  * @property ?int $numberOfPeople
  * @property ?float $totalPrice
@@ -25,27 +30,32 @@ use Exception;
 class Reservation extends Entity
 {
     protected $datamap = [
-        'r_id' => 'id',
-        'r_starting_date' => 'startingDate',
-        'r_ending_date' => 'endingDate',
-        'r_meal_option' => 'mealOption',
-        'r_number_people' => 'numberOfPeople',
-        'r_total_price' => 'totalPrice',
-        'r_status' => 'status',
-        'u_fk_id' => 'user',
+        'id'             => 'r_id',
+        'mealOption'     => 'r_meal_option',
+        'numberOfPeople' => 'r_number_people',
+        'totalPrice'     => 'r_total_price',
+        'createdAt'      => 'r_created_at',
+        'updatedAt'      => 'r_updated_at',
+        'deletedAt'      => 'r_deleted_at',
+        'startingDate'   => 'r_starting_date',
+        'endingDate'     => 'r_ending_date',
+        'status'         => 'r_status',
+        'user'           => 'u_fk_id',
     ];
-
-    protected $dates   = ['r_created_at', 'r_updated_at', 'r_deleted_at', 'r_starting_date', 'r_ending_date'];
+    
+    protected $dates = ['r_created_at', 'r_updated_at', 'r_deleted_at', 'r_starting_date', 'r_ending_date'];
 
     protected $casts   = [
-        'id'             => 'int',
-        'startingDate'   => 'datetime',
-        'endingDate'     => 'datetime',
-        'mealOption'     => 'class[App\Enum\MealOption]',
-        'numberOfPeople' => 'int',
-        'totalPrice'     => 'float',
-        'status'         => 'class[App\Enum\ReservationStatus]',
-        'user'           => 'int',
+        'r_id'              => 'int',
+        'r_meal_option'     => 'enum[App\Enum\MealOption]',
+        'r_number_people'   => 'int',
+        'r_total_price'     => 'float',
+        'r_status'          => 'enum[App\Enum\ReservationStatus]',
+        'u_fk_id'           => 'int',
+    ];
+
+    protected $castHandlers = [
+        'enum' => EnumCast::class,
     ];
 
     public function getId(): ?int
@@ -53,37 +63,53 @@ class Reservation extends Entity
         return $this->id;
     }
 
-    /**
-     * @throws Exception
-     */
-    public function getStartingDate(string $format = 'Y-m-d H:i:s'): ?string
+    public function getStartingDate(): ?string
     {
-        $this->startingDate = $this->mutateDate($this->startingDate);
+        $format = 'Y-m-d H:i:s';
+        $date = $this->mutateDate($this->startingDate);
 
         $timezone = $this->timezone ?? app_timezone();
+        $date->setTimezone($timezone);
 
-        $this->startingDate->setTimezone($timezone);
-
-        return $this->startingDate->format($format);
+        return $date->format($format);
     }
 
-    /**
-     * @throws Exception
-     */
-    public function getEndingDate(string $format = 'Y-m-d H:i:s'): ?string
+    public function getEndingDate(): ?string
     {
-        $this->endingDate = $this->mutateDate($this->endingDate);
+        $format = 'Y-m-d H:i:s';
+        $date = $this->mutateDate($this->endingDate);
 
         $timezone = $this->timezone ?? app_timezone();
+        $date->setTimezone($timezone);
 
-        $this->endingDate->setTimezone($timezone);
-
-        return $this->endingDate->format($format);
+        return $date->format($format);
     }
 
-    public function getMealOption(): ?MealOption
+    public function getCreatedAt(): ?string
     {
-        return $this->mealOption;
+        $format = 'Y-m-d H:i:s';
+        $date = $this->mutateDate($this->createdAt);
+
+        $timezone = $this->timezone ?? app_timezone();
+        $date->setTimezone($timezone);
+
+        return $date->format($format);
+    }
+
+    public function getUpdatedAt(): ?string
+    {
+        $format = 'Y-m-d H:i:s';
+        $date = $this->mutateDate($this->updatedAt);
+
+        $timezone = $this->timezone ?? app_timezone();
+        $date->setTimezone($timezone);
+
+        return $date->format($format);
+    }
+
+    public function getMealOption(): string
+    {
+        return $this->mealOption->getLabel();
     }
 
     public function getNumberOfPeople(): ?int
@@ -96,9 +122,15 @@ class Reservation extends Entity
         return $this->totalPrice;
     }
 
-    public function getStatus(): ?ReservationStatus
+    public function getStatus(): ?string
     {
-        return $this->status;
+        return $this->status->getLabel();
+    }
+
+    public function getUser(): array|User|null
+    {
+        $userModel = new UserModel();
+        return $userModel->find($this->user);
     }
 
     public function getRooms(): ?array
@@ -113,21 +145,29 @@ class Reservation extends Entity
         return $meetingRoomModel->getMeetingRoomsByReservation($this->id);
     }
 
-    /**
-     * @throws Exception
-     */
     public function setStartingDate(string $startingDate): static
     {
-        $this->startingDate = new Time($startingDate, 'UTC');
+        try {
+            $this->startingDate = new Time($startingDate, 'UTC');
+        } catch (Exception $e) {
+            log_message('error', 'Invalid starting date provided: ' . $e->getMessage());
+
+            $this->startingDate = null;
+        }
+
         return $this;
     }
 
-    /**
-     * @throws Exception
-     */
     public function setEndingDate(string $endingDate): static
     {
-        $this->endingDate = new Time($endingDate, 'UTC');
+        try {
+            $this->endingDate = new Time($endingDate, 'UTC');
+        } catch (Exception $e) {
+            log_message('error', 'Invalid ending date provided: ' . $e->getMessage());
+
+            $this->endingDate = null;
+        }
+
         return $this;
     }
 

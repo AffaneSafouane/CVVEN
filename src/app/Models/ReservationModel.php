@@ -13,7 +13,7 @@ class ReservationModel extends Model
     protected $returnType       = Reservation::class;
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['r_starting_date', 'r_ending_date', 'r_meal_option', 'r_number_people', 'r_total_price', 'r_created_at', 'r_updated_at', 'r_deleted_at', 'r_status', 'r_type', 'u_fk_id'];
+    protected $allowedFields    = ['r_id', 'r_starting_date', 'r_ending_date', 'r_meal_option', 'r_number_people', 'r_total_price', 'r_created_at', 'r_updated_at', 'r_deleted_at', 'r_status', 'r_type', 'u_fk_id'];
 
     protected bool $allowEmptyInserts = true;
     protected bool $updateOnlyChanged = true;

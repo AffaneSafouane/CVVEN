@@ -11,9 +11,10 @@ $routes->get('/', 'Home::index');
 service('auth')->routes($routes, ['except' => ['register']]);
 
 use App\Controllers\UserController;
-use App\Controllers\Admin\AdminUserController;
+use App\Controllers\Admin\UserController as AdminUserController;
 use App\Controllers\Auth\RegisterController;
 use App\Controllers\RoomController;
+use App\Controllers\Admin\ReservationController as AdminReservationController;;
 
 // @TODO Ajouter les routes pour la suppression et la mise à jour de l'utilisateur
 $routes->get('admin/users', [AdminUserController::class, 'index']);
@@ -25,3 +26,4 @@ $routes->get('rooms', [RoomController::class, 'index']);
 
 $routes->get('meetingRooms', [MeetingRoomController::class, 'index']);
 
+$routes->get('admin/reservations', [AdminReservationController::class, 'index']);
