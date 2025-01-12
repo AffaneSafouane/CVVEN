@@ -151,7 +151,6 @@ class Reservation extends Entity
             $this->startingDate = new Time($startingDate, 'UTC');
         } catch (Exception $e) {
             log_message('error', 'Invalid starting date provided: ' . $e->getMessage());
-
             $this->startingDate = null;
         }
 
@@ -164,7 +163,6 @@ class Reservation extends Entity
             $this->endingDate = new Time($endingDate, 'UTC');
         } catch (Exception $e) {
             log_message('error', 'Invalid ending date provided: ' . $e->getMessage());
-
             $this->endingDate = null;
         }
 

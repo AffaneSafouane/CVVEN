@@ -5,33 +5,34 @@ namespace App\Entities;
 use CodeIgniter\Entity\Entity;
 use CodeIgniter\I18n\Time;
 use Exception;
-use InvalidArgumentException;
 
 /**
  * @property ?int $id
  * @property ?string $name
  * @property ?string $description
- * @property ?Time $r_starting_date
- * @property ?Time $r_ending_date
+ * @property ?Time $startingDate
+ * @property ?Time $endingDate
  * @property ?float $price
  */
 
 class Activity extends Entity
 {
     protected $datamap = [
-        'id' => 'a_id',
-        'name' => 'a_name',
-        'description' => 'a_description',
-        'price' => 'a_price',
+        'id'           => 'a_id',
+        'name'         => 'a_name',
+        'description'  => 'a_description',
+        'startingDate' => 'r_starting_date',
+        'endingDate'   => 'r_ending_date',
+        'price'        => 'a_price',
     ];
 
     protected $dates   = ['r_starting_date', 'r_ending_date'];
 
     protected $casts   = [
-        'id'              => 'integer',
-        'name'            => 'string',
-        'description'     => 'string',
-        'price'           => 'float',
+        'a_id'          => 'integer',
+        'a_name'        => 'string',
+        'a_description' => 'string',
+        'a_price'       => 'float',
     ];
 
     public function getId(): ?int
@@ -63,22 +64,22 @@ class Activity extends Entity
 
     public function getStartingDate(): ?string
     {
-        try {
-            return $this->r_starting_date->toDateTimeString();
-        } catch (Exception $e) {
-            log_message('error', 'Invalid starting date provided: ' . $e->getMessage());
-        }
+        $format = 'Y-m-d H:i:s';
+        $date = $this->mutateDate($this->startingDate);
 
-        return null;
+        $timezone = $this->timezone ?? app_timezone();
+        $date->setTimezone($timezone);
+
+        return $date->format($format);
     }
 
     public function setStartingDate(string $startingDate): static|string
     {
         try {
-            $this->r_starting_date = new Time($startingDate, 'UTC');
+            $this->startingDate = new Time($startingDate, 'UTC');
         } catch (Exception $e) {
             log_message('error', 'Invalid starting date provided: ' . $e->getMessage());
-            $this->r_starting_date = null;
+            $this->startingDate = null;
         }
 
         return $this;
@@ -86,22 +87,22 @@ class Activity extends Entity
 
     public function getEndingDate(): ?string
     {
-        try {
-            return $this->r_ending_date->toDateTimeString();
-        } catch (Exception $e) {
-            log_message('error', 'Invalid ending date provided: ' . $e->getMessage());
-        }
+        $format = 'Y-m-d H:i:s';
+        $date = $this->mutateDate($this->endingDate);
 
-        return null;
+        $timezone = $this->timezone ?? app_timezone();
+        $date->setTimezone($timezone);
+
+        return $date->format($format);
     }
 
     public function setEndingDate(string $endingDate): static
     {
         try {
-            $this->r_ending_date = new Time($endingDate, 'UTC');
+            $this->endingDate = new Time($endingDate, 'UTC');
         } catch (Exception $e) {
             log_message('error', 'Invalid ending date provided: ' . $e->getMessage());
-            $this->r_ending_date = null;
+            $this->endingDate = null;
         }
 
         return $this;

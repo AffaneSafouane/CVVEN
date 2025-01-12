@@ -7,7 +7,6 @@
 <?= $this->extend('layout'); ?>
 
 <?= $this->section('title'); ?><?= esc($title); ?><?= $this->endSection(); ?>
-
 <?= $this->section('main'); ?>
 <section class="container px-4">
     <h1><?= esc($title); ?></h1>

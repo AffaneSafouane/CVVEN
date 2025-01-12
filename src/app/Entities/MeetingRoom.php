@@ -18,23 +18,23 @@ use CodeIgniter\Entity\Entity;
 class MeetingRoom extends Entity
 {
     protected $datamap = [
-        'id' => 'mr_number',
-        'type' => 'mr_type',
+        'id'          => 'mr_number',
+        'type'        => 'mr_type',
         'description' => 'mr_description',
-        'capacity' => 'mr_capacity',
-        'price' => 'mr_price',
-        'available' => 'mr_available',
+        'capacity'    => 'mr_capacity',
+        'price'       => 'mr_price',
+        'available'   => 'mr_available',
         'reservation' => 'r_fk_id',
     ];
 
     protected $casts   = [
-        'id' => 'integer',
-        'type' => 'string',
-        'description' => 'string',
-        'capacity' => 'integer',
-        'price' => 'integer',
-        'available' => 'int-bool',
-        'reservation' => 'int',
+        'mr_number'      => 'integer',
+        'mr_type'        => 'string',
+        'mr_description' => 'string',
+        'mr_capacity'    => 'integer',
+        'mr_price'       => 'integer',
+        'mr_available'   => 'int-bool',
+        'r_fk_id'        => '?int',
     ];
 
     public function getId(): ?int
