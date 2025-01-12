@@ -52,9 +52,9 @@ class RoomModel extends Model
 
     /**
      * @param int $reservationId
-     * @return Room[]
+     * @return ?Room[]
      */
-    public function getRoomsByReservation(int $reservationId): array
+    public function getRoomsByReservation(int $reservationId): ?array
     {
         return $this->where('r_fk_id', $reservationId)->findAll();
     }

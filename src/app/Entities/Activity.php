@@ -2,6 +2,7 @@
 
 namespace App\Entities;
 
+use App\Models\ActivityModel;
 use CodeIgniter\Entity\Entity;
 use CodeIgniter\I18n\Time;
 use Exception;
@@ -21,12 +22,12 @@ class Activity extends Entity
         'id'           => 'a_id',
         'name'         => 'a_name',
         'description'  => 'a_description',
-        'startingDate' => 'r_starting_date',
-        'endingDate'   => 'r_ending_date',
+        'startingDate' => 'a_starting_date',
+        'endingDate'   => 'a_ending_date',
         'price'        => 'a_price',
     ];
 
-    protected $dates   = ['r_starting_date', 'r_ending_date'];
+    protected $dates   = ['a_starting_date', 'a_ending_date'];
 
     protected $casts   = [
         'a_id'          => 'integer',
@@ -35,25 +36,10 @@ class Activity extends Entity
         'a_price'       => 'float',
     ];
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
-    public function getName(): ?string
-    {
-        return $this->name;
-    }
-
     public function setName(string $name): static
     {
         $this->name = $name;
         return $this;
-    }
-
-    public function getDescription(): ?string
-    {
-        return $this->description;
     }
 
     public function setDescription(string $description): static
@@ -64,6 +50,10 @@ class Activity extends Entity
 
     public function getStartingDate(): ?string
     {
+        if (!isset($this->startingDate)) {
+            return null;
+        }
+
         $format = 'Y-m-d H:i:s';
         $date = $this->mutateDate($this->startingDate);
 
@@ -87,6 +77,10 @@ class Activity extends Entity
 
     public function getEndingDate(): ?string
     {
+        if (!isset($this->endingDate)) {
+            return null;
+        }
+
         $format = 'Y-m-d H:i:s';
         $date = $this->mutateDate($this->endingDate);
 
@@ -108,14 +102,15 @@ class Activity extends Entity
         return $this;
     }
 
-    public function getPrice(): ?float
-    {
-        return $this->price;
-    }
-
     public function setPrice(float $price): static
     {
         $this->price = $price;
         return $this;
+    }
+
+    public function getReservations(): array|Reservation|null
+    {
+        $activityModel = new ActivityModel();
+        return $activityModel->getReservationsByActivity($this->id);
     }
 }

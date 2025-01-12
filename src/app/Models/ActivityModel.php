@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Entities\Activity;
+use App\Entities\Reservation;
 use CodeIgniter\Model;
 
 class ActivityModel extends Model
@@ -46,4 +47,16 @@ class ActivityModel extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
+    /**
+     * @param int $activityId
+     * @return ?Reservation[]
+     */
+    public function getReservationsByActivity(int $activityId): ?array
+    {
+        $builder = $this->db->table('reservations_activities')
+            ->join('reservations', 'reservations_activities.r_fk_id = reservations.r_id')
+            ->where('reservations_activities.a_fk_id', $activityId);
+        return $builder->get()->getResult('App\Entities\Reservation');
+    }
 }

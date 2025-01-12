@@ -13,8 +13,8 @@
     <?php if ($meetingRooms !== []): ?>
         <?php foreach ($meetingRooms as $meetingRoom): ?>
             <ul class="list-group list-group-flush mb-3">
-                <li class="list-group-item"><?= $meetingRoom->type; ?></li>
-                <li class="list-group-item"><?= $meetingRoom->description; ?></li>
+                <li class="list-group-item"><?= esc($meetingRoom->type); ?></li>
+                <li class="list-group-item"><?= esc($meetingRoom->description); ?></li>
             </ul>
         <?php endforeach; ?>
     <?php endif; ?>

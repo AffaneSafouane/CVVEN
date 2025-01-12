@@ -20,15 +20,14 @@ class UserController extends BaseController {
 
         $model = model(UserModel::class);
 
-        $user = $model->findById($userID);
-        $data['user'] = $user->toArray();
-        $data['user']['email'] = $user->getEmail();
+        $data = [
+            'user' => $model->find($userID),
+            'title' => "Informations utilisateur",
+        ];
 
         if ($data['user'] === null) {
             throw new UserNotFoundException('Impossible de trouver l\'utilisateur');
         }
-
-        $data['title'] = "Informations utilisateur";
 
         return view('user/view', $data);
     }

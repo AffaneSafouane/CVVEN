@@ -1,6 +1,6 @@
 <?php
 /**
- * @var ?array $users
+ * @var ?\CodeIgniter\Shield\Entities\User[] $users
  * @var string $title
  * @var \CodeIgniter\Pager\Pager $pager
  */

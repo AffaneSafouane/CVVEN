@@ -6,6 +6,7 @@ use App\Entities\Cast\EnumCast;
 use App\Enum\MealOption;
 use App\Enum\ReservationStatus;
 use App\Models\MeetingRoomModel;
+use App\Models\ReservationModel;
 use App\Models\RoomModel;
 use App\Models\UserModel;
 use CodeIgniter\Entity\Entity;
@@ -58,13 +59,12 @@ class Reservation extends Entity
         'enum' => EnumCast::class,
     ];
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
     public function getStartingDate(): ?string
     {
+        if (!isset($this->startingDate)) {
+            return null;
+        }
+
         $format = 'Y-m-d H:i:s';
         $date = $this->mutateDate($this->startingDate);
 
@@ -76,6 +76,10 @@ class Reservation extends Entity
 
     public function getEndingDate(): ?string
     {
+        if (!isset($this->endingDate)) {
+            return null;
+        }
+
         $format = 'Y-m-d H:i:s';
         $date = $this->mutateDate($this->endingDate);
 
@@ -87,6 +91,10 @@ class Reservation extends Entity
 
     public function getCreatedAt(): ?string
     {
+        if (!isset($this->createdAt)) {
+            return null;
+        }
+
         $format = 'Y-m-d H:i:s';
         $date = $this->mutateDate($this->createdAt);
 
@@ -98,6 +106,10 @@ class Reservation extends Entity
 
     public function getUpdatedAt(): ?string
     {
+        if (!isset($this->updatedAt)) {
+            return null;
+        }
+
         $format = 'Y-m-d H:i:s';
         $date = $this->mutateDate($this->updatedAt);
 
@@ -107,19 +119,9 @@ class Reservation extends Entity
         return $date->format($format);
     }
 
-    public function getMealOption(): string
+    public function getMealOption(): ?string
     {
         return $this->mealOption->getLabel();
-    }
-
-    public function getNumberOfPeople(): ?int
-    {
-        return $this->numberOfPeople;
-    }
-
-    public function getTotalPrice(): ?float
-    {
-        return $this->totalPrice;
     }
 
     public function getStatus(): ?string
@@ -143,6 +145,12 @@ class Reservation extends Entity
     {
         $meetingRoomModel = new MeetingRoomModel();
         return $meetingRoomModel->getMeetingRoomsByReservation($this->id);
+    }
+
+    public function getActivities(): ?array
+    {
+        $reservationModel = new ReservationModel();
+        return $reservationModel->getActivitiesByReservation($this->id);
     }
 
     public function setStartingDate(string $startingDate): static
@@ -191,5 +199,21 @@ class Reservation extends Entity
     {
         $this->status = $status;
         return $this;
+    }
+
+    public function setUser(int $user): static
+    {
+        $this->user = $user;
+        return $this;
+    }
+
+    /**
+     * @param int $reservation
+     * @param int[] $activities
+     */
+    public function addActivities(int $reservation, array $activities): void
+    {
+        $reservationModel = new ReservationModel();
+        $reservationModel->addActivitiesToReservation($reservation, $activities);
     }
 }

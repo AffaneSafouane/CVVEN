@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Entities\Activity;
 use App\Entities\Reservation;
 use CodeIgniter\Model;
 
@@ -52,4 +53,38 @@ class ReservationModel extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
+    /**
+     * @param int $reservationId
+     * @return ?Activity[]
+     */
+    public function getActivitiesByReservation(int $reservationId): ?array
+    {
+        $builder = $this->db->table('reservations_activities')
+            ->join('activities', 'reservations_activities.a_fk_id = activities.a_id')
+            ->where('reservations_activities.r_fk_id', $reservationId);
+        return $builder->get()->getResult('App\Entities\Activity');
+    }
+
+    /**
+     * @param int $reservationId
+     * @param int[] $activitiesId
+     */
+    public function addActivitiesToReservation(int $reservationId, array $activitiesId): void
+    {
+        $this->db->transStart();
+
+        foreach ($activitiesId as $activityId) {
+            $this->db->table('reservations_activities')->insert([
+                'r_fk_id' => $reservationId,
+                'a_fk_id' => $activityId
+            ]);
+        }
+
+        $this->db->transComplete();
+
+        if ($this->db->transStatus() === false) {
+            throw new \RuntimeException('Failed to add activities to reservation');
+        }
+    }
 }
