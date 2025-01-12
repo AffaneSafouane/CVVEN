@@ -16,6 +16,6 @@ class ReservationController extends BaseController
             'title' => 'Liste des réservations',
         ];
 
-        return view('admin/reservation/index', $data);
+        return view('admin/reservations/index', $data);
     }
 }

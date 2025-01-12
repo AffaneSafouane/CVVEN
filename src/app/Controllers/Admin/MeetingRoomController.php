@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Controllers;
+namespace App\Controllers\Admin;
 
 use App\Controllers\BaseController;
 use App\Models\MeetingRoomModel;
-use CodeIgniter\HTTP\ResponseInterface;
 
 class MeetingRoomController extends BaseController
 {
@@ -17,6 +16,6 @@ class MeetingRoomController extends BaseController
             'title' => 'Liste des salles de réunions'
         ];
 
-        return view('meetingRoom/index', $data);
+        return view('admin/meetingRooms/index', $data);
     }
 }

@@ -65,7 +65,7 @@ class Reservation extends Entity
             return null;
         }
 
-        $format = 'Y-m-d H:i:s';
+        $format = 'Y/m/d - H:i:s';
         $date = $this->mutateDate($this->startingDate);
 
         $timezone = $this->timezone ?? app_timezone();
@@ -80,7 +80,7 @@ class Reservation extends Entity
             return null;
         }
 
-        $format = 'Y-m-d H:i:s';
+        $format = 'Y/m/d - H:i:s';
         $date = $this->mutateDate($this->endingDate);
 
         $timezone = $this->timezone ?? app_timezone();
@@ -95,7 +95,7 @@ class Reservation extends Entity
             return null;
         }
 
-        $format = 'Y-m-d H:i:s';
+        $format = 'Y/m/d - H:i:s';
         $date = $this->mutateDate($this->createdAt);
 
         $timezone = $this->timezone ?? app_timezone();
@@ -110,7 +110,7 @@ class Reservation extends Entity
             return null;
         }
 
-        $format = 'Y-m-d H:i:s';
+        $format = 'Y/m/d - H:i:s';
         $date = $this->mutateDate($this->updatedAt);
 
         $timezone = $this->timezone ?? app_timezone();
@@ -156,7 +156,7 @@ class Reservation extends Entity
     public function setStartingDate(string $startingDate): static
     {
         try {
-            $this->startingDate = new Time($startingDate, 'UTC');
+            $this->startingDate = new Time($startingDate, 'Europe/Paris');
         } catch (Exception $e) {
             log_message('error', 'Invalid starting date provided: ' . $e->getMessage());
             $this->startingDate = null;
@@ -168,7 +168,7 @@ class Reservation extends Entity
     public function setEndingDate(string $endingDate): static
     {
         try {
-            $this->endingDate = new Time($endingDate, 'UTC');
+            $this->endingDate = new Time($endingDate, 'Europe/Paris');
         } catch (Exception $e) {
             log_message('error', 'Invalid ending date provided: ' . $e->getMessage());
             $this->endingDate = null;

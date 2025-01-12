@@ -24,7 +24,7 @@ class UserController extends BaseController
             throw new UserNotFoundException('Impossible de trouver des utilisateurs');
         }
 
-        return view('admin/user/index', $data);
+        return view('admin/users/index', $data);
     }
     // @TODO Ajouter les méthodes show(), updateGroup(), delete(), suspend()
 }

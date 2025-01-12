@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Controllers;
+namespace App\Controllers\Admin;
 
 use App\Controllers\BaseController;
 use App\Models\ActivityModel;
-use CodeIgniter\HTTP\ResponseInterface;
 
 class ActivityController extends BaseController
 {
@@ -17,6 +16,6 @@ class ActivityController extends BaseController
             'title' => 'Liste des activités',
         ];
 
-        return view('activity/index', $data);
+        return view('admin/activities/index', $data);
     }
 }
