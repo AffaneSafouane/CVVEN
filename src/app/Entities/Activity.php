@@ -9,7 +9,7 @@ use Exception;
 
 /**
  * @property ?int $id
- * @property ?string $name
+ * @property ?string $type
  * @property ?string $description
  * @property ?Time $startingDate
  * @property ?Time $endingDate
@@ -20,7 +20,7 @@ class Activity extends Entity
 {
     protected $datamap = [
         'id'           => 'a_id',
-        'name'         => 'a_name',
+        'type'         => 'a_type',
         'description'  => 'a_description',
         'startingDate' => 'a_starting_date',
         'endingDate'   => 'a_ending_date',
@@ -31,14 +31,14 @@ class Activity extends Entity
 
     protected $casts   = [
         'a_id'          => 'integer',
-        'a_name'        => 'string',
+        'a_type'        => 'string',
         'a_description' => 'string',
         'a_price'       => 'float',
     ];
 
-    public function setName(string $name): static
+    public function setType(string $type): static
     {
-        $this->name = $name;
+        $this->type = $type;
         return $this;
     }
 

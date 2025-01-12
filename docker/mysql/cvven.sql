@@ -33,7 +33,7 @@ USE cvven;
 
 CREATE TABLE IF NOT EXISTS `activities` (
   `a_id` int NOT NULL,
-  `a_name` varchar(150) NOT NULL,
+  `a_type` varchar(150) NOT NULL,
   `a_starting_date` datetime NOT NULL,
   `a_ending_date` datetime NOT NULL,
   `a_description` varchar(255) NOT NULL,
@@ -44,10 +44,14 @@ CREATE TABLE IF NOT EXISTS `activities` (
 -- Déchargement des données de la table `activities`
 --
 
-INSERT INTO `activities` (`a_id`, `a_name`, `a_starting_date`, `a_ending_date`, `a_description`, `a_price`) VALUES
-(1, 'Randonnée', '2024-12-11 09:00:00', '2024-12-11 12:00:00', 'Randonnée guidée en montagne', 25),
-(2, 'Atelier cuisine', '2024-12-21 14:00:00', '2024-12-21 17:00:00', 'Atelier de cuisine locale', 50),
-(3, 'Yoga', '2025-01-06 08:00:00', '2025-01-06 09:30:00', 'Séance de yoga matinale', 15);
+INSERT INTO `activities` (`a_id`, `a_type`, `a_starting_date`, `a_ending_date`, `a_description`, `a_price`) VALUES
+(1, 'Soirée dansante', '2025-01-15 20:00:00', '2025-01-15 23:00:00', 'Soirée dansante animée par des intervenants extérieurs', 20.00),
+(2, 'Spectacle de théâtre', '2025-02-10 19:30:00', '2025-02-10 22:00:00', 'Spectacle de théâtre avec magie et cirque', 25.00),
+(3, 'Atelier arts plastiques', '2025-02-20 14:00:00', '2025-02-20 16:00:00', 'Activité manuelle pour les vacances scolaires', 15.00),
+(4, 'Randonnée encadrée', '2025-06-10 09:00:00', '2025-06-10 12:00:00', 'Randonnée guidée pour participants aux colloques', 30.00),
+(5, 'Activité sportive estivale', '2025-07-15 10:00:00', '2025-07-15 13:00:00', 'Accès au terrain de sport et parc VTT', 40.00),
+(6, 'Location matériel hiver', '2025-12-20 08:00:00', '2025-12-20 17:00:00', 'Location de ski, raquettes et chaussures de randonnée', 50.00);
+
 
 -- --------------------------------------------------------
 
@@ -212,22 +216,16 @@ CREATE TABLE IF NOT EXISTS `auth_token_logins` (
 
 CREATE TABLE IF NOT EXISTS `reservations` (
   `r_id` int NOT NULL,
-  `r_starting_date` date NOT NULL,
-  `r_ending_date` date NOT NULL,
-  `r_pension_type` varchar(50) NOT NULL,
-  `r_nb_people` int NOT NULL,
-  `r_date` date DEFAULT (curdate()),
-  `r_status` varchar(50) DEFAULT 'En attente',
+  `r_starting_date` DATETIME NOT NULL,
+  `r_ending_date` DATETIME NOT NULL,
+  `r_meal_option` varchar(50) NOT NULL,
+  `r_number_people` int NOT NULL,
+  `r_created_at` DATETIME DEFAULT (CURRENT_TIMESTAMP()),
+  `r_updated_at` DATETIME NULL,
+  `r_deleted_at` DATETIME NOT NULL,
+  `r_status` varchar(50) DEFAULT 'Pending',
   `u_fk_id` int UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Déchargement des données de la table `reservations`
---
-
-INSERT INTO `reservations` (`r_id`, `r_starting_date`, `r_ending_date`, `r_pension_type`, `r_nb_people`, `r_date`, `r_status`, `u_fk_id`) VALUES
-(1, '2024-12-10', '2024-12-15', 'Pension complète', 2, '2024-12-01', 'Confirmée', 1),
-(2, '2024-12-20', '2024-12-22', 'Demi-pension', 1, '2024-12-10', 'En attente', 2);
 
 -- --------------------------------------------------------
 
@@ -236,11 +234,11 @@ INSERT INTO `reservations` (`r_id`, `r_starting_date`, `r_ending_date`, `r_pensi
 --
 
 CREATE TABLE IF NOT EXISTS `rooms` (
-  `ro_num` int NOT NULL,
+  `ro_number` int NOT NULL,
   `ro_type` varchar(150) NOT NULL,
   `ro_description` varchar(255) NOT NULL,
   `ro_price` float NOT NULL,
-  `ro_cleaning_option` tinyint(1) DEFAULT '0',
+  `ro_cleaning_option` tinyint(1) DEFAULT NULL,
   `ro_available` tinyint(1) NOT NULL,
   `r_fk_id` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -249,9 +247,94 @@ CREATE TABLE IF NOT EXISTS `rooms` (
 -- Déchargement des données de la table `rooms`
 --
 
-INSERT INTO `rooms` (`ro_num`, `ro_type`, `ro_description`, `ro_price`, `ro_cleaning_option`, `ro_available`, `r_fk_id`) VALUES
-(101, 'rooms simple', 'rooms avec lit simple et salle de bain privée', 80, 1, 1, 1),
-(102, 'Suite', 'Suite avec salon, rooms et vue sur mer', 200, 1, 1, 2);
+INSERT INTO `rooms` (`ro_number`, `ro_type`, `ro_description`, `ro_price`, `ro_cleaning_option`, `ro_available`, `r_fk_id`)
+VALUES
+-- 40 logements
+(001, 'Logements', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, NULL),
+(002, 'Logements', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, NULL),
+(003, 'Logements', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, NULL),
+(004, 'Logements', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, NULL),
+(005, 'Logements', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, NULL),
+(006, 'Logements', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, NULL),
+(007, 'Logements', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, NULL),
+(008, 'Logements', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, NULL),
+(009, 'Logements', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, NULL),
+(010, 'Logements', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, NULL),
+(011, 'Logements', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, NULL),
+(012, 'Logements', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, NULL),
+(013, 'Logements', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, NULL),
+(014, 'Logements', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, NULL),
+(015, 'Logements', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, NULL),
+(016, 'Logements', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, NULL),
+(017, 'Logements', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, NULL),
+(018, 'Logements', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, NULL),
+(019, 'Logements', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, NULL),
+(020, 'Logements', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, NULL),
+(021, 'Logements', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, NULL),
+(022, 'Logements', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, NULL),
+(023, 'Logements', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, NULL),
+(024, 'Logements', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, NULL),
+(025, 'Logements', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, NULL),
+(026, 'Logements', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, NULL),
+(027, 'Logements', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, NULL),
+(028, 'Logements', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, NULL),
+(029, 'Logements', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, NULL),
+(030, 'Logements', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, NULL),
+(031, 'Logements', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, NULL),
+(032, 'Logements', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, NULL),
+(033, 'Logements', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, NULL),
+(034, 'Logements', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, NULL),
+(035, 'Logements', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, NULL),
+(036, 'Logements', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, NULL),
+(037, 'Logements', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, NULL),
+(038, 'Logements', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, NULL),
+(039, 'Logements', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, NULL),
+(040, 'Logements', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, NULL),
+
+-- 15 chambres doubles
+(041, 'Chambre double', 'Entrée, douche et WC, 1 lit double', 100.00, NULL, 1, NULL),
+(042, 'Chambre double', 'Entrée, douche et WC, 1 lit double', 100.00, NULL, 1, NULL),
+(043, 'Chambre double', 'Entrée, douche et WC, 1 lit double', 100.00, NULL, 1, NULL),
+(044, 'Chambre double', 'Entrée, douche et WC, 1 lit double', 100.00, NULL, 1, NULL),
+(045, 'Chambre double', 'Entrée, douche et WC, 1 lit double', 100.00, NULL, 1, NULL),
+(046, 'Chambre double', 'Entrée, douche et WC, 1 lit double', 100.00, NULL, 1, NULL),
+(047, 'Chambre double', 'Entrée, douche et WC, 1 lit double', 100.00, NULL, 1, NULL),
+(048, 'Chambre double', 'Entrée, douche et WC, 1 lit double', 100.00, NULL, 1, NULL),
+(049, 'Chambre double', 'Entrée, douche et WC, 1 lit double', 100.00, NULL, 1, NULL),
+(050, 'Chambre double', 'Entrée, douche et WC, 1 lit double', 100.00, NULL, 1, NULL),
+(051, 'Chambre double', 'Entrée, douche et WC, 1 lit double', 100.00, NULL, 1, NULL),
+(052, 'Chambre double', 'Entrée, douche et WC, 1 lit double', 100.00, NULL, 1, NULL),
+(053, 'Chambre double', 'Entrée, douche et WC, 1 lit double', 100.00, NULL, 1, NULL),
+(054, 'Chambre double', 'Entrée, douche et WC, 1 lit double', 100.00, NULL, 1, NULL),
+(055, 'Chambre double', 'Entrée, douche et WC, 1 lit double', 100.00, NULL, 1, NULL),
+
+-- 8 chambres de 3 lits
+(056, 'Chambre triple', '3 lits séparés par une cloison mobile avec coin toilette, WC, douche', 110.00, NULL, 1, NULL),
+(057, 'Chambre triple', '3 lits séparés par une cloison mobile avec coin toilette, WC, douche', 110.00, NULL, 1, NULL),
+(058, 'Chambre triple', '3 lits séparés par une cloison mobile avec coin toilette, WC, douche', 110.00, NULL, 1, NULL),
+(059, 'Chambre triple', '3 lits séparés par une cloison mobile avec coin toilette, WC, douche', 110.00, NULL, 1, NULL),
+(060, 'Chambre triple', '3 lits séparés par une cloison mobile avec coin toilette, WC, douche', 110.00, NULL, 1, NULL),
+(061, 'Chambre triple', '3 lits séparés par une cloison mobile avec coin toilette, WC, douche', 110.00, NULL, 1, NULL),
+(062, 'Chambre triple', '3 lits séparés par une cloison mobile avec coin toilette, WC, douche', 110.00, NULL, 1, NULL),
+(063, 'Chambre triple', '3 lits séparés par une cloison mobile avec coin toilette, WC, douche', 110.00, NULL, 1, NULL),
+
+-- 12 chambres de 4 lits
+(064, 'Chambre quadruple', '4 lits séparés par une cloison mobile avec douche, WC et balcon', 140.00, NULL, 1, NULL),
+(065, 'Chambre quadruple', '4 lits séparés par une cloison mobile avec douche, WC et balcon', 140.00, NULL, 1, NULL),
+(066, 'Chambre quadruple', '4 lits séparés par une cloison mobile avec douche, WC et balcon', 140.00, NULL, 1, NULL),
+(067, 'Chambre quadruple', '4 lits séparés par une cloison mobile avec douche, WC et balcon', 140.00, NULL, 1, NULL),
+(068, 'Chambre quadruple', '4 lits séparés par une cloison mobile avec douche, WC et balcon', 140.00, NULL, 1, NULL),
+(069, 'Chambre quadruple', '4 lits séparés par une cloison mobile avec douche, WC et balcon', 140.00, NULL, 1, NULL),
+(070, 'Chambre quadruple', '4 lits séparés par une cloison mobile avec douche, WC et balcon', 140.00, NULL, 1, NULL),
+(071, 'Chambre quadruple', '4 lits séparés par une cloison mobile avec douche, WC et balcon', 140.00, NULL, 1, NULL),
+(072, 'Chambre quadruple', '4 lits séparés par une cloison mobile avec douche, WC et balcon', 140.00, NULL, 1, NULL),
+(073, 'Chambre quadruple', '4 lits séparés par une cloison mobile avec douche, WC et balcon', 140.00, NULL, 1, NULL),
+(074, 'Chambre quadruple', '4 lits séparés par une cloison mobile avec douche, WC et balcon', 140.00, NULL, 1, NULL),
+(075, 'Chambre quadruple', '4 lits séparés par une cloison mobile avec douche, WC et balcon', 140.00, NULL, 1, NULL),
+
+-- 1 logement adapté
+(076, 'Chambre accessible', 'Adapté pour les personnes à mobilité réduite', 130.00, NULL, 1, NULL);
+
 
 -- --------------------------------------------------------
 
@@ -282,21 +365,13 @@ INSERT INTO `migrations` (`id`, `version`, `class`, `group`, `namespace`, `time`
 -- --------------------------------------------------------
 
 --
--- Structure de la table `participate`
+-- Structure de la table `reservations_activities`
 --
 
-CREATE TABLE IF NOT EXISTS `participate` (
+CREATE TABLE IF NOT EXISTS `reservations_activities` (
   `r_fk_id` int NOT NULL,
   `a_fk_id` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Déchargement des données de la table `participate`
---
-
-INSERT INTO `participate` (`r_fk_id`, `a_fk_id`) VALUES
-(1, 1),
-(2, 2);
 
 -- --------------------------------------------------------
 
@@ -305,10 +380,11 @@ INSERT INTO `participate` (`r_fk_id`, `a_fk_id`) VALUES
 --
 
 CREATE TABLE IF NOT EXISTS `meeting_rooms` (
-  `mr_num` int NOT NULL,
+  `mr_number` int NOT NULL,
   `mr_type` varchar(50) NOT NULL,
   `mr_description` varchar(255) NOT NULL,
   `mr_price` float NOT NULL,
+  `mr_capacity` int NOT NULL,
   `mr_available` tinyint(1) NOT NULL,
   `r_fk_id` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -317,9 +393,11 @@ CREATE TABLE IF NOT EXISTS `meeting_rooms` (
 -- Déchargement des données de la table `meeting_rooms`
 --
 
-INSERT INTO `meeting_rooms` (`mr_num`, `mr_type`, `mr_description`, `mr_price`, `mr_available`, `r_fk_id`) VALUES
-(1, 'Salle conférence', 'Salle équipée pour conférence avec 50 places', 300, 1, 1),
-(2, 'Salle workshop', 'Salle pour petits groupes avec équipements interactifs', 150, 1, 2);
+INSERT INTO `meeting_rooms` (`mr_number`, `mr_type`, `mr_description`, `mr_price`, `mr_capacity`, `mr_available`, `r_fk_id`) VALUES
+(100, 'Salle conférence', 'Salle de conférence avec 196 places, tablettes écritoires, sonorisation, vidéoprojecteur pour grand écran', 300, 196, 1, null),
+(101, 'Salle commission', 'Salle de commission avec 45 à 50 places, tablettes écritoires et tableau blanc', 150, 50, 1, null),
+(102, 'Salle commission', 'Salle de commission avec 25 places, tables, chaises et tableau blanc', 120, 25, 1, null),
+(103, 'Salle commission', 'Salle de commission avec 10 places, tables, chaises et tableau blanc', 100, 10, 1, null);
 
 -- --------------------------------------------------------
 
@@ -356,8 +434,10 @@ CREATE TABLE IF NOT EXISTS `transports` (
 --
 
 INSERT INTO `transports` (`t_id`, `t_type`, `t_price`, `r_fk_id`) VALUES
-(1, 'Taxi', 50, 1),
-(2, 'Navette', 30, 2);
+(1, 'Taxi', 50, null),
+(2, 'Remontée mécanique', 30, null),
+(3, 'Taxi', 50, null),
+(4, 'Remontée mécanique', 30, null);
 
 -- --------------------------------------------------------
 
@@ -421,7 +501,7 @@ ALTER TABLE `auth_token_logins`
 -- Index pour la table `rooms`
 --
 ALTER TABLE `rooms`
-  ADD PRIMARY KEY (`ro_num`),
+  ADD PRIMARY KEY (`ro_number`),
   ADD KEY `rooms_reservations_FK` (`r_fk_id`);
 
 --
@@ -431,11 +511,11 @@ ALTER TABLE `migrations`
   ADD PRIMARY KEY (`id`);
 
 --
--- Index pour la table `participate`
+-- Index pour la table `reservations_activities`
 --
-ALTER TABLE `participate`
+ALTER TABLE `reservations_activities`
   ADD PRIMARY KEY (`r_fk_id`,`a_fk_id`),
-  ADD KEY `participate_activities_FK` (`a_fk_id`);
+  ADD KEY `reservations_activities_activities_FK` (`a_fk_id`);
 
 --
 -- Index pour la table `reservations`
@@ -448,7 +528,7 @@ ALTER TABLE `reservations`
 -- Index pour la table `meeting_rooms`
 --
 ALTER TABLE `meeting_rooms`
-  ADD PRIMARY KEY (`mr_num`),
+  ADD PRIMARY KEY (`mr_number`),
   ADD KEY `meeting_rooms_reservations_FK` (`r_fk_id`);
 
 --
@@ -583,11 +663,11 @@ ALTER TABLE `rooms`
   ADD CONSTRAINT `rooms_reservations_FK` FOREIGN KEY (`r_fk_id`) REFERENCES `reservations` (`r_id`);
 
 --
--- Contraintes pour la table `participate`
+-- Contraintes pour la table `reservations_activities`
 --
-ALTER TABLE `participate`
-  ADD CONSTRAINT `participate_activities_FK` FOREIGN KEY (`a_fk_id`) REFERENCES `activities` (`a_id`),
-  ADD CONSTRAINT `participate_reservations_FK` FOREIGN KEY (`r_fk_id`) REFERENCES `reservations` (`r_id`);
+ALTER TABLE `reservations_activities`
+  ADD CONSTRAINT `reservations_activities_activities_FK` FOREIGN KEY (`a_fk_id`) REFERENCES `activities` (`a_id`),
+  ADD CONSTRAINT `reservations_activities_reservations_FK` FOREIGN KEY (`r_fk_id`) REFERENCES `reservations` (`r_id`);
 
 --
 -- Contraintes pour la table `reservations`

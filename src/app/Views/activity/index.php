@@ -13,7 +13,7 @@
     <?php if ($activities !== []): ?>
         <?php foreach ($activities as $activity): ?>
             <ul class="list-group list-group-flush mb-3">
-                <li class="list-group-item"><?= esc($activity->name); ?></li>
+                <li class="list-group-item"><?= esc($activity->type); ?></li>
                 <li class="list-group-item"><?= $activity->getStartingDate(); ?></li>
                 <li class="list-group-item"><?= $activity->getEndingDate(); ?></li>
             </ul>
