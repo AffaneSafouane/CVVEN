@@ -3,9 +3,8 @@ services:
         build:
             context: .
             dockerfile: docker/mysql/Dockerfile
-        environment: 
-            MYSQL_DATABASE: ${MYSQL_DATABASE}
-            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+        env_file:
+            - ./docker/.env
         container_name: "mysql_db"
         restart: always
         volumes:
@@ -58,6 +57,7 @@ services:
             MP_SMTP_AUTH_ALLOW_INSECURE: 1
         networks:
             - sf
+
 volumes:
     db_data:
         driver: local
