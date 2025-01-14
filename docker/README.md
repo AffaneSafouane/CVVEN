@@ -22,7 +22,7 @@ Ouvrez un terminal dans votre projet et lancer la commande :
 docker compose up -d
 ```
 
-L’utilisateur mysql est *root* et le mot de passe est : *adminSQL1234ADC+*
+L’utilisateur mysql est *root* et le mot de passe est : *adminSQL*
 
 ATTENTION: Il ne faut pas que les ports utiliser par les conteneurs soient déjà occupés, par XAMPP par exemple. 
 
