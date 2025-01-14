@@ -29,7 +29,7 @@ class UserController extends BaseController {
             throw new UserNotFoundException('Impossible de trouver l\'utilisateur');
         }
 
-        return view('user/view', $data);
+        return view('users/view', $data);
     }
 
     // @TODO Ajouter les méthodes update et delete uniquement pour l'utilisateur concerné
