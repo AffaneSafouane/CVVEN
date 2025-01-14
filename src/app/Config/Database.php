@@ -26,7 +26,7 @@ class Database extends Config
      */
     public array $default = [
         'DSN'          => '',
-        'hostname'     => 'localhost',
+        'hostname'     => 'mysql_db',
         'username'     => 'root',
         'password'     => 'adminSQL',
         'database'     => 'cvven',

@@ -125,4 +125,4 @@ nb-configuration.xml
 /results/
 /phpunit*.xml
 
-/app/Config/Database.php
+app/Config/Database.php
