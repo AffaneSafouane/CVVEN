@@ -28,7 +28,7 @@ class Database extends Config
         'DSN'          => '',
         'hostname'     => 'mysql_db',
         'username'     => 'root',
-        'password'     => 'adminSQL1234ADC+',
+        'password'     => 'adminSQL',
         'database'     => 'cvven',
         'DBDriver'     => 'MySQLi',
         'DBPrefix'     => '',
