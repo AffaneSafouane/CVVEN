@@ -23,12 +23,12 @@ class Email extends BaseConfig
     /**
      * The server path to Sendmail.
      */
-    public string $mailPath = '/usr/sbin/sendmail';
+    public string $mailPath = '';
 
     /**
      * SMTP Server Hostname
      */
-    public string $SMTPHost = 'mailpit';
+    public string $SMTPHost = 'email.SMTPHost';
 
     /**
      * SMTP Username

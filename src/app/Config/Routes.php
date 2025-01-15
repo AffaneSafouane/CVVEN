@@ -29,3 +29,5 @@ $routes->get('admin/meetingRooms', [AdminMeetingRoomController::class, 'index'])
 $routes->get('admin/reservations', [AdminReservationController::class, 'index']);
 
 $routes->get('admin/activities', [AdminActivityController::class, 'index']);
+
+$routes->get('test/mail', [\App\Controllers\TestMailpit::class, 'index']);

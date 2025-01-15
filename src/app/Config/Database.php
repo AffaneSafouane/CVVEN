@@ -26,10 +26,10 @@ class Database extends Config
      */
     public array $default = [
         'DSN'          => '',
-        'hostname'     => 'mysql_db',
-        'username'     => 'root',
-        'password'     => 'adminSQL',
-        'database'     => 'cvven',
+        'hostname'     => 'database.default.hostname',
+        'username'     => 'datbase.default.username',
+        'password'     => 'database.default.password',
+        'database'     => 'database.default.database',
         'DBDriver'     => 'MySQLi',
         'DBPrefix'     => '',
         'pConnect'     => false,
