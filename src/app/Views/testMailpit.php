@@ -1,5 +1,5 @@
 <?php
-$connection = fsockopen('mailpit', 1025, $errno, $errstr, 5);
+$connection = fsockopen($_ENV['email.SMTPHost'], 1025, $errno, $errstr, 5);
 if (!$connection) {
     echo "Connection failed: $errstr ($errno)";
 } else {
