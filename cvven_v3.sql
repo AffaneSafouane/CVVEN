@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS `activities` (
   `a_ending_date` datetime NOT NULL,
   `a_description` varchar(255) NOT NULL,
   `a_price` float NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) CHARSET=utf8mb4;
 
 --
 -- Déchargement des données de la table `activities`
@@ -76,14 +76,14 @@ CREATE TABLE IF NOT EXISTS `users` (
   `city` varchar(50) NOT NULL,
   `postal_code` varchar(5) NOT NULL,
   `birth_date` date NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) CHARSET=utf8mb4;
 
 --
 -- Déchargement des données de la table `users`
 --
 
 INSERT INTO `users` (`id`, `username`, `status`, `status_message`, `active`, `last_active`, `created_at`, `updated_at`, `deleted_at`, `phone`, `last_name`, `name`, `address`, `city`, `postal_code`, `birth_date`) VALUES
-(1, NULL, NULL, NULL, 1, '2024-12-31 10:29:50', '2024-12-29 12:25:56', '2024-12-29 12:25:57', NULL, NULL, 'Doe', 'John', '21 Jump Street', 'Melun', '77000', '2001-02-21'),
+(1, NULL, NULL, NULL, 1, '2024-12-31 10:29:50', '2024-12-29 12:25:56', '2024-12-29 12:25:57', NULL, NULL, 'Doe', 'John', '21 Jump Street', 'Melun', '77000', '2001-02-21'), 
 (2, NULL, NULL, NULL, 1, '2024-12-31 14:45:19', '2024-12-31 14:41:18', '2024-12-31 14:41:59', NULL, NULL, 'Doe', 'Jane', '22 Jump Street', 'Melun', '77000', '1988-03-24');
 
 -- --------------------------------------------------------
@@ -97,7 +97,7 @@ CREATE TABLE IF NOT EXISTS `auth_groups_users` (
   `user_id` int UNSIGNED NOT NULL,
   `group` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `created_at` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) CHARSET=utf8mb4;
 
 --
 -- Déchargement des données de la table `auth_groups_users`
@@ -126,7 +126,7 @@ CREATE TABLE IF NOT EXISTS `auth_identities` (
   `last_used_at` datetime DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) CHARSET=utf8mb4;
 
 --
 -- Déchargement des données de la table `auth_identities`
@@ -151,7 +151,7 @@ CREATE TABLE IF NOT EXISTS `auth_logins` (
   `user_id` int UNSIGNED DEFAULT NULL,
   `date` datetime NOT NULL,
   `success` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) CHARSET=utf8mb4;
 
 --
 -- Déchargement des données de la table `auth_logins`
@@ -173,7 +173,7 @@ CREATE TABLE IF NOT EXISTS `auth_permissions_users` (
   `user_id` int UNSIGNED NOT NULL,
   `permission` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `created_at` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -189,7 +189,7 @@ CREATE TABLE IF NOT EXISTS `auth_remember_tokens` (
   `expires` datetime NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -206,7 +206,7 @@ CREATE TABLE IF NOT EXISTS `auth_token_logins` (
   `user_id` int UNSIGNED DEFAULT NULL,
   `date` datetime NOT NULL,
   `success` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -225,7 +225,7 @@ CREATE TABLE IF NOT EXISTS `reservations` (
   `r_deleted_at` DATETIME NOT NULL,
   `r_status` varchar(50) DEFAULT 'Pending',
   `u_fk_id` int UNSIGNED NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -241,7 +241,7 @@ CREATE TABLE IF NOT EXISTS `rooms` (
   `ro_cleaning_option` tinyint(1) DEFAULT NULL,
   `ro_available` tinyint(1) NOT NULL,
   `r_fk_id` int DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) CHARSET=utf8mb4;
 
 --
 -- Déchargement des données de la table `rooms`
@@ -350,7 +350,7 @@ CREATE TABLE IF NOT EXISTS `migrations` (
   `namespace` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `time` int NOT NULL,
   `batch` int UNSIGNED NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) CHARSET=utf8mb4;
 
 --
 -- Déchargement des données de la table `migrations`
@@ -371,7 +371,7 @@ INSERT INTO `migrations` (`id`, `version`, `class`, `group`, `namespace`, `time`
 CREATE TABLE IF NOT EXISTS `reservations_activities` (
   `r_fk_id` int NOT NULL,
   `a_fk_id` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -387,7 +387,7 @@ CREATE TABLE IF NOT EXISTS `meeting_rooms` (
   `mr_capacity` int NOT NULL,
   `mr_available` tinyint(1) NOT NULL,
   `r_fk_id` int DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) CHARSET=utf8mb4;
 
 --
 -- Déchargement des données de la table `meeting_rooms`
@@ -414,7 +414,7 @@ CREATE TABLE IF NOT EXISTS `settings` (
   `context` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -427,7 +427,7 @@ CREATE TABLE IF NOT EXISTS `transports` (
   `t_type` varchar(150) NOT NULL,
   `t_price` float NOT NULL,
   `r_fk_id` int DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) CHARSET=utf8mb4;
 
 --
 -- Déchargement des données de la table `transports`
