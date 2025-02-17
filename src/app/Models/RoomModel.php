@@ -13,7 +13,7 @@ class RoomModel extends Model
     protected $returnType       = Room::class;
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['ro_number', 'ro_type', 'ro_description', 'ro_price', 'ro_cleaning_option', 'ro_available', 'ro_capacity', 'r_fk_id'];
+    protected $allowedFields    = ['ro_number', 'ro_type', 'ro_description', 'ro_price', 'ro_cleaning_option', 'ro_available', 'ro_capacity'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -33,8 +33,7 @@ class RoomModel extends Model
         'ro_price' => 'decimal|greater_than[0]|less_than[500]|required',
         'ro_cleaning_option' => 'required|in_list[0,1]',
         'ro_available' => 'required|in_list[0,1]',
-        'ro_capacity' => 'required|integer|greater_than[0]|less_than[10]',
-        'r_fk_id' => 'is_natural_no_zero'
+        'ro_capacity' => 'required|integer|greater_than[0]|less_than[10]'
     ];
     protected $validationMessages   = [];
     protected $skipValidation       = false;

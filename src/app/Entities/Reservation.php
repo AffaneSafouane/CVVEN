@@ -44,7 +44,7 @@ class Reservation extends Entity
         'startingDate'   => 'r_starting_date',
         'endingDate'     => 'r_ending_date',
         'status'         => 'r_status',
-        'userId'           => 'u_fk_id',
+        'userId'         => 'u_fk_id',
     ];
     
     protected $dates = ['r_created_at', 'r_updated_at', 'r_deleted_at', 'r_starting_date', 'r_ending_date'];
