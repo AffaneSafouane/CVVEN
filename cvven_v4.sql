@@ -182,7 +182,7 @@ CREATE TABLE IF NOT EXISTS `auth_token_logins` (
 --
 
 CREATE TABLE IF NOT EXISTS `meeting_rooms` (
-  `mr_number` int(11) NOT NULL,
+  `mr_number` char(3) NOT NULL,
   `mr_type` varchar(50) NOT NULL,
   `mr_description` varchar(255) NOT NULL,
   `mr_price` float NOT NULL,
@@ -195,10 +195,10 @@ CREATE TABLE IF NOT EXISTS `meeting_rooms` (
 --
 
 INSERT INTO `meeting_rooms` (`mr_number`, `mr_type`, `mr_description`, `mr_price`, `mr_capacity`, `mr_available`) VALUES
-(100, 'Salle conférence', 'Salle de conférence avec 196 places, tablettes écritoires, sonorisation, vidéoprojecteur pour grand écran', 300, 196, 1),
-(101, 'Salle commission', 'Salle de commission avec 45 à 50 places, tablettes écritoires et tableau blanc', 150, 50, 1),
-(102, 'Salle commission', 'Salle de commission avec 25 places, tables, chaises et tableau blanc', 120, 25, 1),
-(103, 'Salle commission', 'Salle de commission avec 10 places, tables, chaises et tableau blanc', 100, 10, 1);
+("002", 'Salle conférence', 'Salle de conférence avec 196 places, tablettes écritoires, sonorisation, vidéoprojecteur pour grand écran', 300, 196, 1),
+("003", 'Salle commission', 'Salle de commission avec 45 à 50 places, tablettes écritoires et tableau blanc', 150, 50, 1),
+("004", 'Salle commission', 'Salle de commission avec 25 places, tables, chaises et tableau blanc', 120, 25, 1),
+("005", 'Salle commission', 'Salle de commission avec 10 places, tables, chaises et tableau blanc', 100, 10, 1);
 
 -- --------------------------------------------------------
 
@@ -266,7 +266,7 @@ CREATE TABLE IF NOT EXISTS `reservations_activities` (
 
 CREATE TABLE IF NOT EXISTS `reservations_meeting_rooms` (
   `r_fk_id` int(11) NOT NULL,
-  `mr_fk_number` int(11) NOT NULL
+  `mr_fk_number` char(3) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -277,7 +277,7 @@ CREATE TABLE IF NOT EXISTS `reservations_meeting_rooms` (
 
 CREATE TABLE IF NOT EXISTS `reservations_rooms` (
   `r_fk_id` int(11) NOT NULL,
-  `ro_fk_number` int(11) NOT NULL
+  `ro_fk_number` char(3) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -298,7 +298,7 @@ CREATE TABLE IF NOT EXISTS `reservations_transports` (
 --
 
 CREATE TABLE IF NOT EXISTS `rooms` (
-  `ro_number` int(11) NOT NULL,
+  `ro_number` char(3) NOT NULL,
   `ro_type` varchar(150) NOT NULL,
   `ro_description` varchar(255) NOT NULL,
   `ro_price` float NOT NULL,
@@ -314,90 +314,90 @@ CREATE TABLE IF NOT EXISTS `rooms` (
 INSERT INTO `rooms` (`ro_number`, `ro_type`, `ro_description`, `ro_price`, `ro_cleaning_option`, `ro_available`, `ro_capacity`)
 VALUES
 -- 40 logements
-(001, 'Logements', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, 4),
-(002, 'Logements', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, 4),
-(003, 'Logements', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, 4),
-(004, 'Logements', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, 4),
-(005, 'Logements', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, 4),
-(006, 'Logements', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, 4),
-(007, 'Logements', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, 4),
-(008, 'Logements', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, 4),
-(009, 'Logements', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, 4),
-(010, 'Logements', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, 4),
-(011, 'Logements', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, 4),
-(012, 'Logements', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, 4),
-(013, 'Logements', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, 4),
-(014, 'Logements', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, 4),
-(015, 'Logements', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, 4),
-(016, 'Logements', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, 4),
-(017, 'Logements', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, 4),
-(018, 'Logements', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, 4),
-(019, 'Logements', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, 4),
-(020, 'Logements', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, 4),
-(021, 'Logements', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, 4),
-(022, 'Logements', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, 4),
-(023, 'Logements', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, 4),
-(024, 'Logements', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, 4),
-(025, 'Logements', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, 4),
-(026, 'Logements', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, 4),
-(027, 'Logements', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, 4),
-(028, 'Logements', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, 4),
-(029, 'Logements', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, 4),
-(030, 'Logements', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, 4),
-(031, 'Logements', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, 4),
-(032, 'Logements', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, 4),
-(033, 'Logements', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, 4),
-(034, 'Logements', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, 4),
-(035, 'Logements', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, 4),
-(036, 'Logements', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, 4),
-(037, 'Logements', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, 4),
-(038, 'Logements', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, 4),
-(039, 'Logements', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, 4),
-(040, 'Logements', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, 4),
+("101", 'Accommodation', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, 4),
+("102", 'Accommodation', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, 4),
+("103", 'Accommodation', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, 4),
+("104", 'Accommodation', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, 4),
+("105", 'Accommodation', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, 4),
+("106", 'Accommodation', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, 4),
+("107", 'Accommodation', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, 4),
+("108", 'Accommodation', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, 4),
+("109", 'Accommodation', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, 4),
+("110", 'Accommodation', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, 4),
+("111", 'Accommodation', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, 4),
+("112", 'Accommodation', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, 4),
+("113", 'Accommodation', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, 4),
+("114", 'Accommodation', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, 4),
+("115", 'Accommodation', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, 4),
+("116", 'Accommodation', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, 4),
+("117", 'Accommodation', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, 4),
+("118", 'Accommodation', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, 4),
+("119", 'Accommodation', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, 4),
+("120", 'Accommodation', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, 4),
+("121", 'Accommodation', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, 4),
+("122", 'Accommodation', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, 4),
+("123", 'Accommodation', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, 4),
+("124", 'Accommodation', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, 4),
+("125", 'Accommodation', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, 4),
+("126", 'Accommodation', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, 4),
+("127", 'Accommodation', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, 4),
+("128", 'Accommodation', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, 4),
+("129", 'Accommodation', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, 4),
+("130", 'Accommodation', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, 4),
+("131", 'Accommodation', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, 4),
+("132", 'Accommodation', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, 4),
+("133", 'Accommodation', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, 4),
+("134", 'Accommodation', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, 4),
+("135", 'Accommodation', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, 4),
+("136", 'Accommodation', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, 4),
+("137", 'Accommodation', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, 4),
+("138", 'Accommodation', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, 4),
+("139", 'Accommodation', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, 4),
+("140", 'Accommodation', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120.00, NULL, 1, 4),
 
 -- 15 chambres doubles
-(041, 'Chambre Double', 'Entrée, douche et WC, 1 lit double', 100.00, NULL, 1, 2),
-(042, 'Chambre Double', 'Entrée, douche et WC, 1 lit double', 100.00, NULL, 1, 2),
-(043, 'Chambre Double', 'Entrée, douche et WC, 1 lit double', 100.00, NULL, 1, 2),
-(044, 'Chambre Double', 'Entrée, douche et WC, 1 lit double', 100.00, NULL, 1, 2),
-(045, 'Chambre Double', 'Entrée, douche et WC, 1 lit double', 100.00, NULL, 1, 2),
-(046, 'Chambre Double', 'Entrée, douche et WC, 1 lit double', 100.00, NULL, 1, 2),
-(047, 'Chambre Double', 'Entrée, douche et WC, 1 lit double', 100.00, NULL, 1, 2),
-(048, 'Chambre Double', 'Entrée, douche et WC, 1 lit double', 100.00, NULL, 1, 2),
-(049, 'Chambre Double', 'Entrée, douche et WC, 1 lit double', 100.00, NULL, 1, 2),
-(050, 'Chambre Double', 'Entrée, douche et WC, 1 lit double', 100.00, NULL, 1, 2),
-(051, 'Chambre Double', 'Entrée, douche et WC, 1 lit double', 100.00, NULL, 1, 2),
-(052, 'Chambre Double', 'Entrée, douche et WC, 1 lit double', 100.00, NULL, 1, 2),
-(053, 'Chambre Double', 'Entrée, douche et WC, 1 lit double', 100.00, NULL, 1, 2),
-(054, 'Chambre Double', 'Entrée, douche et WC, 1 lit double', 100.00, NULL, 1, 2),
-(055, 'Chambre Double', 'Entrée, douche et WC, 1 lit double', 100.00, NULL, 1, 2),
+("201", 'Double Room', 'Entrée, douche et WC, 1 lit double', 100.00, NULL, 1, 2),
+("202", 'Double Room', 'Entrée, douche et WC, 1 lit double', 100.00, NULL, 1, 2),
+("203", 'Double Room', 'Entrée, douche et WC, 1 lit double', 100.00, NULL, 1, 2),
+("204", 'Double Room', 'Entrée, douche et WC, 1 lit double', 100.00, NULL, 1, 2),
+("205", 'Double Room', 'Entrée, douche et WC, 1 lit double', 100.00, NULL, 1, 2),
+("206", 'Double Room', 'Entrée, douche et WC, 1 lit double', 100.00, NULL, 1, 2),
+("207", 'Double Room', 'Entrée, douche et WC, 1 lit double', 100.00, NULL, 1, 2),
+("208", 'Double Room', 'Entrée, douche et WC, 1 lit double', 100.00, NULL, 1, 2),
+("209", 'Double Room', 'Entrée, douche et WC, 1 lit double', 100.00, NULL, 1, 2),
+("210", 'Double Room', 'Entrée, douche et WC, 1 lit double', 100.00, NULL, 1, 2),
+("211", 'Double Room', 'Entrée, douche et WC, 1 lit double', 100.00, NULL, 1, 2),
+("212", 'Double Room', 'Entrée, douche et WC, 1 lit double', 100.00, NULL, 1, 2),
+("213", 'Double Room', 'Entrée, douche et WC, 1 lit double', 100.00, NULL, 1, 2),
+("214", 'Double Room', 'Entrée, douche et WC, 1 lit double', 100.00, NULL, 1, 2),
+("215", 'Double Room', 'Entrée, douche et WC, 1 lit double', 100.00, NULL, 1, 2),
 
 -- 8 chambres de 3 lits
-(056, 'Chambre Triple', '3 lits séparés par une cloison mobile avec coin toilette, WC, douche', 110.00, NULL, 1, 3),
-(057, 'Chambre Triple', '3 lits séparés par une cloison mobile avec coin toilette, WC, douche', 110.00, NULL, 1, 3),
-(058, 'Chambre Triple', '3 lits séparés par une cloison mobile avec coin toilette, WC, douche', 110.00, NULL, 1, 3),
-(059, 'Chambre Triple', '3 lits séparés par une cloison mobile avec coin toilette, WC, douche', 110.00, NULL, 1, 3),
-(060, 'Chambre Triple', '3 lits séparés par une cloison mobile avec coin toilette, WC, douche', 110.00, NULL, 1, 3),
-(061, 'Chambre Triple', '3 lits séparés par une cloison mobile avec coin toilette, WC, douche', 110.00, NULL, 1, 3),
-(062, 'Chambre Triple', '3 lits séparés par une cloison mobile avec coin toilette, WC, douche', 110.00, NULL, 1, 3),
-(063, 'Chambre Triple', '3 lits séparés par une cloison mobile avec coin toilette, WC, douche', 110.00, NULL, 1, 3),
+("301", 'Triple Room', 'Trois lits séparés par une cloison mobile avec coin toilette, WC, douche', 110.00, NULL, 1, 3),
+("302", 'Triple Room', 'Trois lits séparés par une cloison mobile avec coin toilette, WC, douche', 110.00, NULL, 1, 3),
+("303", 'Triple Room', 'Trois lits séparés par une cloison mobile avec coin toilette, WC, douche', 110.00, NULL, 1, 3),
+("304", 'Triple Room', 'Trois lits séparés par une cloison mobile avec coin toilette, WC, douche', 110.00, NULL, 1, 3),
+("305", 'Triple Room', 'Trois lits séparés par une cloison mobile avec coin toilette, WC, douche', 110.00, NULL, 1, 3),
+("306", 'Triple Room', 'Trois lits séparés par une cloison mobile avec coin toilette, WC, douche', 110.00, NULL, 1, 3),
+("307", 'Triple Room', 'Trois lits séparés par une cloison mobile avec coin toilette, WC, douche', 110.00, NULL, 1, 3),
+("308", 'Triple Room', 'Trois lits séparés par une cloison mobile avec coin toilette, WC, douche', 110.00, NULL, 1, 3),
 
 -- 12 chambres de 4 lits
-(064, 'Chambre Quadruple', '4 lits séparés par une cloison mobile avec douche, WC et balcon', 140.00, NULL, 1, 4),
-(065, 'Chambre Quadruple', '4 lits séparés par une cloison mobile avec douche, WC et balcon', 140.00, NULL, 1, 4),
-(066, 'Chambre Quadruple', '4 lits séparés par une cloison mobile avec douche, WC et balcon', 140.00, NULL, 1, 4),
-(067, 'Chambre Quadruple', '4 lits séparés par une cloison mobile avec douche, WC et balcon', 140.00, NULL, 1, 4),
-(068, 'Chambre Quadruple', '4 lits séparés par une cloison mobile avec douche, WC et balcon', 140.00, NULL, 1, 4),
-(069, 'Chambre Quadruple', '4 lits séparés par une cloison mobile avec douche, WC et balcon', 140.00, NULL, 1, 4),
-(070, 'Chambre Quadruple', '4 lits séparés par une cloison mobile avec douche, WC et balcon', 140.00, NULL, 1, 4),
-(071, 'Chambre Quadruple', '4 lits séparés par une cloison mobile avec douche, WC et balcon', 140.00, NULL, 1, 4),
-(072, 'Chambre Quadruple', '4 lits séparés par une cloison mobile avec douche, WC et balcon', 140.00, NULL, 1, 4),
-(073, 'Chambre Quadruple', '4 lits séparés par une cloison mobile avec douche, WC et balcon', 140.00, NULL, 1, 4),
-(074, 'Chambre Quadruple', '4 lits séparés par une cloison mobile avec douche, WC et balcon', 140.00, NULL, 1, 4),
-(075, 'Chambre Quadruple', '4 lits séparés par une cloison mobile avec douche, WC et balcon', 140.00, NULL, 1, 4),
+("401", 'Quadruple Room', 'Quatre lits séparés par une cloison mobile avec douche, WC et balcon', 140.00, NULL, 1, 4),
+("402", 'Quadruple Room', 'Quatre lits séparés par une cloison mobile avec douche, WC et balcon', 140.00, NULL, 1, 4),
+("403", 'Quadruple Room', 'Quatre lits séparés par une cloison mobile avec douche, WC et balcon', 140.00, NULL, 1, 4),
+("404", 'Quadruple Room', 'Quatre lits séparés par une cloison mobile avec douche, WC et balcon', 140.00, NULL, 1, 4),
+("405", 'Quadruple Room', 'Quatre lits séparés par une cloison mobile avec douche, WC et balcon', 140.00, NULL, 1, 4),
+("406", 'Quadruple Room', 'Quatre lits séparés par une cloison mobile avec douche, WC et balcon', 140.00, NULL, 1, 4),
+("407", 'Quadruple Room', 'Quatre lits séparés par une cloison mobile avec douche, WC et balcon', 140.00, NULL, 1, 4),
+("408", 'Quadruple Room', 'Quatre lits séparés par une cloison mobile avec douche, WC et balcon', 140.00, NULL, 1, 4),
+("409", 'Quadruple Room', 'Quatre lits séparés par une cloison mobile avec douche, WC et balcon', 140.00, NULL, 1, 4),
+("410", 'Quadruple Room', 'Quatre lits séparés par une cloison mobile avec douche, WC et balcon', 140.00, NULL, 1, 4),
+("411", 'Quadruple Room', 'Quatre lits séparés par une cloison mobile avec douche, WC et balcon', 140.00, NULL, 1, 4),
+("412", 'Quadruple Room', 'Quatre lits séparés par une cloison mobile avec douche, WC et balcon', 140.00, NULL, 1, 4),
 
 -- 1 logement adapté
-(076, 'Chambre Accessible', 'Adapté pour les personnes à mobilité réduite', 130.00, NULL, 1, 2);
+("001", 'Accessible Room', 'Adapté pour les personnes à mobilité réduite', 130.00, NULL, 1, 2);
 
 -- --------------------------------------------------------
 
@@ -670,6 +670,24 @@ ALTER TABLE `settings`
 --
 ALTER TABLE `users`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT pour la table `transports`
+--
+ALTER TABLE `transports`
+  MODIFY `t_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT pour la table `reservations`
+--
+ALTER TABLE `reservations`
+  MODIFY `r_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT pour la table `activities`
+--
+ALTER TABLE `activities`
+  MODIFY `a_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- Contraintes pour les tables déchargées
