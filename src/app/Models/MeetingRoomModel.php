@@ -27,11 +27,11 @@ class MeetingRoomModel extends Model
 
     // Validation
     protected $validationRules      = [
-        'mr_number' => 'required|integer|is_unique[meeting_rooms.mr_number]|greater_than[0]',
+        'mr_number' => 'required|is_unique[meeting_rooms.mr_number]|regex_match[/\A[0-9]+\z/]|min_length[3]|max_length[3]',
         'mr_type' => 'required|regex_match[/^[a-zA-Zàâäéèêëîïôöùûüç\'\-]+$/]|min_length[3]|max_length[50]',
         'mr_description' => 'required|min_length[10]|max_length[255]',
-        'mr_capacity' => 'required|integer|greater_than[0]|less_than[200]',
-        'mr_price' => 'required|decimal|greater_than[0]|less_than[1000]',
+        'mr_capacity' => 'required|integer|greater_than[0]|less_than[500]',
+        'mr_price' => 'required|decimal|greater_than[0]|less_than[500]',
         'mr_available' => 'required|in_list[0,1]',
         'r_fk_id' => 'is_natural_no_zero'
     ];

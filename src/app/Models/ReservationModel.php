@@ -35,8 +35,8 @@ class ReservationModel extends Model
         'r_ending_date'   => 'required|valid_date',
         'r_type'          => 'required|in_list[Room, Activity, Meeting Room, Transport]',
         'r_meal_option'   => 'required|in_list[Full Pension, Half Pension, No Pension]',
-        'r_number_people' => 'required|integer|greater_than[0]|less_than[197]',
-        'r_total_price'   => 'required|decimal|greater_than[0]|less_than[10000]',
+        'r_number_people' => 'required|integer|greater_than[0]|less_than[500]',
+        'r_total_price'   => 'required|decimal|greater_than[0]|less_than[1000]',
         'r_status'        => 'required|in_list[Confirmed, Pending, Canceled]',
         'u_fk_id'         => 'required|integer|greater_than[0]',
     ];

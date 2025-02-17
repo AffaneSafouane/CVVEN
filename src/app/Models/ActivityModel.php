@@ -14,7 +14,7 @@ class ActivityModel extends Model
     protected $returnType       = Activity::class;
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['a_type', 'a_starting_date', 'a_ending_date', 'a_description', 'a_price'];
+    protected $allowedFields    = ['a_type', 'a_starting_date', 'a_ending_date', 'a_description', 'a_price', 'a_limit'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -32,7 +32,8 @@ class ActivityModel extends Model
         'a_starting_date' => 'required|valid_date',
         'a_ending_date'   => 'required|valid_date',
         'a_description'   => 'required|min_length[10]|max_length[255]',
-        'a_price'         => 'required|decimal|greater_than[0]|less_than[1000]',
+        'a_price'         => 'required|decimal|greater_than[0]|less_than[100]',
+        'a_limit'         => 'required|integer|greater_than[0]|less_than[500]',
     ];
     protected $validationMessages   = [];
     protected $skipValidation       = false;

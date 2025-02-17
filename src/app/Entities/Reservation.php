@@ -5,6 +5,7 @@ namespace App\Entities;
 use App\Entities\Cast\EnumCast;
 use App\Enum\MealOption;
 use App\Enum\ReservationStatus;
+use App\Enum\ReservationType;
 use App\Models\MeetingRoomModel;
 use App\Models\ReservationModel;
 use App\Models\RoomModel;
@@ -18,6 +19,7 @@ use Exception;
  * @property ?int $id
  * @property ?Time $startingDate
  * @property ?Time $endingDate
+ * @property ?ReservationType $type
  * @property ?Time $createdAt
  * @property ?Time $updatedAt
  * @property ?Time $deletedAt
@@ -38,6 +40,7 @@ class Reservation extends Entity
         'createdAt'      => 'r_created_at',
         'updatedAt'      => 'r_updated_at',
         'deletedAt'      => 'r_deleted_at',
+        'type'           => 'r_type',
         'startingDate'   => 'r_starting_date',
         'endingDate'     => 'r_ending_date',
         'status'         => 'r_status',
@@ -52,6 +55,7 @@ class Reservation extends Entity
         'r_number_people'   => 'int',
         'r_total_price'     => 'float',
         'r_status'          => 'enum[App\Enum\ReservationStatus]',
+        'r_type'            => 'enum[App\Enum\ReservationType]',
         'u_fk_id'           => 'int',
     ];
 
@@ -135,6 +139,11 @@ class Reservation extends Entity
     public function getStatus(): ?string
     {
         return $this->status->getLabel();
+    }
+
+    public function getType(): ?string
+    {
+        return $this->type->getLabel();
     }
 
     /** @return ?User */
@@ -222,7 +231,7 @@ class Reservation extends Entity
 
     public function setUser(int $userId): static
     {
-        $this->user = $userId;
+        $this->userId = $userId;
         return $this;
     }
 
