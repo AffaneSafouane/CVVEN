@@ -14,7 +14,6 @@
                         <li><a class="dropdown-item" href="#">Chambres</a></li>
                         <li><a class="dropdown-item" href="#">Activités</a></li>
                         <li><a class="dropdown-item" href="#">Salle de réunion</a></li>
-                        <li><a class="dropdown-item" href="#">Transports</a></li>
                     </ul>
                 </li>
                 <?php if (auth()->loggedIn()): ?>
@@ -23,9 +22,9 @@
             </ul>
             <ul class="navbar-nav d-flex">
                 <?php if (auth()->loggedIn()): ?>
-                    <li class="nav-item"><a class="nav-link link-primary" href="<?= site_url('logout'); ?>">Se déconnecter</a></li>
+                    <li class="nav-item"><a class="nav-link link-success" href="<?= site_url('logout'); ?>">Se déconnecter</a></li>
                 <?php else: ?>
-                    <li class="nav-item"><a class="btn btn-primary" role="button" href="<?= site_url('login'); ?>">Se connecter</a></li>
+                    <li class="nav-item"><a class="btn btn-success" role="button" href="<?= site_url('login'); ?>">Se connecter</a></li>
                 <?php endif; ?>
             </ul>
         </div>

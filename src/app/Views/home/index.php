@@ -5,13 +5,24 @@
 <?= $this->section('title') ?><?= esc($title) ?><?= $this->endSection() ?>
 
 <?= $this->section('main'); ?>
+<style>
+    #intro {
+        background-image: url('<?=(base_url('images/summer.jpg'));?>');
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+        height: 100%;
+    }
+</style>
 
 <!-- Header-->
-<header class="bg-gradient text-white bg-primary-subtle py-5">
-    <div class="container px-4 text-center py-5">
-        <h1 class="fw-bolder">CVVEN</h1>
-        <p class="lead">Site de vacance</p>
-        <a href="#" class="btn btn-dark">Parcourez nos offres</a> <!-- @TODO ajouter lien pour accueil réservations -->
+<header id="intro" class="bg-image shadow-2-strong">
+    <div style="background-color: rgba(0, 0, 0, 0.8);" class="py-5">
+        <div class="container px-4 text-center py-5">
+            <h1 class="fw-bolder">CVVEN</h1>
+            <p class="lead">Site de vacance</p>
+            <a href="#" class="btn btn-success">Parcourez nos offres</a> <!-- @TODO ajouter lien pour accueil réservations -->
+        </div>
     </div>
 </header>
 

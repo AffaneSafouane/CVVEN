@@ -40,7 +40,7 @@
                 </ul>
                 <p><small><?= $user->active ? "Votre compte est activé." : "Votre compte n'est pas activé."; ?></small></p>
             </div>
-            <!-- Ajouter les boutons pour la suppression et la modification du compte -->
+            <!-- @TODO Ajouter les boutons pour la suppression et la modification du compte -->
         </div>
     </div>
 </section>

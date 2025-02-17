@@ -27,8 +27,8 @@ class RoomModel extends Model
 
     // Validation
     protected $validationRules      = [
-        'ro_number' => 'regex_match[/\A[0-9]+\z/]|required|is_unique[rooms.ro_number]',
-        'ro_type' => 'regex_match[/^[a-zA-Zàâäéèêëîïôöùûüç\'\-]+$/]|required|min_length[3]|max_length[50]',
+        'ro_number' => 'integer|greater_than[0]|required|is_unique[rooms.ro_number]',
+        'ro_type' => 'required|in_list[Housing, Double Room, Triple Room, Quadruple Room, Handicap Room]',
         'ro_description' => 'required|min_length[10]|max_length[255]',
         'ro_price' => 'decimal|greater_than[0]|less_than[10000]|required',
         'ro_cleaning_option' => 'required|in_list[0,1]',
@@ -58,4 +58,9 @@ class RoomModel extends Model
     {
         return $this->where('r_fk_id', $reservationId)->findAll();
     }
+
+    // SELECT COUNT(ro_type) AS RoomType FROM `rooms` WHERE ro_type = "Logements";
+    // SELECT COUNT(ro_type) AS RoomType FROM `rooms` WHERE ro_type = "Chambre double";
+    // SELECT COUNT(ro_type) AS RoomType FROM `rooms` WHERE ro_type = "Chambre triple";
+    // SELECT COUNT(ro_type) AS RoomType FROM `rooms` WHERE ro_type = "Chambre quadruple";
 }

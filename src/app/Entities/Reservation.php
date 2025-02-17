@@ -25,7 +25,7 @@ use Exception;
  * @property ?int $numberOfPeople
  * @property ?float $totalPrice
  * @property ?ReservationStatus $status
- * @property ?int $user
+ * @property ?int $userId
  */
 
 class Reservation extends Entity
@@ -41,7 +41,7 @@ class Reservation extends Entity
         'startingDate'   => 'r_starting_date',
         'endingDate'     => 'r_ending_date',
         'status'         => 'r_status',
-        'user'           => 'u_fk_id',
+        'userId'           => 'u_fk_id',
     ];
     
     protected $dates = ['r_created_at', 'r_updated_at', 'r_deleted_at', 'r_starting_date', 'r_ending_date'];
@@ -61,62 +61,70 @@ class Reservation extends Entity
 
     public function getStartingDate(): ?string
     {
-        if (!isset($this->startingDate)) {
+        if (!$this->startingDate) {
             return null;
         }
-
         $format = 'Y/m/d - H:i:s';
-        $date = $this->mutateDate($this->startingDate);
-
-        $timezone = $this->timezone ?? app_timezone();
-        $date->setTimezone($timezone);
-
-        return $date->format($format);
+        try {
+            $date = $this->mutateDate($this->startingDate);
+            $timezone = $this->timezone ?? app_timezone();
+            $date->setTimezone($timezone);
+            return $date->format($format);
+        } catch (Exception $e) {
+            log_message('error', 'Error formatting ending date ' . $e->getMessage());
+            return null;
+        }
     }
 
     public function getEndingDate(): ?string
     {
-        if (!isset($this->endingDate)) {
+        if (!$this->endingDate) {
             return null;
         }
-
         $format = 'Y/m/d - H:i:s';
-        $date = $this->mutateDate($this->endingDate);
-
-        $timezone = $this->timezone ?? app_timezone();
-        $date->setTimezone($timezone);
-
-        return $date->format($format);
+        try {
+            $date = $this->mutateDate($this->endingDate);
+            $timezone = $this->timezone ?? app_timezone();
+            $date->setTimezone($timezone);
+            return $date->format($format);
+        } catch (Exception $e) {
+            log_message('error', 'Error formatting ending date ' . $e->getMessage());
+            return null;
+        }
     }
 
     public function getCreatedAt(): ?string
     {
-        if (!isset($this->createdAt)) {
+        if (!$this->createdAt) {
             return null;
         }
-
         $format = 'Y/m/d - H:i:s';
-        $date = $this->mutateDate($this->createdAt);
-
-        $timezone = $this->timezone ?? app_timezone();
-        $date->setTimezone($timezone);
-
-        return $date->format($format);
+        try {
+            $date = $this->mutateDate($this->createdAt);
+            $timezone = $this->timezone ?? app_timezone();
+            $date->setTimezone($timezone);
+            return $date->format($format);
+        } catch (Exception $e) {
+            log_message('error', 'Error formatting starting date ' . $e->getMessage());
+            return null;
+        }
     }
 
     public function getUpdatedAt(): ?string
     {
-        if (!isset($this->updatedAt)) {
+        if (!$this->updatedAt) {
             return null;
         }
-
         $format = 'Y/m/d - H:i:s';
-        $date = $this->mutateDate($this->updatedAt);
-
-        $timezone = $this->timezone ?? app_timezone();
-        $date->setTimezone($timezone);
-
-        return $date->format($format);
+        try {
+            $date = $this->mutateDate($this->updatedAt);
+            $timezone = $this->timezone ?? app_timezone();
+            $date->setTimezone($timezone);
+            return $date->format($format);
+        } catch (Exception $e) {
+            log_message('error', 'Error formatting ending date ' . $e->getMessage());
+            return null;
+        }
     }
 
     public function getMealOption(): ?string
@@ -129,10 +137,11 @@ class Reservation extends Entity
         return $this->status->getLabel();
     }
 
-    public function getUser(): array|User|null
+    /** @return ?User */
+    public function getUser(): ?array
     {
         $userModel = new UserModel();
-        return $userModel->find($this->user);
+        return $userModel->find($this->userId);
     }
 
     public function getRooms(): ?array
@@ -151,6 +160,16 @@ class Reservation extends Entity
     {
         $reservationModel = new ReservationModel();
         return $reservationModel->getActivitiesByReservation($this->id);
+    }
+
+    /**
+     * @param int $userId
+     * @return ?Reservation[]
+     */
+    public function getReservationsByUser(int $userId): ?array
+    {
+        $reservationModel = new ReservationModel();
+        return $reservationModel->where('u_fk_id', $userId)->findAll();
     }
 
     public function setStartingDate(string $startingDate): static
@@ -201,9 +220,9 @@ class Reservation extends Entity
         return $this;
     }
 
-    public function setUser(int $user): static
+    public function setUser(int $userId): static
     {
-        $this->user = $user;
+        $this->user = $userId;
         return $this;
     }
 

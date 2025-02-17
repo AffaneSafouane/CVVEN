@@ -7,21 +7,21 @@ use CodeIgniter\Shield\Exceptions\PermissionException;
 use CodeIgniter\Shield\Exceptions\UserNotFoundException;
 
 /**
- * Description of UsersController
+ * Description of UserController
  *
- * @author Affane Safouane, Sisakoun Matthew, Ghouas Ilyes, Krouch Kellyann
+ * @author Affane Safouane, Ghouas Ilyes
  */
 class UserController extends BaseController {
-    public function show(?int $userID): string
+    public function show(?int $userId): string
     {
-        if (auth()->id() != $userID) {
+        if (auth()->id() != $userId) {
             throw new PermissionException('Vous n\'avez pas le droit d\'accéder à cette page.');
         }
 
         $model = model(UserModel::class);
 
         $data = [
-            'user' => $model->find($userID),
+            'user' => $model->find($userId),
             'title' => "Informations utilisateur",
         ];
 
@@ -32,5 +32,18 @@ class UserController extends BaseController {
         return view('users/view', $data);
     }
 
-    // @TODO Ajouter les méthodes update et delete uniquement pour l'utilisateur concerné
+    public function update(?int $userId): string
+    {
+        // @TODO
+    }
+
+    public function updatePassword(?int $userId): string
+    {
+        // @TODO
+    }
+
+    public function delete(?int $userId): string
+    {
+        // @TODO
+    }
 }

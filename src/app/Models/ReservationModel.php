@@ -33,10 +33,11 @@ class ReservationModel extends Model
     protected $validationRules      = [
         'r_starting_date' => 'required|valid_date',
         'r_ending_date'   => 'required|valid_date',
-        'r_meal_option'   => 'required|regex_match[/^[a-zA-Zàâäéèêëîïôöùûüç\'\-]+$/]|max_length[20]|min_length[5]',
-        'r_number_people' => 'required|integer|greater_than[0]|less_than[500]',
+        'r_type'          => 'required|in_list[Room, Activity, Meeting Room, Transport]',
+        'r_meal_option'   => 'required|in_list[Full Pension, Half Pension, No Pension]',
+        'r_number_people' => 'required|integer|greater_than[0]|less_than[197]',
         'r_total_price'   => 'required|decimal|greater_than[0]|less_than[10000]',
-        'r_status'        => 'required|regex_match[/^[a-zA-Zàâäéèêëîïôöùûüç\'\-]+$/]|max_length[20]|min_length[5]',
+        'r_status'        => 'required|in_list[Confirmed, Pending, Canceled]',
         'u_fk_id'         => 'required|integer|greater_than[0]',
     ];
     protected $validationMessages   = [];
@@ -53,6 +54,15 @@ class ReservationModel extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
+    /**
+     * @param int $userId
+     * @return ?Reservation[]
+     */
+    public function getReservationByUser(int $userId): ?array
+    {
+        return $this->where('u_fk_id', $userId)->findAll();
+    }
 
     /**
      * @param int $reservationId

@@ -4,7 +4,7 @@ services:
             context: .
             dockerfile: docker/mysql/Dockerfile
         env_file:
-            - ./docker/.env
+            - .env
         container_name: "mysql_db"
         restart: always
         volumes:
@@ -32,12 +32,15 @@ services:
     
     phpmyadmin:
         image: phpmyadmin:5.2.1
+        depends_on:
+            - db
         restart: always
         ports:
             - 80:80
+        env_file:
+            - .env
         environment:
-            PMA_HOST: db
-            PMA_PORT: 3306
+            PMA_PASSWORD: ${MYSQL_ROOT_PASSWORD}
         networks: 
             - sf
 
@@ -60,7 +63,6 @@ services:
 
 volumes:
     db_data:
-        driver: local
 
 networks:
     sf: 

@@ -103,7 +103,6 @@ $maxDate = date('Y-m-d', strtotime('18 years ago'));
                     </div>
 
                     <p class="text-center"><?= lang('Auth.haveAccount') ?> <a href="<?= url_to('login') ?>"><?= lang('Auth.login') ?></a></p>
-
                 </form>
             </div>
         </div>
