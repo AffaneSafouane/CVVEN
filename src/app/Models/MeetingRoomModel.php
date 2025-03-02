@@ -62,5 +62,5 @@ class MeetingRoomModel extends Model
         return $builder->get()->getResult('App\Entities\Reservation');
     }
 
-    
+
 }

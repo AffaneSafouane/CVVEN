@@ -37,8 +37,9 @@ CREATE TABLE IF NOT EXISTS `activities` (
   `a_starting_date` datetime NOT NULL,
   `a_ending_date` datetime NOT NULL,
   `a_description` varchar(255) NOT NULL,
-  `a_price` float NOT NULL,
-  `a_limit` int(11) NOT NULL
+  `a_price` float NOT NULL CHECK (a_price > 0),
+  `a_limit` int(11) NOT NULL CHECK (a_limit > 0),
+  CHECK (a_ending_date >= a_starting_date)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -52,6 +53,39 @@ INSERT INTO `activities` (`a_id`, `a_type`, `a_starting_date`, `a_ending_date`, 
 (4, 'Randonnée encadrée', '2025-07-10 09:00:00', '2025-07-10 12:00:00', 'Randonnée guidée pour participants aux colloques', 30, 30),
 (5, 'Activité sportive estivale', '2025-07-20 10:00:00', '2025-07-20 13:00:00', 'Accès au terrain de sport et parc VTT', 40, 50),
 (6, 'Location matériel hiver', '2025-12-22 08:00:00', '2025-12-22 17:00:00', 'Location de ski, raquettes et chaussures de randonnée', 50, 200);
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `users`
+--
+
+CREATE TABLE IF NOT EXISTS `users` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `username` varchar(30) DEFAULT NULL,
+  `status` varchar(255) DEFAULT NULL,
+  `status_message` varchar(255) DEFAULT NULL,
+  `active` tinyint(1) NOT NULL DEFAULT 0,
+  `last_active` datetime DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `deleted_at` datetime DEFAULT NULL,
+  `phone` varchar(10) DEFAULT NULL,
+  `last_name` varchar(100) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `address` varchar(50) NOT NULL,
+  `city` varchar(50) NOT NULL,
+  `postal_code` varchar(5) NOT NULL,
+  `birth_date` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Déchargement des données de la table `users`
+--
+
+INSERT INTO `users` (`id`, `username`, `status`, `status_message`, `active`, `last_active`, `created_at`, `updated_at`, `deleted_at`, `phone`, `last_name`, `name`, `address`, `city`, `postal_code`, `birth_date`) VALUES
+(1, NULL, NULL, NULL, 1, '2024-12-31 10:29:50', '2024-12-29 12:25:56', '2024-12-29 12:25:57', NULL, NULL, 'Doe', 'John', '21 Jump Street', 'Melun', '77000', '2001-02-21'),
+(2, NULL, NULL, NULL, 1, '2024-12-31 14:45:19', '2024-12-31 14:41:18', '2024-12-31 14:41:59', NULL, NULL, 'Doe', 'Jane', '22 Jump Street', 'Melun', '77000', '1988-03-24');
 
 -- --------------------------------------------------------
 
@@ -185,8 +219,8 @@ CREATE TABLE IF NOT EXISTS `meeting_rooms` (
   `mr_number` char(3) NOT NULL,
   `mr_type` varchar(50) NOT NULL,
   `mr_description` varchar(255) NOT NULL,
-  `mr_price` float NOT NULL,
-  `mr_capacity` int(11) NOT NULL,
+  `mr_price` float NOT NULL CHECK (mr_price > 0),
+  `mr_capacity` int(11) NOT NULL CHECK (mr_capacity > 0),
   `mr_available` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -234,17 +268,18 @@ INSERT INTO `migrations` (`id`, `version`, `class`, `group`, `namespace`, `time`
 
 CREATE TABLE IF NOT EXISTS `reservations` (
   `r_id` int(11) NOT NULL,
-  `r_starting_date` datetime NOT NULL,
-  `r_ending_date` datetime NOT NULL,
-  `r_type` varchar(50) NOT NULL,
-  `r_total_price` float NOT NULL,
-  `r_meal_option` varchar(50) NOT NULL,
-  `r_number_people` int(11) NOT NULL,
-  `r_created_at` datetime DEFAULT current_timestamp(),
-  `r_updated_at` datetime DEFAULT NULL,
-  `r_deleted_at` datetime NOT NULL,
-  `r_status` varchar(50) DEFAULT 'Pending',
-  `u_fk_id` int(10) UNSIGNED NOT NULL
+  `r_starting_date` DATETIME NOT NULL,
+  `r_ending_date` DATETIME NOT NULL,
+  `r_type` ENUM('Chambre', 'Activité', 'Salle de réunion', 'Transport') NOT NULL,
+  `r_total_price` FLOAT NOT NULL CHECK (r_total_price > 0),
+  `r_meal_option` ENUM('Pension-Compléte', 'Demi-Pension', 'Sans-Pension') NOT NULL,
+  `r_number_people` INT(11) NOT NULL CHECK (r_number_people > 0),
+  `r_created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
+  `r_updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `r_deleted_at` DATETIME NULL,
+  `r_status` ENUM('En attente', 'Confirmée', 'Annulée') NOT NULL DEFAULT 'En attente',
+  `u_fk_id` INT(10) UNSIGNED NOT NULL,
+  CHECK (r_ending_date >= r_starting_date)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -301,10 +336,10 @@ CREATE TABLE IF NOT EXISTS `rooms` (
   `ro_number` char(3) NOT NULL,
   `ro_type` varchar(150) NOT NULL,
   `ro_description` varchar(255) NOT NULL,
-  `ro_price` float NOT NULL,
+  `ro_price` float NOT NULL CHECK (ro_price > 0),
   `ro_cleaning_option` tinyint(1) DEFAULT NULL,
   `ro_available` tinyint(1) NOT NULL,
-  `ro_capacity` int(11) NOT NULL
+  `ro_capacity` int(11) NOT NULL CHECK (ro_capacity > 0)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -439,37 +474,6 @@ INSERT INTO `transports` (`t_id`, `t_type`, `t_price`) VALUES
 (4, 'Remontée mécanique', 30);
 
 -- --------------------------------------------------------
-
---
--- Structure de la table `users`
---
-
-CREATE TABLE IF NOT EXISTS `users` (
-  `id` int(10) UNSIGNED NOT NULL,
-  `username` varchar(30) DEFAULT NULL,
-  `status` varchar(255) DEFAULT NULL,
-  `status_message` varchar(255) DEFAULT NULL,
-  `active` tinyint(1) NOT NULL DEFAULT 0,
-  `last_active` datetime DEFAULT NULL,
-  `created_at` datetime DEFAULT NULL,
-  `updated_at` datetime DEFAULT NULL,
-  `deleted_at` datetime DEFAULT NULL,
-  `phone` varchar(10) DEFAULT NULL,
-  `last_name` varchar(100) NOT NULL,
-  `name` varchar(100) NOT NULL,
-  `address` varchar(50) NOT NULL,
-  `city` varchar(50) NOT NULL,
-  `postal_code` varchar(5) NOT NULL,
-  `birth_date` date NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Déchargement des données de la table `users`
---
-
-INSERT INTO `users` (`id`, `username`, `status`, `status_message`, `active`, `last_active`, `created_at`, `updated_at`, `deleted_at`, `phone`, `last_name`, `name`, `address`, `city`, `postal_code`, `birth_date`) VALUES
-(1, NULL, NULL, NULL, 1, '2024-12-31 10:29:50', '2024-12-29 12:25:56', '2024-12-29 12:25:57', NULL, NULL, 'Doe', 'John', '21 Jump Street', 'Melun', '77000', '2001-02-21'),
-(2, NULL, NULL, NULL, 1, '2024-12-31 14:45:19', '2024-12-31 14:41:18', '2024-12-31 14:41:59', NULL, NULL, 'Doe', 'Jane', '22 Jump Street', 'Melun', '77000', '1988-03-24');
 
 --
 -- Index pour les tables déchargées
