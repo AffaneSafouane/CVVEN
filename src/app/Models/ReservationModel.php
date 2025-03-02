@@ -3,7 +3,9 @@
 namespace App\Models;
 
 use App\Entities\Activity;
+use App\Entities\MeetingRoom;
 use App\Entities\Reservation;
+use App\Entities\Room;
 use CodeIgniter\Model;
 
 class ReservationModel extends Model
@@ -56,12 +58,55 @@ class ReservationModel extends Model
     protected $afterDelete    = [];
 
     /**
-     * @param int $userId
-     * @return ?Reservation[]
+     * @param int $reservationId
+     * @return ?Room[]
      */
-    public function getReservationByUser(int $userId): ?array
+    public function getRoomsByReservation(int $reservationId): ?array
     {
-        return $this->where('u_fk_id', $userId)->findAll();
+        // @TODO récupérer les chambres d'une réservation via leur table de liaison
+    }
+
+    /**
+     * @param int $reservationId
+     * @param string[] $roomsNum
+     */
+    public function addRoomsToReservation(int $reservationId, array $roomsNum): void
+    {
+        // @TODO méthode pour ajouter des chambres à une réservation via leur table de liaison
+    }
+
+    /**
+     * @param int $reservationId
+     * @return ?MeetingRoom[]
+     */
+    public function getMeetingRoomsByReservation(int $reservationId): ?array
+    {
+        $builder = $this->db->table('reservations_meeting_rooms')
+            ->join('meeting_rooms', 'reservations_meeting_rooms.mr_fk_number = meeting_rooms.mr_number')
+            ->where('reservations_meeting_rooms.r_fk_id', $reservationId);
+        return $builder->get()->getResult('App\Entities\MeetingRoom');
+    }
+
+    /**
+     * @param int $reservationId
+     * @param string[] $meetingRoomsNum
+     */
+    public function addMeetingRoomsToReservation(int $reservationId, array $meetingRoomsNum): void
+    {
+        $this->db->transStart();
+
+        foreach ($meetingRoomsNum as $meetingRoomNum) {
+            $this->db->table('reservations_meeting_rooms')->insert([
+                'r_fk_id' => $reservationId,
+                'mr_fk_num' => $meetingRoomNum
+            ]);
+        }
+
+        $this->db->transComplete();
+
+        if ($this->db->transStatus() === false) {
+            throw new \RuntimeException('Failed to add meeting_rooms to reservation');
+        }
     }
 
     /**
@@ -96,5 +141,14 @@ class ReservationModel extends Model
         if ($this->db->transStatus() === false) {
             throw new \RuntimeException('Failed to add activities to reservation');
         }
+    }
+
+    /**
+     * @param int $userId
+     * @return ?Reservation[]
+     */
+    public function getReservationsByUser(int $userId): ?array
+    {
+        return $this->where('u_fk_id', $userId)->findAll();
     }
 }

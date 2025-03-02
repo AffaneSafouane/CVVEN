@@ -155,13 +155,12 @@ class Reservation extends Entity
 
     public function getRooms(): ?array
     {
-        $roomModel = new RoomModel();
-        return $roomModel->getRoomsByReservation($this->id);
+        // @TODO appel la méthode du model de réservations pour afficher les chambres d'une réservation
     }
 
     public function getMeetingRooms(): ?array
     {
-        $meetingRoomModel = new MeetingRoomModel();
+        $meetingRoomModel = new ReservationModel();
         return $meetingRoomModel->getMeetingRoomsByReservation($this->id);
     }
 
@@ -236,12 +235,31 @@ class Reservation extends Entity
     }
 
     /**
-     * @param int $reservation
-     * @param int[] $activities
+     * @param int $reservationId
+     * @param string[] $roomsNum
      */
-    public function addActivities(int $reservation, array $activities): void
+    public function addRooms(int $reservationId, array $roomsNum): void
+    {
+        // @TODO appel la méthode addRoomsToReservation() de ReservationModel pour ajouter des chambres à une réservation
+    }
+
+    /**
+     * @param int $reservationId
+     * @param string[] $meetingRoomsNum
+     */
+    public function addMeetingRooms(int $reservationId, array $meetingRoomsNum): void
     {
         $reservationModel = new ReservationModel();
-        $reservationModel->addActivitiesToReservation($reservation, $activities);
+        $reservationModel->addMeetingRoomsToReservation($reservationId, $meetingRoomsNum);
+    }
+
+    /**
+     * @param int $reservationId
+     * @param int[] $activitiesId
+     */
+    public function addActivities(int $reservationId, array $activitiesId): void
+    {
+        $reservationModel = new ReservationModel();
+        $reservationModel->addActivitiesToReservation($reservationId, $activitiesId);
     }
 }

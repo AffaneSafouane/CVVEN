@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
+use App\Enum\ReservationType;
 use CodeIgniter\HTTP\ResponseInterface;
 
 class MeetingRoomController extends BaseController
@@ -15,19 +16,20 @@ class MeetingRoomController extends BaseController
         // @TODO afficher toutes les salles de réunion disponible
     }
 
-    public function show(?int $meetingId): string
+    public function show(?string $meetingRoomNum): string
     {
-        // @TODO afficher les détails d'une chambre
+        // @TODO afficher les détails d'une salle de réunion
     }
 
     /**
-     * Donner un objet de type MeetingRoom pour dates et nb de personnes.
+     * Donner l'id de la salle de réunion pour dates et nb de personnes.
      */
-    public function new($type = "meeting_room"): string
+    public function new(string $meetingRoomNum, $type = "Salle de réunion"): string
     {
         helper('form');
 
         $data['reservationType'] = $type;
+        $data['id'] = $meetingRoomNum;
         return view('reservations/create', $data);
     }
 }

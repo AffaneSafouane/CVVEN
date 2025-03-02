@@ -6,45 +6,42 @@ use App\Models\ReservationModel;
 use CodeIgniter\Entity\Entity;
 
 /**
- * @property ?int $id
+ * @property ?string $num
  * @property ?string $type
  * @property ?string $description
  * @property ?float $price
  * @property ?bool $cleaningOption
  * @property ?bool $available
- * @property ?int $reservation
  */
 
 class Room extends Entity
 {
     protected $datamap = [
-        'id'             => 'ro_number',
+        'num'            => 'ro_number',
         'type'           => 'ro_type',
         'description'    => 'ro_description',
         'price'          => 'ro_price',
         'cleaningOption' => 'ro_cleaning_option',
         'available'      => 'ro_available',
-        'reservation'    => 'r_fk_id',
     ];
 
     protected $casts   = [
-        'ro_number'          => 'int',
+        'ro_number'          => 'string',
         'ro_type'            => 'string',
         'ro_description'     => 'string',
         'ro_price'           => 'float',
         'ro_cleaning_option' => '?int-bool',
         'ro_available'       => 'int-bool',
-        'r_fk_id'            => '?int',
     ];
 
-    public function getId(): ?int
+    public function getNum(): ?string
     {
-        return $this->id;
+        return $this->num;
     }
 
-    public function setId(?int $id): static
+    public function setNum(?string $num): static
     {
-        $this->id = $id;
+        $this->num = $num;
         return $this;
     }
 
@@ -105,13 +102,6 @@ class Room extends Entity
 
     public function getReservation(): array|Reservation|null
     {
-        $reservationModel = new ReservationModel();
-        return $reservationModel->find($this->reservation);
-    }
-
-    public function setReservation(?int $reservation): static
-    {
-        $this->reservation = $reservation;
-        return $this;
+        // @TODO Récupérer les réservations d'une chambre
     }
 }

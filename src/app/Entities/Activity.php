@@ -14,6 +14,7 @@ use Exception;
  * @property ?Time $startingDate
  * @property ?Time $endingDate
  * @property ?float $price
+ * @property ?int $limit
  */
 
 class Activity extends Entity
@@ -25,6 +26,7 @@ class Activity extends Entity
         'startingDate' => 'a_starting_date',
         'endingDate'   => 'a_ending_date',
         'price'        => 'a_price',
+        'limit'        => 'a_limit',
     ];
 
     protected $dates   = ['a_starting_date', 'a_ending_date'];
@@ -34,6 +36,7 @@ class Activity extends Entity
         'a_type'        => 'string',
         'a_description' => 'string',
         'a_price'       => 'float',
+        'a_limit'       => 'integer',
     ];
 
     public function setType(string $type): static
@@ -50,17 +53,19 @@ class Activity extends Entity
 
     public function getStartingDate(): ?string
     {
-        if (!isset($this->startingDate)) {
+        if (!$this->startingDate) {
             return null;
         }
-
         $format = 'Y/m/d - H:i:s';
-        $date = $this->mutateDate($this->startingDate);
-
-        $timezone = $this->timezone ?? app_timezone();
-        $date->setTimezone($timezone);
-
-        return $date->format($format);
+        try {
+            $date = $this->mutateDate($this->startingDate);
+            $timezone = $this->timezone ?? app_timezone();
+            $date->setTimezone($timezone);
+            return $date->format($format);
+        } catch (Exception $e) {
+            log_message('error', 'Error formatting ending date ' . $e->getMessage());
+            return null;
+        }
     }
 
     public function setStartingDate(string $startingDate): static|string
@@ -77,17 +82,19 @@ class Activity extends Entity
 
     public function getEndingDate(): ?string
     {
-        if (!isset($this->endingDate)) {
+        if (!$this->endingDate) {
             return null;
         }
-
         $format = 'Y/m/d - H:i:s';
-        $date = $this->mutateDate($this->endingDate);
-
-        $timezone = $this->timezone ?? app_timezone();
-        $date->setTimezone($timezone);
-
-        return $date->format($format);
+        try {
+            $date = $this->mutateDate($this->endingDate);
+            $timezone = $this->timezone ?? app_timezone();
+            $date->setTimezone($timezone);
+            return $date->format($format);
+        } catch (Exception $e) {
+            log_message('error', 'Error formatting ending date ' . $e->getMessage());
+            return null;
+        }
     }
 
     public function setEndingDate(string $endingDate): static
@@ -105,6 +112,12 @@ class Activity extends Entity
     public function setPrice(float $price): static
     {
         $this->price = $price;
+        return $this;
+    }
+
+    public function setLimit(int $limit): static
+    {
+        $this->limit = $limit;
         return $this;
     }
 

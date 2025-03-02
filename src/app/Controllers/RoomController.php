@@ -20,7 +20,7 @@ class RoomController extends BaseController
         // @TODO afficher toutes les chambres disponibles
     }
 
-    public function show(int $roomId): string
+    public function show(?string $roomNum): string
     {
         // @TODO afficher les détails d'une chambre
     }
@@ -28,7 +28,7 @@ class RoomController extends BaseController
     /**
      * Donner un objet de type Room pour nb de personnes et dates.
      */
-    public function new($type = "room"): string
+    public function new(string $roomNum, $type = "room"): string
     {
         // @TODO afficher le formulaire pour une chambre
     }

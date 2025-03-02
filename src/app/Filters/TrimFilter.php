@@ -17,6 +17,9 @@ class TrimFilter implements FilterInterface
         if (! $request instanceof IncomingRequest) {
             return;
         }
+
+        $trimmedPost = [];
+
         // Get the POST data and apply "trim" to each element
         $postData = $request->getPost();
         if(is_array($postData)){

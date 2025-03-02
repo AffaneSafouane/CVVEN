@@ -4,7 +4,9 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use App\Entities\Reservation;
+use App\Models\MeetingRoomModel;
 use App\Models\ReservationModel;
+use CodeIgniter\HTTP\RedirectResponse;
 use CodeIgniter\HTTP\ResponseInterface;
 
 /**
@@ -24,29 +26,18 @@ class ReservationController extends BaseController
         // @TODO afficher les détails d'une réservation
     }
 
-    public function list(): string
-    {
-        // @TODO afficher les différents types de réservations
-    }
-
     /**
      * La fonction recevra un objet du type de la réservation (Room, MeetingRoom, Activity).
      * Elle gère tous les types de réservations avec un switch.
      * Le type de réservation est donné via la méthode new() des différents controllers.
      * Il faudra ajouter des transactions pour les insertions dans la base de données.
      */
-    public function create(): string
+    public function create(): string|RedirectResponse
     {
         helper('form');
 
         $reservationType = $this->request->getPost('reservationType');
-
-        $rules = [
-            'startingDate' => 'required|valid_date',
-            'endingDate'   => 'required|valid_date',
-            'mealOption'   => 'required|in_list[Full Pension, Half Pension, No Pension]',
-            'nbPeople'     => 'required|integer|greater_than[0]|less_than[200]',
-        ];
+        $id = $this->request->getPost('id');
 
         switch ($reservationType) {
             case 'room':
@@ -56,6 +47,18 @@ class ReservationController extends BaseController
                 // @TODO Validations pour les activités (dates et nbPeople)
                 break;
             case 'meeting_room':
+                $meetingRoomModel = new MeetingRoomModel();
+                $meetingRoom = $meetingRoomModel->find($id);
+                if (!$meetingRoom) {
+                    return redirect()->back()->withInput()->with('errors', $meetingRoomModel->errors());
+                }
+
+                $rules = [
+                    'startingDate' => 'required|valid_date',
+                    'endingDate'   => 'required|valid_date',
+                    'mealOption'   => 'required|in_list[Full Pension, Half Pension, No Pension]',
+                    'nbPeople'     => 'required|integer|greater_than[0]|less_than[197]',
+                ];
                 // @TODO Validations pour les salles de réunion (dates et nbPeople)
                 break;
         }
@@ -63,17 +66,7 @@ class ReservationController extends BaseController
         $data = $this->request->getPost(array_keys($rules));
 
         if (!$this->validate($data, $rules)) {
-            switch ($reservationType) {
-                case 'room':
-                    // @TODO Formulaire pour les salles de réunion
-                    break;
-                case 'activity':
-                    // @TODO Formulaire pour les activités
-                    break;
-                case 'meeting_room':
-                    return (new MeetingRoomController())->new();
-                    break;
-            }
+            return redirect()->back()->withInput()->with('errors', 'Erreur de validation');
         }
 
         $reservation = new Reservation();
@@ -84,14 +77,14 @@ class ReservationController extends BaseController
                     // @TODO Insertion db chambres
                     break;
                 case 'activity':
-                    // @TODO Insertion db activités (Many To Many)
+                    // @TODO Insertion db activités
                     break;
                 case 'meeting_room':
                     // @TODO Insertion db salles de réunion
                     break;
             }
         } catch (\ReflectionException $e) {
-            exit($e->getMessage());
+            log_message('error', 'Erreur lors de l\'insertion dans la base de données' . $e->getMessage());
         }
     }
 }

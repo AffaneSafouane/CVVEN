@@ -4,18 +4,13 @@ namespace App\Enum;
 
 enum ReservationType: string
 {
-    case Room = 'Room';
-    case Activity = 'Activity';
-    case MeetingRoom = 'Meeting Room';
+    case Room = 'Chambre';
+    case Activity = 'Activité';
+    case MeetingRoom = 'Salle de réunion';
     case Transport = 'Transport';
 
     public function getLabel(): string
     {
-        return match ($this) {
-            self::Room => 'Chambre',
-            self::Activity => 'Activité',
-            self::MeetingRoom => 'Salle de réunion',
-            self::Transport => 'Transport',
-        };
+        return $this->value;
     }
 }

@@ -16,8 +16,7 @@
                 <div class="card-body">
                     <div class="card-title d-flex justify-content-between">
                         <ul class="list-group list-group-flush">
-                            <!-- @TODO remplacer par un lien vers détails réservation (show() controllers) -->
-                            <li class="list-group-item bg-dark-subtle"><h3><a href="<?= site_url('users/' . $reservation->getUser()->id); ?>"><?= $reservation->getUser()->last_name . " " . $reservation->getUser()->name; ?></a></h3></li>
+                            <!-- @TODO ajouter un lien vers détails réservation (show() ReservationController) -->
 
                             <li class="list-group-item bg-dark-subtle"><?= $reservation->getStartingDate(); ?></li>
                             <li class="list-group-item bg-dark-subtle"><?= $reservation->getEndingDate(); ?></li>

@@ -12,8 +12,6 @@
 <?= $this->section('main'); ?>
     <section class="container px-4">
         <h1 class="mb-3 mt-3"><?= esc($title); ?></h1>
-
         <!-- @TODO afficher les infos d'une chambre -->
-
     </section>
 <?= $this->endSection(); ?>

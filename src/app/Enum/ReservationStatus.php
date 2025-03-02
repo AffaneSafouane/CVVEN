@@ -4,16 +4,12 @@ namespace App\Enum;
 
 enum ReservationStatus: string
 {
-    case Confirmed = 'Confirmed';
-    case Cancelled = 'Cancelled';
-    case Pending = 'Pending';
+    case Confirmed = 'Confirmée';
+    case Cancelled = 'Annulée';
+    case Pending = 'En attente';
 
     public function getLabel(): string
     {
-        return match ($this) {
-            self::Confirmed => 'Confirmée',
-            self::Cancelled => 'Annulée',
-            self::Pending => 'En attente',
-        };
+        return $this->value;
     }
 }

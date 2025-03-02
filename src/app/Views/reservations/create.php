@@ -2,6 +2,7 @@
 /**
  * @var $title string
  * @var $reservationType string
+ * @var $id string|int
  */
 ?>
 
@@ -30,6 +31,8 @@
 
         <input type="hidden" name="reservationType" value="<?= esc($reservationType); ?>">
 
+        <input type="hidden" name="id" value="<?= esc($id); ?>">
+
         <!-- Saisir le nombre de personnes -->
         <div class="mb-3">
             <label for="nbPeople" class="form-label">Nombre de personnes</label>
@@ -42,9 +45,9 @@
             <label for="mealOption" class="form-label">Option repas</label>
             <select class="form-select" id="mealOption" name="mealOption" required>
                 <option value="" selected disabled>Choisissez une option</option>
-                <option value="Full Pension">Pension complète</option>
-                <option value="Half Pension">Demi-pension</option>
-                <option value="No Pension">Pas de pension</option>
+                <option value="Pension-Compléte">Pension complète</option>
+                <option value="Demi-Pension">Demi-pension</option>
+                <option value="Sans-Pension">Pas de pension</option>
             </select>
         </div>
 

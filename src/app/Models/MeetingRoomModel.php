@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Entities\MeetingRoom;
+use App\Entities\Reservation;
 use CodeIgniter\Model;
 
 class MeetingRoomModel extends Model
@@ -50,11 +51,16 @@ class MeetingRoomModel extends Model
     protected $afterDelete    = [];
 
     /**
-     * @param int $reservationId
-     * @return ?MeetingRoom[]
+     * @param string $meetingRoomNum
+     * @return ?Reservation[]
      */
-    public function getMeetingRoomsByReservation(int $reservationId): ?array
+    public function getReservationsByMeetingRoom(string $meetingRoomNum): ?array
     {
-        return $this->where('r_fk_id', $reservationId)->findAll();
+        $builder = $this->db->table('reservations_meeting_rooms')
+            ->join('reservations', 'reservations_meeting_rooms.r_fk_id = reservations.r_id')
+            ->where('reservations_meeting_rooms.mr_fk_number', $meetingRoomNum);
+        return $builder->get()->getResult('App\Entities\Reservation');
     }
+
+    
 }

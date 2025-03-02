@@ -2,44 +2,41 @@
 
 namespace App\Entities;
 
-use App\Models\ReservationModel;
+use App\Models\MeetingRoomModel;
 use CodeIgniter\Entity\Entity;
 
 /**
- * @property ?int $id
+ * @property ?string $num
  * @property ?string $type
  * @property ?string $description
  * @property ?int $capacity
  * @property ?float $price
  * @property ?bool $available
- * @property ?int $reservation
  */
 
 class MeetingRoom extends Entity
 {
     protected $datamap = [
-        'id'          => 'mr_number',
+        'num'         => 'mr_number',
         'type'        => 'mr_type',
         'description' => 'mr_description',
         'capacity'    => 'mr_capacity',
         'price'       => 'mr_price',
         'available'   => 'mr_available',
-        'reservation' => 'r_fk_id',
     ];
 
     protected $casts   = [
-        'mr_number'      => 'integer',
+        'mr_number'      => 'string',
         'mr_type'        => 'string',
         'mr_description' => 'string',
         'mr_capacity'    => 'integer',
         'mr_price'       => 'integer',
         'mr_available'   => 'int-bool',
-        'r_fk_id'        => '?int',
     ];
 
-    public function getId(): ?int
+    public function getNum(): ?string
     {
-        return $this->id;
+        return $this->num;
     }
 
     public function getType(): ?string
@@ -67,15 +64,15 @@ class MeetingRoom extends Entity
         return $this->available;
     }
 
-    public function getReservation(): array|Reservation|null
+    public function getReservations(): array|Reservation|null
     {
-        $reservationModel = new ReservationModel();
-        return $reservationModel->find($this->reservation);
+        $meetingRoomModel = new MeetingRoomModel();
+        return $meetingRoomModel->getReservationsByMeetingRoom($this->num);
     }
 
-    public function setId(int $id): static
+    public function setNum(string $num): static
     {
-        $this->id = $id;
+        $this->num = $num;
         return $this;
     }
 
@@ -106,12 +103,6 @@ class MeetingRoom extends Entity
     public function setAvailable(bool $available): static
     {
         $this->available = $available;
-        return $this;
-    }
-
-    public function setReservation(int $reservation): static
-    {
-        $this->reservation = $reservation;
         return $this;
     }
 }
