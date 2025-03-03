@@ -62,5 +62,24 @@ class MeetingRoomModel extends Model
         return $builder->get()->getResult('App\Entities\Reservation');
     }
 
+    /**
+     * @param string $meetingRoomNum
+     * @param string $startDate
+     * @param string $endDate
+     * @return bool
+     */
+    public function isMeetingRoomAvailable(string $meetingRoomNum, string $startDate, string $endDate): bool
+    {
+        $query = $this->db->table('reservations_meeting_rooms')
+            ->join('reservations', 'reservations_meeting_rooms.r_fk_id = reservations.r_id')
+            ->where('reservations_meeting_rooms.mr_number', $meetingRoomNum)
+            ->groupStart()
+                ->where("('$startDate' BETWEEN reservations.R_STARTING_DATE AND reservations.R_ENDING_DATE)")
+                ->orWhere("('$endDate' BETWEEN reservations.R_STARTING_DATE AND reservations.R_ENDING_DATE)")
+                ->orWhere("(reservations.R_STARTING_DATE BETWEEN '$startDate' AND '$endDate')")
+            ->groupEnd()
+            ->get();
 
+        return $query->getNumRows() === 0;
+    }
 }

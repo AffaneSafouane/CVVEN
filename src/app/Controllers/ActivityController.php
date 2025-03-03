@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
+use App\Enum\ReservationType;
 use CodeIgniter\HTTP\ResponseInterface;
 
 class ActivityController extends BaseController
@@ -24,7 +25,7 @@ class ActivityController extends BaseController
      * Ajouter un nombre limite de participants (db).
      * Donner un objet de type Activity pour dates et nb de participants.
      */
-    public function new($type = "activity"): string
+    public function new(int $activityId, $type = ReservationType::Activity): string
     {
         // @TODO afficher le formulaire pour une activité
     }

@@ -35,11 +35,11 @@ class ReservationModel extends Model
     protected $validationRules      = [
         'r_starting_date' => 'required|valid_date',
         'r_ending_date'   => 'required|valid_date',
-        'r_type'          => 'required|in_list[Room, Activity, Meeting Room, Transport]',
-        'r_meal_option'   => 'required|in_list[Full Pension, Half Pension, No Pension]',
+        'r_type'          => 'required|in_list[Chambre,Activité,Salle de réunion,Transport]',
+        'r_meal_option'   => 'required|in_list[Pension-Compléte,Demi-Pension,Sans-Pension]',
         'r_number_people' => 'required|integer|greater_than[0]|less_than[500]',
         'r_total_price'   => 'required|decimal|greater_than[0]|less_than[1000]',
-        'r_status'        => 'required|in_list[Confirmed, Pending, Canceled]',
+        'r_status'        => 'required|in_list[Confirmée,En attente,Annulée]',
         'u_fk_id'         => 'required|integer|greater_than[0]',
     ];
     protected $validationMessages   = [];
@@ -90,23 +90,23 @@ class ReservationModel extends Model
     /**
      * @param int $reservationId
      * @param string[] $meetingRoomsNum
+     * @return bool
      */
-    public function addMeetingRoomsToReservation(int $reservationId, array $meetingRoomsNum): void
+    public function addMeetingRoomsToReservation(int $reservationId, array $meetingRoomsNum): bool
     {
-        $this->db->transStart();
-
+        $insertData = [];
         foreach ($meetingRoomsNum as $meetingRoomNum) {
-            $this->db->table('reservations_meeting_rooms')->insert([
+            $insertData = [
                 'r_fk_id' => $reservationId,
                 'mr_fk_num' => $meetingRoomNum
-            ]);
+            ];
         }
 
+        $this->db->transStart();
+        $this->db->table('reservations_meeting_rooms')->insertBatch($insertData);
         $this->db->transComplete();
 
-        if ($this->db->transStatus() === false) {
-            throw new \RuntimeException('Failed to add meeting_rooms to reservation');
-        }
+        return $this->db->transStatus();
     }
 
     /**
@@ -124,23 +124,23 @@ class ReservationModel extends Model
     /**
      * @param int $reservationId
      * @param int[] $activitiesId
+     * @return bool
      */
-    public function addActivitiesToReservation(int $reservationId, array $activitiesId): void
+    public function addActivitiesToReservation(int $reservationId, array $activitiesId): bool
     {
-        $this->db->transStart();
-
+        $insertData = [];
         foreach ($activitiesId as $activityId) {
-            $this->db->table('reservations_activities')->insert([
+            $insertData = [
                 'r_fk_id' => $reservationId,
                 'a_fk_id' => $activityId
-            ]);
+            ];
         }
 
+        $this->db->transStart();
+        $this->db->table('reservations_activities')->insertBatch($insertData);
         $this->db->transComplete();
 
-        if ($this->db->transStatus() === false) {
-            throw new \RuntimeException('Failed to add activities to reservation');
-        }
+        return $this->db->transStatus();
     }
 
     /**

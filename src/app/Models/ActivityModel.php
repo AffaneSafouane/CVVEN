@@ -61,4 +61,9 @@ class ActivityModel extends Model
             ->where('reservations_activities.a_fk_id', $activityId);
         return $builder->get()->getResult('App\Entities\Reservation');
     }
+
+    public function isActivityFull(int $activityId, int $numberOfPeople): bool
+    {
+        // @TODO Vérifier si l'activité n'est pas pleine (compter le nombre de participant en joignant la table reservations_activities et activity et vérifier si la limite a été atteinte)
+    }
 }

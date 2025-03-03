@@ -24,7 +24,7 @@ class MeetingRoomController extends BaseController
     /**
      * Donner l'id de la salle de réunion pour dates et nb de personnes.
      */
-    public function new(string $meetingRoomNum, $type = "Salle de réunion"): string
+    public function new(string $meetingRoomNum, $type = ReservationType::MeetingRoom): string
     {
         helper('form');
 

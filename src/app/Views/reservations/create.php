@@ -1,7 +1,7 @@
 <?php
 /**
  * @var $title string
- * @var $reservationType string
+ * @var $reservationType \App\Enum\ReservationType
  * @var $id string|int
  */
 ?>
@@ -29,7 +29,7 @@
     <?= form_open('reservation'); ?>
         <?= csrf_field() ?>
 
-        <input type="hidden" name="reservationType" value="<?= esc($reservationType); ?>">
+        <input type="hidden" name="reservationType" value="<?= esc($reservationType->getLabel()); ?>">
 
         <input type="hidden" name="id" value="<?= esc($id); ?>">
 
@@ -55,14 +55,14 @@
         <!-- Ajouter date de début -->
         <div class="mb-3">
             <label for="startingDate" class="form-label">Date de début du séjour</label>
-            <!-- @TODO Rendre dynamique les limites de la date de début -->
+            <!-- @TODO Rendre dynamique les limites de la date de début (javascript) -->
             <input type="date" class="form-control" id="startingDate" value="2018-07-22" min="2018-01-01" max="2040-12-31" required/>
         </div>
 
         <!-- Ajouter date de fin -->
         <div class="mb-3">
             <label for="endingDate" class="form-label">Date de fin du séjour</label>
-            <!-- @TODO Rendre dynamique les limites de la date de fin -->
+            <!-- @TODO Rendre dynamique les limites de la date de fin (javascript) -->
             <input type="date" class="form-control" id="endingDate" value="2018-07-22" min="2018-01-01" max="2040-12-31" required>
         </div>
 

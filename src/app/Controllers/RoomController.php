@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
+use App\Enum\ReservationType;
 use CodeIgniter\HTTP\ResponseInterface;
 
 /**
@@ -28,7 +29,7 @@ class RoomController extends BaseController
     /**
      * Donner un objet de type Room pour nb de personnes et dates.
      */
-    public function new(string $roomNum, $type = "room"): string
+    public function new(string $roomNum, $type = ReservationType::Room): string
     {
         // @TODO afficher le formulaire pour une chambre
     }

@@ -14,7 +14,7 @@ use Exception;
  * @property ?Time $startingDate
  * @property ?Time $endingDate
  * @property ?float $price
- * @property ?int $limit
+ * @property ?int $capacity
  */
 
 class Activity extends Entity
@@ -26,7 +26,7 @@ class Activity extends Entity
         'startingDate' => 'a_starting_date',
         'endingDate'   => 'a_ending_date',
         'price'        => 'a_price',
-        'limit'        => 'a_limit',
+        'capacity'     => 'a_limit',
     ];
 
     protected $dates   = ['a_starting_date', 'a_ending_date'];
@@ -115,9 +115,9 @@ class Activity extends Entity
         return $this;
     }
 
-    public function setLimit(int $limit): static
+    public function setCapacity(int $capacity): static
     {
-        $this->limit = $limit;
+        $this->capacity = $capacity;
         return $this;
     }
 

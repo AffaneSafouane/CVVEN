@@ -2,7 +2,7 @@
 
 namespace App\Validation;
 
-class DateValidation
+class BirthDateValidation
 {
      public function isValidBirthDate($value, ?string &$error = null): bool
      {
