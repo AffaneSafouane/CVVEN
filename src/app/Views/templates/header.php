@@ -13,7 +13,7 @@
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="#">Chambres</a></li>
                         <li><a class="dropdown-item" href="#">Activités</a></li>
-                        <li><a class="dropdown-item" href="#">Salle de réunion</a></li>
+                        <li><a class="dropdown-item" href="<?= site_url('meetingRooms/'); ?>">Salle de réunion</a></li>
                     </ul>
                 </li>
                 <?php if (auth()->loggedIn()): ?>

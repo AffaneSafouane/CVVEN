@@ -13,7 +13,6 @@ class UserController extends BaseController
     {
         $model = model(UserModel::class);
 
-        $users = $model->findAll();
         $data = [
             'users'     => $model->paginate(10),
             'pager'     => $model->pager,

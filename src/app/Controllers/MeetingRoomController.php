@@ -4,6 +4,8 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use App\Enum\ReservationType;
+use App\Models\MeetingRoomModel;
+use CodeIgniter\HTTP\RedirectResponse;
 use CodeIgniter\HTTP\ResponseInterface;
 
 class MeetingRoomController extends BaseController
@@ -13,23 +15,51 @@ class MeetingRoomController extends BaseController
      */
     public function index(): string
     {
-        // @TODO afficher toutes les salles de réunion disponible
+        $meetingRoomModel = model(MeetingRoomModel::class);
+
+        $data = [
+            'meetingRooms' => $meetingRoomModel->paginate(10),
+            'pager'        => $meetingRoomModel->pager,
+            'title'        => 'Liste des salles de réunions',
+        ];
+
+        return view('meetingRooms/index', $data);
     }
 
-    public function show(?string $meetingRoomNum): string
+    public function show(string $meetingRoomNum): string
     {
-        // @TODO afficher les détails d'une salle de réunion
+        $meetingRoomModel = new MeetingRoomModel();
+        $meetingRoom = $meetingRoomModel->find($meetingRoomNum);
+
+        $data = [
+            'meetingRoom' => $meetingRoom,
+            'title' => 'Détail salle de réunion',
+        ];
+
+        return view('meetingRooms/show', $data);
     }
 
     /**
      * Donner l'id de la salle de réunion pour dates et nb de personnes.
      */
-    public function new(string $meetingRoomNum, $type = ReservationType::MeetingRoom): string
+    public function new(string $meetingRoomNum, $type = ReservationType::MeetingRoom): string|RedirectResponse
     {
         helper('form');
 
-        $data['reservationType'] = $type;
-        $data['id'] = $meetingRoomNum;
+        $meetingRoomModel = new MeetingRoomModel();
+        $meetingRoom = $meetingRoomModel->find($meetingRoomNum);
+
+        if (!$meetingRoom) {
+            return redirect()->back()->with('error', 'Salle de réunion introuvable.');
+        }
+
+        $data = [
+            'id'                => $meetingRoom->num,
+            'reservationType'   => $type,
+            'capacity'          => $meetingRoom->capacity,
+            'title'             => 'Réservation salle de réunion'
+        ];
+
         return view('reservations/create', $data);
     }
 }

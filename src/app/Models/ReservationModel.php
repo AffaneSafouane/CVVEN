@@ -66,14 +66,14 @@ class ReservationModel extends Model
         // @TODO récupérer les chambres d'une réservation via leur table de liaison
     }
 
-    /**
-     * @param int $reservationId
-     * @param string[] $roomsNum
-     */
-    public function addRoomsToReservation(int $reservationId, array $roomsNum): void
-    {
-        // @TODO méthode pour ajouter des chambres à une réservation via leur table de liaison
-    }
+//    /**
+//     * @param int $reservationId
+//     * @param string[] $roomsNum
+//     */
+//    public function addRoomsToReservation(int $reservationId, array $roomsNum): void
+//    {
+//        // @TODO méthode pour ajouter des chambres à une réservation via leur table de liaison
+//    }
 
     /**
      * @param int $reservationId
@@ -87,27 +87,27 @@ class ReservationModel extends Model
         return $builder->get()->getResult('App\Entities\MeetingRoom');
     }
 
-    /**
-     * @param int $reservationId
-     * @param string[] $meetingRoomsNum
-     * @return bool
-     */
-    public function addMeetingRoomsToReservation(int $reservationId, array $meetingRoomsNum): bool
-    {
-        $insertData = [];
-        foreach ($meetingRoomsNum as $meetingRoomNum) {
-            $insertData = [
-                'r_fk_id' => $reservationId,
-                'mr_fk_num' => $meetingRoomNum
-            ];
-        }
-
-        $this->db->transStart();
-        $this->db->table('reservations_meeting_rooms')->insertBatch($insertData);
-        $this->db->transComplete();
-
-        return $this->db->transStatus();
-    }
+//    /**
+//     * @param int $reservationId
+//     * @param string[] $meetingRoomsNum
+//     * @return bool
+//     */
+//    public function addMeetingRoomsToReservation(int $reservationId, array $meetingRoomsNum): bool
+//    {
+//        $insertData = [];
+//        foreach ($meetingRoomsNum as $meetingRoomNum) {
+//            $insertData = [
+//                'r_fk_id' => $reservationId,
+//                'mr_fk_num' => $meetingRoomNum
+//            ];
+//        }
+//
+//        $this->db->transStart();
+//        $this->db->table('reservations_meeting_rooms')->insertBatch($insertData);
+//        $this->db->transComplete();
+//
+//        return $this->db->transStatus();
+//    }
 
     /**
      * @param int $reservationId
@@ -121,27 +121,27 @@ class ReservationModel extends Model
         return $builder->get()->getResult('App\Entities\Activity');
     }
 
-    /**
-     * @param int $reservationId
-     * @param int[] $activitiesId
-     * @return bool
-     */
-    public function addActivitiesToReservation(int $reservationId, array $activitiesId): bool
-    {
-        $insertData = [];
-        foreach ($activitiesId as $activityId) {
-            $insertData = [
-                'r_fk_id' => $reservationId,
-                'a_fk_id' => $activityId
-            ];
-        }
-
-        $this->db->transStart();
-        $this->db->table('reservations_activities')->insertBatch($insertData);
-        $this->db->transComplete();
-
-        return $this->db->transStatus();
-    }
+//    /**
+//     * @param int $reservationId
+//     * @param int[] $activitiesId
+//     * @return bool
+//     */
+//    public function addActivitiesToReservation(int $reservationId, array $activitiesId): bool
+//    {
+//        $insertData = [];
+//        foreach ($activitiesId as $activityId) {
+//            $insertData = [
+//                'r_fk_id' => $reservationId,
+//                'a_fk_id' => $activityId
+//            ];
+//        }
+//
+//        $this->db->transStart();
+//        $this->db->table('reservations_activities')->insertBatch($insertData);
+//        $this->db->transComplete();
+//
+//        return $this->db->transStatus();
+//    }
 
     /**
      * @param int $userId

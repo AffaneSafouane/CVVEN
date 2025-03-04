@@ -7,7 +7,10 @@ use App\Controllers\Admin\RoomController as AdminRoomController;
 use App\Controllers\Admin\UserController as AdminUserController;
 use App\Controllers\Auth\RegisterController;
 use App\Controllers\UserController;
+use App\Controllers\UserReservationController;
 use CodeIgniter\Router\RouteCollection;
+use App\Controllers\MeetingRoomController;
+use App\Controllers\ReservationController;
 
 /**
  * @var RouteCollection $routes
@@ -22,8 +25,12 @@ $routes->get('register', [RegisterController::class, 'registerView']);
 $routes->post('register', [RegisterController::class, 'registerAction']);
 
 // Routes Reservations
-// @TODO Ajouter les routes pour les réservations (Room, MeetingRoom et Activity)
-
+// @TODO Ajouter les routes pour les réservations (Room et Activity)
+$routes->get('meetingRooms', [MeetingRoomController::class, 'index']);
+$routes->get('meetingRooms/(:segment)', [MeetingRoomController::class, 'show']);
+$routes->get('meetingRooms/new/(:segment)', [MeetingRoomController::class, 'new']);
+$routes->post('reservations/create', [ReservationController::class, 'create']);
+$routes->get('reservations/', [UserReservationController::class, 'index']);
 
 // Routes admin
 $routes->get('admin/users', [AdminUserController::class, 'index']);

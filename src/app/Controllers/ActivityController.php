@@ -16,7 +16,7 @@ class ActivityController extends BaseController
         // @TODO afficher toutes les activités disponibles
     }
 
-    public function show(?int $activityId): string
+    public function show(int $activityId): string
     {
         // @TODO afficher les détails d'une activité
     }

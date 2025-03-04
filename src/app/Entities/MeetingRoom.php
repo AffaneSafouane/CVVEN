@@ -17,7 +17,7 @@ use CodeIgniter\Entity\Entity;
 class MeetingRoom extends Entity
 {
     protected $datamap = [
-        'num'         => 'mr_number',
+        'num'          => 'mr_number',
         'type'        => 'mr_type',
         'description' => 'mr_description',
         'capacity'    => 'mr_capacity',
@@ -70,7 +70,7 @@ class MeetingRoom extends Entity
         return $meetingRoomModel->getReservationsByMeetingRoom($this->num);
     }
 
-    public function setNum(string $num): static
+    public function setId(string $num): static
     {
         $this->num = $num;
         return $this;

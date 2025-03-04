@@ -72,11 +72,11 @@ class MeetingRoomModel extends Model
     {
         $query = $this->db->table('reservations_meeting_rooms')
             ->join('reservations', 'reservations_meeting_rooms.r_fk_id = reservations.r_id')
-            ->where('reservations_meeting_rooms.mr_number', $meetingRoomNum)
+            ->where('reservations_meeting_rooms.mr_fk_number', $meetingRoomNum)
             ->groupStart()
-                ->where("('$startDate' BETWEEN reservations.R_STARTING_DATE AND reservations.R_ENDING_DATE)")
-                ->orWhere("('$endDate' BETWEEN reservations.R_STARTING_DATE AND reservations.R_ENDING_DATE)")
-                ->orWhere("(reservations.R_STARTING_DATE BETWEEN '$startDate' AND '$endDate')")
+                ->where("('$startDate' BETWEEN reservations.r_starting_date AND reservations.r_ending_date)")
+                ->orWhere("('$endDate' BETWEEN reservations.r_starting_date AND reservations.r_ending_date)")
+                ->orWhere("(reservations.r_starting_date BETWEEN '$startDate' AND '$endDate')")
             ->groupEnd()
             ->get();
 

@@ -68,7 +68,7 @@ class Reservation extends Entity
         if (!$this->startingDate) {
             return null;
         }
-        $format = 'Y/m/d - H:i:s';
+        $format = 'd/m/Y';
         try {
             $date = $this->mutateDate($this->startingDate);
             $timezone = $this->timezone ?? app_timezone();
@@ -85,7 +85,7 @@ class Reservation extends Entity
         if (!$this->endingDate) {
             return null;
         }
-        $format = 'Y/m/d - H:i:s';
+        $format = 'd/m/Y';
         try {
             $date = $this->mutateDate($this->endingDate);
             $timezone = $this->timezone ?? app_timezone();
@@ -146,8 +146,10 @@ class Reservation extends Entity
         return $this->type->getLabel();
     }
 
-    /** @return ?User */
-    public function getUser(): ?array
+    /**
+     * @return array|User|null
+     */
+    public function getUser(): array|User|null
     {
         $userModel = new UserModel();
         return $userModel->find($this->userId);

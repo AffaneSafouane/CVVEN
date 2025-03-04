@@ -6,15 +6,25 @@ use App\Enum\MealOption;
 use App\Enum\ReservationType;
 use Exception;
 
+/**
+ * @property ?string $startingDate
+ * @property ?string $endingDate
+ * @property ?int $nbPeople
+ * @property ?MealOption $mealOption
+ * @property ?ReservationType $type
+ * @property int|string|null $id
+ * @property string $status
+ */
 abstract class BaseReservation
 {
     protected ?string $startingDate;
     protected ?string $endingDate;
     protected ?int $nbPeople;
-    protected ?MealOption $mealOption;
-    protected ?ReservationType $type;
-    protected null|int|string $id;
-    protected string $status = 'En attente';
+    protected ?string $mealOption;
+    protected ?string $type;
+    protected int|string|null $id;
+    protected ?int $userId;
+    protected string $status;
 
     public function __construct(array $data)
     {
@@ -24,6 +34,8 @@ abstract class BaseReservation
         $this->mealOption = $data['mealOption'] ?? null;
         $this->type = $data['type'] ?? null;
         $this->id = $data['id'] ?? null;
+        $this->userId = $data['userId'] ?? null;
+        $this->status = 'En attente';
     }
 
     /**
@@ -31,12 +43,30 @@ abstract class BaseReservation
      */
     protected function validateBase(): bool
     {
-        if (!$this->startingDate || !$this->endingDate || !$this->nbPeople || !$this->mealOption || !$this->type || !$this->id) {
-            throw new Exception("Données de réservation incomplètes");
-        }
+        $validation = service('validation');
 
-        if ($this->startingDate > $this->endingDate) {
-            throw new Exception('La date de fin doit être postérieur ou égale à la date de début.');
+        $validation->setRules([
+            'startingDate' => 'required|valid_date|isValidDateRange[endingDate]',
+            'endingDate' => 'required|valid_date',
+            'nbPeople' => 'required|integer|greater_than[0]|less_than[201]',
+            'mealOption' => 'required|in_list[Pension-Compléte,Demi-Pension,Sans-Pension]',
+            'type' => 'required|in_list[Chambre,Salle de réunion,Activité]',
+            'userId' => 'required|integer|greater_than[0]',
+            'id' => 'required|regex_match[/\A[0-9]+\z/]|min_length[1]|max_length[3]',
+        ]);
+
+        $dataToValidate = [
+            'startingDate' => $this->startingDate,
+            'endingDate' => $this->endingDate,
+            'nbPeople' => $this->nbPeople,
+            'mealOption' => $this->mealOption,
+            'type' => $this->type,
+            'id' => $this->id,
+            'userId' => $this->userId,
+        ];
+
+        if (!$validation->run($dataToValidate)) {
+            throw new Exception(implode("<br>", $validation->getErrors()));
         }
 
         return true;
@@ -44,16 +74,21 @@ abstract class BaseReservation
 
     abstract public function validate(): bool;
 
+    public function getId(): string|int|null
+    {
+        return $this->id;
+    }
+
     public function getData(): array
     {
         return [
-            'startingDate' => $this->startingDate,
-            'endingDate'   => $this->endingDate,
-            'nbPeople'     => $this->nbPeople,
-            'mealOption'   => $this->mealOption,
-            'type'         => $this->type,
-            'status'       => $this->status,
-            'id'           => $this->id,
+            'startingDate'   => $this->startingDate,
+            'endingDate'     => $this->endingDate,
+            'numberOfPeople' => $this->nbPeople,
+            'mealOption'     => $this->mealOption,
+            'type'           => $this->type,
+            'status'         => $this->status,
+            'userId'         => $this->userId,
         ];
     }
 }

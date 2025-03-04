@@ -3,6 +3,7 @@
 namespace Config;
 
 use App\Validation\BirthDateValidation;
+use App\Validation\DateRangeValidation;
 use CodeIgniter\Config\BaseConfig;
 use CodeIgniter\Validation\StrictRules\CreditCardRules;
 use CodeIgniter\Validation\StrictRules\FileRules;
@@ -27,6 +28,7 @@ class Validation extends BaseConfig
         FileRules::class,
         CreditCardRules::class,
         BirthDateValidation::class,
+        DateRangeValidation::class,
     ];
 
     /**

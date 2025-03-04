@@ -4,7 +4,7 @@ namespace App\Libraries;
 
 class BookingDateValidator
 {
-    // Solution temporaire, utiliser une API dans l'idéal
+    // Ceci est une solution temporaire, utiliser une API dans l'idéal
     public static function isMeetingRoomDateValid(string $startingDate, string $endingDate, ?string &$error = null): bool
     {
         $vacationRange = [
@@ -24,7 +24,7 @@ class BookingDateValidator
             }
         }
 
-        $error = "Les dates saisies ne sont pas disponibles. Seuls les dates pendant les vacances de pacques, de la toussaint et noël sont disponibles pour les salles de réunion.";
+        $error = "Les dates saisies ne sont pas disponibles. Seuls les dates pendant les vacances de pacques, de la toussaint et de noël sont disponibles pour les salles de réunion.";
         return false;
     }
 
