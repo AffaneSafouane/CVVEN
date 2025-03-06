@@ -44,16 +44,10 @@ $maxDate = date('Y-m-d', strtotime('18 years ago'));
                         <label for="floatingUsernameInput"><?= lang('Auth.username') ?></label>
                     </div>
 
-                    <!-- Last Name -->
+                    <!-- Full Name -->
                     <div class="form-floating mb-2">
-                        <input class="form-control" type="text" name="last_name" id="floatingLastNameInput" inputmode="text" autocomplete="lastName" placeholder="Nom de famille" value="<?= old('last_name'); ?>" minlength="3" maxlength="50" required/>
-                        <label for="floatingLastNameInput">Nom de famille*</label>
-                    </div>
-
-                    <!-- Name -->
-                    <div class="form-floating mb-2">
-                        <input class="form-control" type="text" name="name" id="floatingNameInput" inputmode="text" autocomplete="name" placeholder="Prénom" value="<?= old('name'); ?>" minlength="3" maxlength="50" required/>
-                        <label for="floatingNameInput">Prénom*</label>
+                        <input class="form-control" type="text" name="full_name" id="floatingFullNameInput" inputmode="text" autocomplete="fullName" placeholder="Nom complet" value="<?= old('full_name'); ?>" minlength="3" maxlength="100" required/>
+                        <label for="floatingFullNameInput">Nom complet*</label>
                     </div>
 
                     <!-- Address -->

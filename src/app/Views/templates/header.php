@@ -7,17 +7,15 @@
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav me-auto mb-lg-0">
                 <li class="nav-item"><a class="nav-link" href="<?= site_url('/'); ?>">Accueil</a></li>
-                <li class="nav-item dropdown">
-                    <!-- @TODO ajouter les liens pour les réservations -->
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Réservations</a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Chambres</a></li>
-                        <li><a class="dropdown-item" href="#">Activités</a></li>
-                        <li><a class="dropdown-item" href="<?= site_url('meetingRooms/'); ?>">Salle de réunion</a></li>
-                    </ul>
-                </li>
+                <li><a class="nav-link" href="#">Chambres</a></li>
                 <?php if (auth()->loggedIn()): ?>
-                    <li class="nav-item"><a class="nav-link" href="<?= site_url('users/' . auth()->id()); ?>">Profil</a></li>
+                    <li class="nav-item dropdown">
+                        <span class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">Utilisateur</span>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">Réservations</a></li>
+                            <li class="dropdown-item"><a class="nav-link" href="<?= site_url('users/' . auth()->id()); ?>">Profil</a></li>
+                        </ul>
+                    </li>
                 <?php endif; ?>
             </ul>
             <ul class="navbar-nav d-flex">

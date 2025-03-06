@@ -3,7 +3,7 @@
 namespace Config;
 
 use App\Validation\BirthDateValidation;
-use App\Validation\DateRangeValidation;
+use App\Validation\BookingDateValidator;
 use CodeIgniter\Config\BaseConfig;
 use CodeIgniter\Validation\StrictRules\CreditCardRules;
 use CodeIgniter\Validation\StrictRules\FileRules;
@@ -28,7 +28,7 @@ class Validation extends BaseConfig
         FileRules::class,
         CreditCardRules::class,
         BirthDateValidation::class,
-        DateRangeValidation::class,
+        BookingDateValidator::class,
     ];
 
     /**
@@ -50,7 +50,7 @@ class Validation extends BaseConfig
             'label' => 'Auth.username',
             'rules' => [
                 'permit_empty',
-                'max_length[30]',
+                'max_length[100]',
                 'min_length[3]',
                 'regex_match[/\A[a-zA-Z0-9\.]+\z/]',
                 'is_unique[users.username]',
@@ -90,29 +90,20 @@ class Validation extends BaseConfig
             'label' => 'Auth.passwordConfirm',
             'rules' => 'required|matches[password]',
         ],
-        'last_name' => [
-            'label' => 'Nom de famille',
+        'full_name' => [
+            'label' => 'Nom complet',
             'rules' => [
                 'required',
-                'max_length[50]',
+                'max_length[150]',
                 'min_length[3]',
-                'regex_match[/^[a-zA-Zàâäéèêëîïôöùûüç\'\-]+$/]',
-            ]
-        ],
-        'name' => [
-            'label' => 'Prénom',
-            'rules' => [
-                'required',
-                'max_length[50]',
-                'min_length[3]',
-                'regex_match[/^[a-zA-Zàâäéèêëîïôöùûüç\'\-]+$/]',
+                'regex_match[/^[a-zA-Zàâäéèêëîïôöùûüç\'\- ]+$/]',
             ]
         ],
         'address' => [
             'label' => 'Adresse',
             'rules' => [
                 'required',
-                'max_length[50]',
+                'max_length[100]',
                 'min_length[5]',
             ]
         ],
@@ -120,7 +111,7 @@ class Validation extends BaseConfig
             'label' => 'Ville',
             'rules' => [
                 'required',
-                'max_length[50]',
+                'max_length[100]',
                 'min_length[1]',
                 'regex_match[/^[a-zA-Zàâäéèêëîïôöùûüç\'\-]+$/]',
             ]

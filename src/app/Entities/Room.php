@@ -6,11 +6,11 @@ use App\Models\ReservationModel;
 use CodeIgniter\Entity\Entity;
 
 /**
+ * @property ?int $id
  * @property ?string $num
  * @property ?string $type
  * @property ?string $description
  * @property ?float $price
- * @property ?bool $cleaningOption
  * @property ?bool $available
  * @property ?int $capacity
  */
@@ -18,44 +18,44 @@ use CodeIgniter\Entity\Entity;
 class Room extends Entity
 {
     protected $datamap = [
-        'num'            => 'ro_number',
-        'type'           => 'ro_type',
-        'description'    => 'ro_description',
-        'price'          => 'ro_price',
-        'cleaningOption' => 'ro_cleaning_option',
-        'available'      => 'ro_available',
-        'capacity'       => 'ro_capacity',
+        'id'             => 'id',
+        'roomNumber'     => 'room_number',
+        'type'           => 'type',
+        'description'    => 'description',
+        'price'          => 'price',
+        'available'      => 'available',
+        'capacity'       => 'capacity',
     ];
 
     protected $casts   = [
-        'ro_number'          => 'string',
-        'ro_type'            => 'string',
-        'ro_description'     => 'string',
-        'ro_price'           => 'float',
-        'ro_cleaning_option' => '?int-bool',
-        'ro_available'       => 'int-bool',
-        'ro_capacity'        => 'int',
+        'id'              => 'integer',
+        'room_number'     => 'string',
+        'type'            => 'string',
+        'description'     => 'string',
+        'price'           => 'float',
+        'available'       => 'int-bool',
+        'capacity'        => 'int',
     ];
 
-    public function getNum(): ?string
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function setId(?int $id): static
+    {
+        $this->id = $id;
+        return $this;
+    }
+
+    public function getRoomNumber(): ?string
     {
         return $this->num;
     }
 
-    public function setNum(?string $num): static
+    public function setRoomNumber(?string $num): static
     {
         $this->num = $num;
-        return $this;
-    }
-
-    public function getType(): ?string
-    {
-        return $this->type;
-    }
-
-    public function setType(?string $type): static
-    {
-        $this->type = $type;
         return $this;
     }
 
@@ -81,17 +81,6 @@ class Room extends Entity
         return $this;
     }
 
-    public function getCleaningOption(): ?bool
-    {
-        return $this->cleaningOption;
-    }
-
-    public function setCleaningOption(?bool $cleaningOption): static
-    {
-        $this->cleaningOption = $cleaningOption;
-        return $this;
-    }
-
     public function getAvailable(): ?bool
     {
         return $this->available;
@@ -114,7 +103,10 @@ class Room extends Entity
         return $this;
     }
 
-    public function getReservation(): array|Reservation|null
+    /** 
+     * @return ?Reservation[]
+     */
+    public function getReservations(): ?array
     {
         // @TODO Récupérer les réservations d'une chambre
     }

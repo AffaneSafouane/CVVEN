@@ -3,7 +3,6 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
-use App\Enum\ReservationType;
 use CodeIgniter\HTTP\ResponseInterface;
 
 /**
@@ -18,19 +17,24 @@ class RoomController extends BaseController
      */
     public function index(): string
     {
-        // @TODO afficher toutes les chambres disponibles
+        // TODO: afficher toutes les chambres disponibles, getAvailableRooms() de RoomModel
     }
 
-    public function show(?string $roomNum): string
+    public function show(int $roomId): string
     {
-        // @TODO afficher les détails d'une chambre
+        // TODO: afficher les détails d'une chambre spécifique
+    }
+
+    public function search(): string
+    {
+        // TODO: recherche de logements en fonction des critères (dates, nombre de personnes, type, prix, etc.)
     }
 
     /**
-     * Donner un objet de type Room pour nb de personnes et dates.
+     * Donner un objet de type Room au formulaire
      */
-    public function new(string $roomNum, $type = ReservationType::Room): string
+    public function new(int $roomId): string
     {
-        // @TODO afficher le formulaire pour une chambre
+        // TODO: afficher le formulaire pour une chambre (reservations/create)
     }
 }

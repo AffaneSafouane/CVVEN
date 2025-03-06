@@ -4,16 +4,18 @@ namespace App\Models;
 
 use App\Entities\Room;
 use CodeIgniter\Model;
+use Exception;
+use ReflectionException;
 
 class RoomModel extends Model
 {
     protected $table            = 'rooms';
-    protected $primaryKey       = 'ro_number';
-    protected $useAutoIncrement = false;
+    protected $primaryKey       = 'id';
+    protected $useAutoIncrement = true;
     protected $returnType       = Room::class;
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['ro_number', 'ro_type', 'ro_description', 'ro_price', 'ro_cleaning_option', 'ro_available', 'ro_capacity'];
+    protected $allowedFields    = ['room_number', 'type', 'description', 'price', 'available', 'capacity'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -27,13 +29,12 @@ class RoomModel extends Model
 
     // Validation
     protected $validationRules      = [
-        'ro_number'          => 'required|is_unique[rooms.ro_number]|regex_match[/\A[0-9]+\z/]|min_length[3]|max_length[3]',
-        'ro_type'            => 'required|regex_match[/^[a-zA-Zàâäéèêëîïôöùûüç\'\-]+$/]|min_length[3]|max_length[50]',
-        'ro_description'     => 'required|min_length[10]|max_length[255]',
-        'ro_price'           => 'decimal|greater_than[0]|less_than[500]|required',
-        'ro_cleaning_option' => 'required|in_list[0,1]',
-        'ro_available'       => 'required|in_list[0,1]',
-        'ro_capacity'        => 'required|integer|greater_than[0]|less_than[10]'
+        'room_number'     => 'required|is_unique[rooms.room_number]|regex_match[/^B[0-9]{3}$/]|min_length[4]|max_length[4]',
+        'type'            => 'required|min_length[1]',
+        'description'     => 'required|min_length[5]|max_length[255]',
+        'price'           => 'decimal|greater_than[0]|required',
+        'available'       => 'required|in_list[0,1]',
+        'capacity'        => 'required|integer|greater_than[0]'
     ];
     protected $validationMessages   = [];
     protected $skipValidation       = false;
@@ -52,26 +53,64 @@ class RoomModel extends Model
 
     /**
      * @param int $reservationId
-     * @return ?Room[]
+     * @return ?Room
      */
-    public function getRoomsByReservation(int $reservationId): ?array
+    public function getRoomByReservation(int $reservationId): ?array
     {
-        return $this->where('r_fk_id', $reservationId)->findAll();
+        // TODO récupérer la chambre d'une réservation via la table de liaison reservations_rooms
+    }
+
+    public function isRoomAvailable(int $roomId, string $startDate, string $endDate): bool
+    {
+        // Construire la requête pour rechercher des conflits de réservation
+
+        // Joindre la table reservations_rooms avec reservations
+        // pour vérifier si la chambre est déjà réservée dans cette période
+
+        // Filtrer les enregistrements pour la chambre spécifiée
+
+        // Début du groupement des conditions de chevauchement des dates
+        // Vérifier si la date de début demandée est comprise dans une réservation existante
+
+        // Vérifier si la date de fin demandée est comprise dans une réservation existante
+
+        // Vérifier si la réservation existante est entièrement contenue dans la période demandée
+
+        // Exécuter la requête
+
+        // Si aucune réservation ne chevauche la période demandée, la chambre est disponible
     }
 
     /**
-     * @param string $roomNum
      * @param string $startDate
      * @param string $endDate
-     * @return bool
+     * @return ?Room[]
      */
-    public function isRoomAvailable(string $roomNum, string $startDate, string $endDate): bool
+    public function getAvailableRooms(string $startDate, string $endDate): ?array
     {
-        // @TODO Vérifier si la chambre est disponible aux dates demandées (cf. MeetingRoomModel)
+        // TODO Afficher toutes les chambres disponibles, SELECT et appel à isRoomAvailable()
     }
 
-    // SELECT COUNT(ro_type) AS RoomType FROM `rooms` WHERE ro_type = "Logements";
-    // SELECT COUNT(ro_type) AS RoomType FROM `rooms` WHERE ro_type = "Chambre double";
-    // SELECT COUNT(ro_type) AS RoomType FROM `rooms` WHERE ro_type = "Chambre triple";
-    // SELECT COUNT(ro_type) AS RoomType FROM `rooms` WHERE ro_type = "Chambre quadruple";
+    /**
+     * @param int $reservationId
+     * @param int $roomId
+     * @return bool
+     * @throws Exception
+     */
+    public function addRoomToReservation(int $reservationId, int $roomId): bool
+    {
+        // Vérifier si $roomId est null
+        // Si c'est le cas, lever une exception pour empêcher une réservation sans chambre
+
+        // Insérer la relation réservation-chambre dans la table reservations_rooms
+
+        // Si l'insertion échoue, annuler immédiatement lever une exception pour indiquer que l'ajout de la chambre a échoué
+
+        // Retourner true pour confirmer que l'ajout de la chambre à la réservation a réussi
+    }
+
+    // SELECT COUNT(type) AS RoomType FROM `rooms` WHERE type = "Logements";
+    // SELECT COUNT(type) AS RoomType FROM `rooms` WHERE type = "Chambre Double";
+    // SELECT COUNT(type) AS RoomType FROM `rooms` WHERE type = "Chambre Triple";
+    // SELECT COUNT(type) AS RoomType FROM `rooms` WHERE type = "Chambre Quadruple";
 }

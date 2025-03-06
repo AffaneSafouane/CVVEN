@@ -1,6 +1,18 @@
-# Création projet CVVEN : Docker
+# CVVEN
 
-## Installer Docker Desktop
+Il s'agit d'une application web développée développé dans le contexte d'un projet scolaire et permet la réservation de séjour dans le Jura durant les vacances scolaires.
+
+## Tech Stack
+
+**Client:** HTML, Bootstrap, Javascript
+
+**Server:** PHP, Codeigniter 4
+
+**Database:** MySQL
+
+## Installation
+
+Installer le projet avec docker desktop.
 
 Pour linux : 
 
@@ -14,11 +26,7 @@ Pour Windows :
 
 ```bash
 git clone https://github.com/AffaneSafouane/CVVEN.git 
-```
-
-Ouvrez un terminal dans votre projet et lancer la commande :
-
-```bash
+cd CVVEN
 docker compose up -d
 ```
 

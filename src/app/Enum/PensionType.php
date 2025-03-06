@@ -2,7 +2,7 @@
 
 namespace App\Enum;
 
-enum MealOption: string
+enum PensionType: string
 {
     case FullPension = 'Pension-Compléte';
     case HalfPension = 'Demi-Pension';

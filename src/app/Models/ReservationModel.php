@@ -2,21 +2,23 @@
 
 namespace App\Models;
 
-use App\Entities\Activity;
-use App\Entities\MeetingRoom;
 use App\Entities\Reservation;
 use App\Entities\Room;
+use App\Enum\PensionType;
 use CodeIgniter\Model;
+use Exception;
+use http\Encoding\Stream\Deflate;
+use ReflectionException;
 
 class ReservationModel extends Model
 {
     protected $table            = 'reservations';
-    protected $primaryKey       = 'r_id';
+    protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = Reservation::class;
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['r_starting_date', 'r_ending_date', 'r_meal_option', 'r_number_people', 'r_total_price', 'r_status', 'r_type', 'u_fk_id'];
+    protected $allowedFields    = ['start_date', 'end_date', 'meal_option', 'cleaning_option', 'number_people', 'total_price', 'status', 'user_id'];
 
     protected bool $allowEmptyInserts = true;
     protected bool $updateOnlyChanged = true;
@@ -27,20 +29,21 @@ class ReservationModel extends Model
     // Dates
     protected $useTimestamps = false;
     protected $dateFormat    = 'datetime';
-    protected $createdField  = 'r_created_at';
-    protected $updatedField  = 'r_updated_at';
-    protected $deletedField  = 'r_deleted_at';
+    protected $createdField  = 'created_at';
+    protected $updatedField  = 'updated_at';
+    protected $deletedField  = '';
 
     // Validation
     protected $validationRules      = [
-        'r_starting_date' => 'required|valid_date',
-        'r_ending_date'   => 'required|valid_date',
-        'r_type'          => 'required|in_list[Chambre,Activité,Salle de réunion,Transport]',
-        'r_meal_option'   => 'required|in_list[Pension-Compléte,Demi-Pension,Sans-Pension]',
-        'r_number_people' => 'required|integer|greater_than[0]|less_than[500]',
-        'r_total_price'   => 'required|decimal|greater_than[0]|less_than[1000]',
-        'r_status'        => 'required|in_list[Confirmée,En attente,Annulée]',
-        'u_fk_id'         => 'required|integer|greater_than[0]',
+        'start_date'      => 'required|valid_date',
+        'end_date'        => 'required|valid_date',
+        'family_quotient' => 'required|integer|greater_than[0]|less_than[7]',
+        'meal_option'     => 'required|in_list[Pension-Compléte,Demi-Pension,Sans-Pension]',
+        'number_people'   => 'required|integer|greater_than[0]|less_than[50]',
+        'cleaning_option' => 'required|in_list[0,1]',
+        'total_price'     => 'required|decimal|greater_than[0]|less_than[1000]',
+        'status'          => 'required|in_list[Confirmée,En attente,Annulée]',
+        'user_id'         => 'required|integer|greater_than[0]',
     ];
     protected $validationMessages   = [];
     protected $skipValidation       = false;
@@ -58,97 +61,81 @@ class ReservationModel extends Model
     protected $afterDelete    = [];
 
     /**
-     * @param int $reservationId
-     * @return ?Room[]
-     */
-    public function getRoomsByReservation(int $reservationId): ?array
-    {
-        // @TODO récupérer les chambres d'une réservation via leur table de liaison
-    }
-
-//    /**
-//     * @param int $reservationId
-//     * @param string[] $roomsNum
-//     */
-//    public function addRoomsToReservation(int $reservationId, array $roomsNum): void
-//    {
-//        // @TODO méthode pour ajouter des chambres à une réservation via leur table de liaison
-//    }
-
-    /**
-     * @param int $reservationId
-     * @return ?MeetingRoom[]
-     */
-    public function getMeetingRoomsByReservation(int $reservationId): ?array
-    {
-        $builder = $this->db->table('reservations_meeting_rooms')
-            ->join('meeting_rooms', 'reservations_meeting_rooms.mr_fk_number = meeting_rooms.mr_number')
-            ->where('reservations_meeting_rooms.r_fk_id', $reservationId);
-        return $builder->get()->getResult('App\Entities\MeetingRoom');
-    }
-
-//    /**
-//     * @param int $reservationId
-//     * @param string[] $meetingRoomsNum
-//     * @return bool
-//     */
-//    public function addMeetingRoomsToReservation(int $reservationId, array $meetingRoomsNum): bool
-//    {
-//        $insertData = [];
-//        foreach ($meetingRoomsNum as $meetingRoomNum) {
-//            $insertData = [
-//                'r_fk_id' => $reservationId,
-//                'mr_fk_num' => $meetingRoomNum
-//            ];
-//        }
-//
-//        $this->db->transStart();
-//        $this->db->table('reservations_meeting_rooms')->insertBatch($insertData);
-//        $this->db->transComplete();
-//
-//        return $this->db->transStatus();
-//    }
-
-    /**
-     * @param int $reservationId
-     * @return ?Activity[]
-     */
-    public function getActivitiesByReservation(int $reservationId): ?array
-    {
-        $builder = $this->db->table('reservations_activities')
-            ->join('activities', 'reservations_activities.a_fk_id = activities.a_id')
-            ->where('reservations_activities.r_fk_id', $reservationId);
-        return $builder->get()->getResult('App\Entities\Activity');
-    }
-
-//    /**
-//     * @param int $reservationId
-//     * @param int[] $activitiesId
-//     * @return bool
-//     */
-//    public function addActivitiesToReservation(int $reservationId, array $activitiesId): bool
-//    {
-//        $insertData = [];
-//        foreach ($activitiesId as $activityId) {
-//            $insertData = [
-//                'r_fk_id' => $reservationId,
-//                'a_fk_id' => $activityId
-//            ];
-//        }
-//
-//        $this->db->transStart();
-//        $this->db->table('reservations_activities')->insertBatch($insertData);
-//        $this->db->transComplete();
-//
-//        return $this->db->transStatus();
-//    }
-
-    /**
      * @param int $userId
      * @return ?Reservation[]
      */
-    public function getReservationsByUser(int $userId): ?array
+    public function getUserReservations(int $userId): ?array
     {
-        return $this->where('u_fk_id', $userId)->findAll();
+        return $this->where('user_id', $userId)->findAll();
+    }
+
+    /**
+     * @param int $roomId
+     * @return ?Reservation[]
+     */
+    public function getReservationsByRoom(int $roomId): ?array
+    {
+        // TODO récupérer les réservations d'une chambre via la table de liaison reservations_rooms
+    }
+
+    /**
+     * @param Reservation $reservation
+     * @param Room[] $rooms
+     * @return float
+     */
+    public function calculatePrice(array $rooms, Reservation $reservation): float
+    {
+        // TODO: Calculer le prix en fonction du type de pension, du forfait ménage, du nombre de chambres et leur prix ainsi que du quotient familial
+    }
+
+    /**
+     * @param Reservation $reservation
+     * @param int $roomId
+     * @return bool
+     * @throws Exception
+     */
+    public function saveReservation(Reservation $reservation, int $roomId): bool
+    {
+        // Vérifier si $roomId est null
+        // Si c'est le cas, lever une exception pour empêcher une opération invalide
+
+        // Vérifier la disponibilité de la chambre pour les dates de la réservation (RoomModel->isRoomAvailable())
+
+        // Retourner l'enregistrement de la réservation dans la base de données
+    }
+
+    /**
+     * @param Reservation $reservation
+     * @param int $roomId
+     * @return bool
+     * @throws Exception
+     */
+    public function createReservation(Reservation $reservation, int $roomId): bool
+    {
+        // Démarrer une transaction pour garantir l'intégrité des données
+
+        // Sauvegarder la réservation (saveReservation()) et vérifier si elle est bien enregistrée
+        // Si l'insertion échoue, annuler la transaction pour éviter d'enregistrer des données partielles
+        // Puis lever une exception pour signaler l'échec
+
+        // Récupérer l'identifiant de la réservation nouvellement créée
+
+        // Associer la chambre à la réservation (RoomModel->addRoomToReservation())
+        // Si l'insertion échoue, annuler la transaction pour éviter d'enregistrer des données partielles
+        // Puis lever une exception pour signaler l'échec
+
+        // Si toutes les insertions réussissent, valider la transaction pour enregistrer les modifications
+
+        // Retourner true pour indiquer que l'opération a réussi
+    }
+
+    public function cancelReservation(int $reservationId): bool
+    {
+        // TODO: Update status de la réservation et supprimer dans table jointe
+    }
+
+    public function confirmReservation(int $reservationId): bool
+    {
+        // TODO: Update status de la réservation (uniquement pour admin)
     }
 }

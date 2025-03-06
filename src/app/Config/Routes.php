@@ -36,7 +36,7 @@ $routes->get('reservations/', [UserReservationController::class, 'index']);
 $routes->get('admin/users', [AdminUserController::class, 'index']);
 $routes->get('admin/rooms', [AdminRoomController::class, 'index']);
 $routes->get('admin/meetingRooms', [AdminMeetingRoomController::class, 'index']);
-$routes->get('admin/reservations', [AdminReservationController::class, 'index']);
+$routes->get('admin/reservations', [ReservationController::class, 'index']);
 $routes->get('admin/activities', [AdminActivityController::class, 'index']);
 
 // Test mailpit

@@ -3,10 +3,8 @@
 namespace App\Entities;
 
 use App\Entities\Cast\EnumCast;
-use App\Enum\MealOption;
+use App\Enum\PensionType;
 use App\Enum\ReservationStatus;
-use App\Enum\ReservationType;
-use App\Models\MeetingRoomModel;
 use App\Models\ReservationModel;
 use App\Models\RoomModel;
 use App\Models\UserModel;
@@ -17,13 +15,13 @@ use Exception;
 
 /**
  * @property ?int $id
- * @property ?Time $startingDate
- * @property ?Time $endingDate
- * @property ?ReservationType $type
+ * @property ?Time $startDate
+ * @property ?Time $endDate
  * @property ?Time $createdAt
  * @property ?Time $updatedAt
- * @property ?Time $deletedAt
- * @property ?MealOption $mealOption
+ * @property ?bool $cleaningOption
+ * @property ?PensionType $pension
+ * @property ?int $familyQuotient
  * @property ?int $numberOfPeople
  * @property ?float $totalPrice
  * @property ?ReservationStatus $status
@@ -33,44 +31,46 @@ use Exception;
 class Reservation extends Entity
 {
     protected $datamap = [
-        'id'             => 'r_id',
-        'mealOption'     => 'r_meal_option',
-        'numberOfPeople' => 'r_number_people',
-        'totalPrice'     => 'r_total_price',
-        'createdAt'      => 'r_created_at',
-        'updatedAt'      => 'r_updated_at',
-        'deletedAt'      => 'r_deleted_at',
-        'type'           => 'r_type',
-        'startingDate'   => 'r_starting_date',
-        'endingDate'     => 'r_ending_date',
-        'status'         => 'r_status',
-        'userId'         => 'u_fk_id',
+        'id'             => 'id',
+        'pension'        => 'pension',
+        'numberOfPeople' => 'number_people',
+        'totalPrice'     => 'total_price',
+        'createdAt'      => 'created_at',
+        'updatedAt'      => 'updated_at',
+        'startDate'      => 'start_date',
+        'endDate'        => 'end_date',
+        'cleaningOption' => 'cleaning_option',
+        'familyQuotient' => 'family_quotient',
+        'status'         => 'status',
+        'userId'         => 'user_id',
     ];
     
-    protected $dates = ['r_created_at', 'r_updated_at', 'r_deleted_at', 'r_starting_date', 'r_ending_date'];
+    protected $dates = ['created_at', 'updated_at', 'start_date', 'end_date'];
 
     protected $casts   = [
-        'r_id'              => 'int',
-        'r_meal_option'     => 'enum[App\Enum\MealOption]',
-        'r_number_people'   => 'int',
-        'r_total_price'     => 'float',
-        'r_status'          => 'enum[App\Enum\ReservationStatus]',
-        'r_type'            => 'enum[App\Enum\ReservationType]',
-        'u_fk_id'           => 'int',
+        'id'              => 'int',
+        'meal_option'     => 'enum[App\Enum\PensionType]',
+        'number_people'   => 'int',
+        'total_price'     => 'float',
+        'status'          => 'enum[App\Enum\ReservationStatus]',
+        'cleaning_option' => 'int-bool',
+        'family_quotient' => 'int',
+        'user_id'         => 'int',
     ];
 
     protected $castHandlers = [
         'enum' => EnumCast::class,
     ];
 
-    public function getStartingDate(): ?string
+    public function getStartDate(): ?string
     {
-        if (!$this->startingDate) {
+        if (!$this->startDate) {
             return null;
         }
+
         $format = 'd/m/Y';
         try {
-            $date = $this->mutateDate($this->startingDate);
+            $date = $this->mutateDate($this->startDate);
             $timezone = $this->timezone ?? app_timezone();
             $date->setTimezone($timezone);
             return $date->format($format);
@@ -80,14 +80,15 @@ class Reservation extends Entity
         }
     }
 
-    public function getEndingDate(): ?string
+    public function getEndDate(): ?string
     {
-        if (!$this->endingDate) {
+        if (!$this->endDate) {
             return null;
         }
+
         $format = 'd/m/Y';
         try {
-            $date = $this->mutateDate($this->endingDate);
+            $date = $this->mutateDate($this->endDate);
             $timezone = $this->timezone ?? app_timezone();
             $date->setTimezone($timezone);
             return $date->format($format);
@@ -131,9 +132,9 @@ class Reservation extends Entity
         }
     }
 
-    public function getMealOption(): ?string
+    public function getPensionType(): ?string
     {
-        return $this->mealOption->getLabel();
+        return $this->pension->getLabel();
     }
 
     public function getStatus(): ?string
@@ -141,9 +142,9 @@ class Reservation extends Entity
         return $this->status->getLabel();
     }
 
-    public function getType(): ?string
+    public function getFamilyQuotient(): ?int
     {
-        return $this->type->getLabel();
+        return $this->familyQuotient;
     }
 
     /**
@@ -155,21 +156,12 @@ class Reservation extends Entity
         return $userModel->find($this->userId);
     }
 
+    /**
+     * @return ?Room[]
+     */
     public function getRooms(): ?array
     {
-        // @TODO appel la méthode du model de réservations pour afficher les chambres d'une réservation
-    }
-
-    public function getMeetingRooms(): ?array
-    {
-        $meetingRoomModel = new ReservationModel();
-        return $meetingRoomModel->getMeetingRoomsByReservation($this->id);
-    }
-
-    public function getActivities(): ?array
-    {
-        $reservationModel = new ReservationModel();
-        return $reservationModel->getActivitiesByReservation($this->id);
+        // @TODO appel la méthode getRoomByReservation() de RoomModel pour afficher les chambres d'une réservation
     }
 
     /**
@@ -179,58 +171,75 @@ class Reservation extends Entity
     public function getReservationsByUser(int $userId): ?array
     {
         $reservationModel = new ReservationModel();
-        return $reservationModel->where('u_fk_id', $userId)->findAll();
+        return $reservationModel->where('user_id', $userId)->findAll();
     }
 
-    public function setStartingDate(string $startingDate): static
+    public function setStartDate(?string $startDate): static
     {
         try {
-            $this->startingDate = new Time($startingDate, 'Europe/Paris');
+            $this->startDate = new Time($startDate, 'Europe/Paris');
         } catch (Exception $e) {
             log_message('error', 'Invalid starting date provided: ' . $e->getMessage());
-            $this->startingDate = null;
+            $this->startDate = null;
         }
 
         return $this;
     }
 
-    public function setEndingDate(string $endingDate): static
+    public function setEndingDate(?string $endingDate): static
     {
         try {
-            $this->endingDate = new Time($endingDate, 'Europe/Paris');
+            $this->endDate = new Time($endingDate, 'Europe/Paris');
         } catch (Exception $e) {
             log_message('error', 'Invalid ending date provided: ' . $e->getMessage());
-            $this->endingDate = null;
+            $this->endDate = null;
         }
 
         return $this;
     }
 
-    public function setMealOption(MealOption $mealOption): static
+    public function setPensionType(?PensionType $pension): static
     {
-        $this->mealOption = $mealOption;
+        $this->pension = $pension;
         return $this;
     }
 
-    public function setNumberOfPeople(int $numberOfPeople): static
+    public function setNumberOfPeople(?int $numberOfPeople): static
     {
         $this->numberOfPeople = $numberOfPeople;
         return $this;
     }
 
-    public function setTotalPrice(float $totalPrice): static
+    public function setTotalPrice(?float $totalPrice): static
     {
         $this->totalPrice = $totalPrice;
         return $this;
     }
 
-    public function setStatus(ReservationStatus $status): static
+    public function setStatus(?ReservationStatus $status): static
     {
         $this->status = $status;
         return $this;
     }
 
-    public function setUser(int $userId): static
+    public function setFamilyQuotient(?int $familyQuotient): static
+    {
+        $this->familyQuotient = $familyQuotient;
+        return $this;
+    }
+
+    public function getCleaningOption(): ?bool
+    {
+        return $this->cleaningOption;
+    }
+
+    public function setCleaningOption(?bool $cleaningOption): static
+    {
+        $this->cleaningOption = $cleaningOption;
+        return $this;
+    }
+
+    public function setUser(?int $userId): static
     {
         $this->userId = $userId;
         return $this;
@@ -238,30 +247,16 @@ class Reservation extends Entity
 
     /**
      * @param int $reservationId
-     * @param string[] $roomsNum
+     * @param string[] $roomsId
      */
-    public function addRooms(int $reservationId, array $roomsNum): void
+    public function addRooms(int $reservationId, array $roomsId): void
     {
-        // @TODO appel la méthode addRoomsToReservation() de ReservationModel pour ajouter des chambres à une réservation
+        // TODO appel la méthode addRoomsToReservation() de ReservationModel pour ajouter des chambres à une réservation
     }
 
-    /**
-     * @param int $reservationId
-     * @param string[] $meetingRoomsNum
-     */
-    public function addMeetingRooms(int $reservationId, array $meetingRoomsNum): void
+    // Méthode pour calculer le prix total selon le type de pension, le quotient familial et le prix des chambres
+    public function calculatePrice(array $room_id, string $pension, $forfait_menage)
     {
-        $reservationModel = new ReservationModel();
-        $reservationModel->addMeetingRoomsToReservation($reservationId, $meetingRoomsNum);
-    }
-
-    /**
-     * @param int $reservationId
-     * @param int[] $activitiesId
-     */
-    public function addActivities(int $reservationId, array $activitiesId): void
-    {
-        $reservationModel = new ReservationModel();
-        $reservationModel->addActivitiesToReservation($reservationId, $activitiesId);
+        // TODO: Ajouter la logique pour calculer le prix en fonction du logement, des dates et des options
     }
 }

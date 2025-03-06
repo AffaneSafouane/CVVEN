@@ -21,19 +21,18 @@
                 <div class="card-body">
                     <div class="card-title d-flex justify-content-between">
                         <ul class="list-group list-group-flush">
-                            <!-- @TODO ajouter un lien vers détails réservation (show() ReservationController) -->
-                            <li class="list-group-item bg-dark-subtle"><?= $reservation->getType(); ?></li>
-                            <li class="list-group-item bg-dark-subtle"><?= $reservation->getMealOption(); ?></li>
+                            <!-- TODO: Ajouter le type de chambre -->
+                            <li class="list-group-item bg-dark-subtle"><?= $reservation->getPensionType(); ?></li>
                             <li class="list-group-item bg-dark-subtle"><?= $reservation->getStartingDate() . ' - ' . $reservation->getEndingDate(); ?></li>
-                            <li class="list-group-item bg-dark-subtle"><?= $reservation->getType(); ?></li>
-                            <li class="list-group-item bg-dark-subtle"><?= $reservation->getUser()->last_name . ' ' . $reservation->getUser()->name; ?></li>
+                            <li class="list-group-item bg-dark-subtle"><?= $reservation->getUser()->full_name; ?></li>
                         </ul>
                     </div>
+                    <!-- TODO: ajouter un lien vers détails réservation (show() ReservationController) -->
                 </div>
             </div>
         <?php endforeach; ?>
     <?php else: ?>
-        <p>Aucune réservations pour le moment</p>
+        <p>Vous n'avez aucune réservations pour le moment</p>
     <?php endif; ?>
 </section>
 <?= $this->endSection(); ?>

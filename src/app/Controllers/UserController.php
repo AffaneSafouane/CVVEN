@@ -25,10 +25,6 @@ class UserController extends BaseController {
             'title' => "Informations utilisateur",
         ];
 
-        if ($data['user'] === null) {
-            throw new UserNotFoundException('Impossible de trouver l\'utilisateur');
-        }
-
         return view('users/view', $data);
     }
 

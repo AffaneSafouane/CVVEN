@@ -25,5 +25,6 @@ class UserController extends BaseController
 
         return view('admin/users/index', $data);
     }
-    // @TODO Ajouter les méthodes show(), updateGroup(), delete(), suspend()
+
+    // @TODO Ajouter les méthodes show(), updateRole(), delete(), suspend()
 }
