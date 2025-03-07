@@ -21,7 +21,7 @@
         <div class="container px-4 text-center py-5">
             <h1 class="fw-bolder">CVVEN</h1>
             <p class="lead">Site de vacance</p>
-            <a href="#" class="btn btn-success">Parcourez nos offres</a> <!-- @TODO ajouter lien pour accueil réservations -->
+            <a href="#" class="btn btn-success">Parcourez nos offres</a> <!-- TODO: lien vers les chambres disponibles -->
         </div>
     </div>
 </header>
