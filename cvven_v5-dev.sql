@@ -223,7 +223,7 @@ CREATE TABLE IF NOT EXISTS `reservations` (
   `updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `deleted_at` DATETIME NULL,
   `status` ENUM('En attente', 'Confirmée', 'Annulée') NOT NULL DEFAULT 'En attente',
-  `family_quotient` INT(11) NOT NULL CHECK (family_quotient > 0 AND family_quotient < 7),
+  `family_quotient` ENUM('less_800', '800-1200', '1200-1800', '1800-2500', 'more_2500') NOT NULL,
   `user_id` INT(10) UNSIGNED NOT NULL,
   CHECK (end_date > start_date)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;

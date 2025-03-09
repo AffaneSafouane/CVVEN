@@ -3,6 +3,7 @@
 namespace App\Entities;
 
 use App\Entities\Cast\EnumCast;
+use App\Enum\FamilyQuotient;
 use App\Enum\PensionType;
 use App\Enum\ReservationStatus;
 use App\Models\ReservationModel;
@@ -21,7 +22,7 @@ use Exception;
  * @property ?Time $updatedAt
  * @property ?bool $cleaningOption
  * @property ?PensionType $pension
- * @property ?int $familyQuotient
+ * @property ?FamilyQuotient $familyQuotient
  * @property ?int $numberOfPeople
  * @property ?float $totalPrice
  * @property ?ReservationStatus $status
@@ -54,7 +55,7 @@ class Reservation extends Entity
         'total_price'     => 'float',
         'status'          => 'enum[App\Enum\ReservationStatus]',
         'cleaning_option' => 'int-bool',
-        'family_quotient' => 'int',
+        'family_quotient' => 'enum[App\Enum\FamilyQuotient]',
         'user_id'         => 'int',
     ];
 
@@ -142,9 +143,9 @@ class Reservation extends Entity
         return $this->status->getLabel();
     }
 
-    public function getFamilyQuotient(): ?int
+    public function getFamilyQuotient(): ?string
     {
-        return $this->familyQuotient;
+        return $this->status->getLabel();
     }
 
     /**
@@ -222,7 +223,7 @@ class Reservation extends Entity
         return $this;
     }
 
-    public function setFamilyQuotient(?int $familyQuotient): static
+    public function setFamilyQuotient(?FamilyQuotient $familyQuotient): static
     {
         $this->familyQuotient = $familyQuotient;
         return $this;

@@ -37,7 +37,7 @@ class ReservationModel extends Model
     protected $validationRules      = [
         'start_date'      => 'required|valid_date',
         'end_date'        => 'required|valid_date',
-        'family_quotient' => 'required|integer|greater_than[0]|less_than[7]',
+        'family_quotient' => 'required|in_list[less_800,800-1200,1200-1800,1800-2500,more_2500]',
         'meal_option'     => 'required|in_list[Pension-Compléte,Demi-Pension,Sans-Pension]',
         'number_people'   => 'required|integer|greater_than[0]|less_than[50]',
         'cleaning_option' => 'required|in_list[0,1]',
@@ -80,12 +80,24 @@ class ReservationModel extends Model
 
     /**
      * @param Reservation $reservation
-     * @param Room[] $rooms
+     * @param Room $room
      * @return float
      */
-    public function calculatePrice(array $rooms, Reservation $reservation): float
+    public function calculatePrice(Room $room, Reservation $reservation): float
     {
-        // TODO: Calculer le prix en fonction du type de pension, du forfait ménage, du nombre de chambres et leur prix ainsi que du quotient familial
+        // TODO: Calculer le prix en fonction du type de pension, du forfait ménage, du prix de la chambre et du quotient familial
+        /**
+         * Type de pension
+         * demi-pension = +30€
+         * pension compléte = +50€
+         * forfait ménage = +30€
+         * Quotient Familial
+         * QF < 800 = -40%
+         * 800 ≤ QF < 1200 = -30%
+         * 1200 ≤ QF < 1800 = -20%
+         * 1800 ≤ QF < 2500 = -10%
+         * QF ≥ 2500 (pas de réduction)
+         */
     }
 
     /**

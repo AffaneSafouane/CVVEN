@@ -55,15 +55,12 @@
                     </select>
                 </div>
 
-                <!-- TODO date de fin déterminer avec la date de début, 7 jours plus tard (samedi au samedi), Si date de fin tombe en dehors des vacances scolaires alors date indisponible -->
-                <!-- Ajouter date de séjour -->
-                <div class="mb-3">
-                    <label for="startingDate" class="form-label">Date de début séjour (vacances scolaires)</label>
-                    <!-- @TODO Rendre dynamique les limites de la date de début (javascript) -->
-                    <input type="date" class="form-control" id="startingDate" name="startingDate" value="<?= date('Y-m-d'); ?>>" min="2025-01-01" max="2026-01-04" required/>
-                </div>
-
-                <!-- TODO: Ajouter input quotient familial (min=1, max=6) -->
+                <!-- TODO: Ajouter quotient familial (menu déroulant) -->
+                <!-- less_800 -->
+                <!-- 800-1200 -->
+                <!-- 1200-1800 -->
+                <!-- 1800-2500 -->
+                <!-- more_2500 -->
 
                 <!-- Pour les chambres : choisir ou non l'option ménage -->
                 <fieldset class="form-group border p-3">

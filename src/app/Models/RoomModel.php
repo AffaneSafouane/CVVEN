@@ -88,7 +88,7 @@ class RoomModel extends Model
      */
     public function getAvailableRooms(string $startDate, string $endDate): ?array
     {
-        // TODO Afficher toutes les chambres disponibles, SELECT et appel à isRoomAvailable()
+        // TODO Afficher toutes les chambres disponibles, SELECT et appel à isRoomAvailable() (filtres par dates dans page web)
     }
 
     /**
@@ -99,7 +99,7 @@ class RoomModel extends Model
      */
     public function addRoomToReservation(int $reservationId, int $roomId): bool
     {
-        // Vérifier si $roomId est null
+        // Vérifier si $roomId ou $reservationId sont null
         // Si c'est le cas, lever une exception pour empêcher une réservation sans chambre
 
         // Insérer la relation réservation-chambre dans la table reservations_rooms

@@ -132,6 +132,6 @@ class Validation extends BaseConfig
                 'valid_date',
                 'isValidBirthDate',
             ]
-        ]
+        ],
     ];
 }
