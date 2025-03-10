@@ -58,6 +58,11 @@ class RoomModel extends Model
     public function getRoomByReservation(int $reservationId): ?array
     {
         // TODO récupérer la chambre d'une réservation via la table de liaison reservations_rooms
+
+        $query = $this->db->table('reservations_rooms')
+            ->join('rooms', 'rooms.id = reservations_rooms.room_id')
+            ->where('reservations_rooms.reservation_id', $reservationId);
+        return $query->get()->getRow('App\Entities\Room');
     }
 
     public function isRoomAvailable(int $roomId, string $startDate, string $endDate): bool
@@ -88,7 +93,17 @@ class RoomModel extends Model
      */
     public function getAvailableRooms(string $startDate, string $endDate): ?array
     {
-        // TODO Afficher toutes les chambres disponibles, SELECT et appel à isRoomAvailable() (filtres par dates dans page web)
+        // TODO: Afficher toutes les chambres disponibles
+
+        // Initialise un tableau vide pour stocker les chambres disponibles.
+
+        // Récupère toutes les chambres disponibles à partir de la base de données.
+
+        // Vérifie pour chaque chambre si elle est disponible pour la période donnée.
+
+        // Si la chambre est disponible, l'ajoute au tableau des chambres disponibles.
+
+        // Retourne le tableau des chambres disponibles.
     }
 
     /**

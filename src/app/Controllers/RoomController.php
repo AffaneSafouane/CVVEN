@@ -28,7 +28,7 @@ class RoomController extends BaseController
     /**
      * Donner un objet de type Room au formulaire
      */
-    public function new(int $roomId): string
+    public function newReservation(int $roomId): string
     {
         // TODO: afficher le formulaire pour une chambre (reservations/create)
     }

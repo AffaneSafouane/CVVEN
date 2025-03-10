@@ -20,7 +20,7 @@ class ReservationController extends BaseController
         return view('admin/reservations/index', $data);
     }
 
-    public function show($id): string
+    public function show(int $reservationId): string
     {
         // TODO: Affiche les détails d'une réservation
     }

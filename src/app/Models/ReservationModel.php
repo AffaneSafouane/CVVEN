@@ -4,11 +4,10 @@ namespace App\Models;
 
 use App\Entities\Reservation;
 use App\Entities\Room;
+use App\Enum\FamilyQuotient;
 use App\Enum\PensionType;
 use CodeIgniter\Model;
 use Exception;
-use http\Encoding\Stream\Deflate;
-use ReflectionException;
 
 class ReservationModel extends Model
 {
@@ -75,7 +74,27 @@ class ReservationModel extends Model
      */
     public function getReservationsByRoom(int $roomId): ?array
     {
-        // TODO récupérer les réservations d'une chambre via la table de liaison reservations_rooms
+        // TODO récupérer les réservations d'une chambre via la table jointe reservations_rooms
+    }
+
+    private function getFamilyQuotaDiscount(FamilyQuotient $familyQuotient): float
+    {
+        // TODO: Calculer le pourcentage de réduction à partir du quotient familial
+        // match expression (enum)
+        // QF < 800 = -40%
+        // 800 ≤ QF < 1200 = -30%
+        // 1200 ≤ QF < 1800 = -20%
+        // 1800 ≤ QF < 2500 = -10%
+        // < 2500 = pas de réduction
+    }
+
+    private function getPensionExtra(PensionType $pensionType): int
+    {
+        // TODO: Calculer l'extra du type de pension
+        // match expression (enum)
+        // Demi-pension = +30
+        // Pension compléte = +50
+        // Sans pension = +0
     }
 
     /**
@@ -86,18 +105,15 @@ class ReservationModel extends Model
     public function calculatePrice(Room $room, Reservation $reservation): float
     {
         // TODO: Calculer le prix en fonction du type de pension, du forfait ménage, du prix de la chambre et du quotient familial
-        /**
-         * Type de pension
-         * demi-pension = +30€
-         * pension compléte = +50€
-         * forfait ménage = +30€
-         * Quotient Familial
-         * QF < 800 = -40%
-         * 800 ≤ QF < 1200 = -30%
-         * 1200 ≤ QF < 1800 = -20%
-         * 1800 ≤ QF < 2500 = -10%
-         * QF ≥ 2500 (pas de réduction)
-         */
+        // Prix de base, prix de la chambre * 7 (nb de nuits)
+
+        // Supplément pour pension ($this->getPensionExtra)
+
+        // Supplément +30 pour option ménage (if)
+
+        // Réduction en fonction du quotient familial ($this->getFamilyQuotaDiscount)
+
+        // Calculer et retourner le prix total (tout additionner moins la réduction)
     }
 
     /**
@@ -108,10 +124,15 @@ class ReservationModel extends Model
      */
     public function saveReservation(Reservation $reservation, int $roomId): bool
     {
+        // TODO: Enregistrer la réservation en vérifiant la disponibilité et établir le prix
         // Vérifier si $roomId est null
         // Si c'est le cas, lever une exception pour empêcher une opération invalide
 
+        // Récupérer la chambre et vérifier si elle existe, lever une exception si ce n'est pas le cas
+
         // Vérifier la disponibilité de la chambre pour les dates de la réservation (RoomModel->isRoomAvailable())
+
+        // Calculer le prix de la réservation ($this->calculatePrice())
 
         // Retourner l'enregistrement de la réservation dans la base de données
     }
@@ -124,6 +145,7 @@ class ReservationModel extends Model
      */
     public function createReservation(Reservation $reservation, int $roomId): bool
     {
+        // TODO: Créer une réservation et insérer le lien réservation chambre dans leur table jointe
         // Démarrer une transaction pour garantir l'intégrité des données
 
         // Sauvegarder la réservation (saveReservation()) et vérifier si elle est bien enregistrée
@@ -141,13 +163,33 @@ class ReservationModel extends Model
         // Retourner true pour indiquer que l'opération a réussi
     }
 
+    /**
+     * @throws Exception
+     */
     public function cancelReservation(int $reservationId): bool
     {
-        // TODO: Update status de la réservation et supprimer dans table jointe
+        // TODO: Update status de la réservation et supprimer dans table jointe (admin et utilisateur concerné)
+        // Début d'une transaction pour garantir l'intégrité des données.
+
+        // Met à jour le statut de la réservation en "Annulée" dans la base de données.
+
+        // Vérifie si la mise à jour a réussi. Si ce n'est pas le cas, lève une exception avec les erreurs.
+
+        // Supprime les entrées associées à cette réservation dans la table de liaison (ex: réservations et chambres).
+
+        // Vérifie si la suppression a bien été effectuée. Sinon, lève une exception.
+
+        // Si toutes les opérations se sont bien déroulées, valide la transaction et retourne true.
+
+        // En cas d'erreur, annule toutes les modifications effectuées dans la transaction.
+
+        // Enregistre l'erreur dans les logs pour un suivi ultérieur.
+
+        // Retourne false pour indiquer que l'annulation a échoué.
     }
 
     public function confirmReservation(int $reservationId): bool
     {
-        // TODO: Update status de la réservation (uniquement pour admin)
+        // TODO: Update status de la réservation (admin)
     }
 }
