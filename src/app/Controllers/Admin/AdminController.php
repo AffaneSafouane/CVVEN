@@ -7,7 +7,6 @@ use CodeIgniter\HTTP\RedirectResponse;
 
 class AdminController extends BaseController
 {
-    // TODO: vérifier si l'utilisateur connecté est un admin
     public function dashboard(): string
     {
         // TODO: affiche le panel admin

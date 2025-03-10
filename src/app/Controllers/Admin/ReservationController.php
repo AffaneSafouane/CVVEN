@@ -27,12 +27,12 @@ class ReservationController extends BaseController
 
     public function edit(int $reservationId): RedirectResponse
     {
-        // TODO: Vérifier que l'utilisateur connecté correspond à l'utilisateur de la réservation puis update une reservation
+        // TODO: Update une reservation
     }
 
     public function delete(int $reservationId): RedirectResponse
     {
-        // TODO: Vérifier que l'utilisateur connecté correspond à l'utilisateur de la réservation puis delete une reservation
+        // TODO: Delete une reservation
     }
 
     public function confirm(int $reservationId): RedirectResponse
