@@ -72,7 +72,7 @@ class Filters extends BaseFilters
     public array $globals = [
         'before' => [
             // 'honeypot',
-            'csrf', // @TODO Ajouter ['except' => ['api/record/save']], lors de l'implémentation de l'api de paiement
+            'csrf', // Ajouter ['except' => ['api/record/save']], en cas d'implémentation d'une api
             'session' => ['except' => ['login*', 'register', 'auth/a/*', '/', 'test*']],
             // 'invalidchars',
         ],
@@ -108,5 +108,7 @@ class Filters extends BaseFilters
      *
      * @var array<string, array<string, list<string>>>
      */
-    public array $filters = [];
+    public array $filters = [
+        'group:admin' => ['before' => ['admin/*']]
+    ];
 }

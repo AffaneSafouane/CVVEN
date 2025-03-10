@@ -13,7 +13,7 @@
                         <span class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">Utilisateur</span>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="#">Réservations</a></li>
-                            <li class="dropdown-item"><a class="nav-link" href="<?= site_url('users/' . auth()->id()); ?>">Profil</a></li>
+                            <li><a class="dropdown-item" href="<?= site_url('users/' . auth()->id()); ?>">Profil</a></li>
                         </ul>
                     </li>
                 <?php endif; ?>
