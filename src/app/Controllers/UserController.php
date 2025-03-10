@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\UserModel;
+use CodeIgniter\HTTP\RedirectResponse;
 use CodeIgniter\Shield\Exceptions\PermissionException;
 use CodeIgniter\Shield\Exceptions\UserNotFoundException;
 
@@ -28,18 +29,13 @@ class UserController extends BaseController {
         return view('users/view', $data);
     }
 
-    public function update(int $userId): string
+    public function update(int $userId): RedirectResponse
     {
-        // @TODO
+        // TODO: Mettre à jour l'utilisateur
     }
 
-    public function updatePassword(int $userId): string
+    public function delete(int $userId): RedirectResponse
     {
-        // @TODO
-    }
-
-    public function delete(int $userId): string
-    {
-        // @TODO
+        // TODO: Supprimer l'utilisateur
     }
 }

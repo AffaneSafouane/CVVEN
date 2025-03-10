@@ -1,9 +1,13 @@
 #!/bin/bash
 set -e
 
-# Installer les dépendances Composer si elles n'existent pas
-echo "Installation des dépendances Composer..."
-composer install --no-scripts --no-interaction --optimize-autoloader
+# Vérifier si le répertoire vendor existe avant d'installer les dépendances
+if [ ! -d "vendor" ]; then
+    echo "Le répertoire vendor n'existe pas. Installation des dépendances Composer..."
+    composer install --no-scripts --no-interaction --optimize-autoloader
+else
+    echo "Les dépendances Composer sont déjà installées."
+fi
 
 # Démarrer Apache
 exec apache2-foreground "$@" 

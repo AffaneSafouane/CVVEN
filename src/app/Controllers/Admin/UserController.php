@@ -4,6 +4,7 @@ namespace App\Controllers\Admin;
 
 use App\Controllers\BaseController;
 use App\Models\UserModel;
+use CodeIgniter\HTTP\RedirectResponse;
 use CodeIgniter\Shield\Exceptions\UserNotFoundException;
 
 class UserController extends BaseController
@@ -27,4 +28,23 @@ class UserController extends BaseController
     }
 
     // @TODO Ajouter les méthodes show(), updateRole(), delete(), suspend()
+    public function show(int $userId): string
+    {
+        // TODO: afficher les infos d'un utilisateur
+    }
+
+    public function updateRole(): RedirectResponse
+    {
+        // TODO: Mettre à jour le role d'un utilisateur (le rendre admin)
+    }
+
+    public function suspend(int $userId): RedirectResponse
+    {
+        // TODO: suspendre le compte d'un utilisateur
+    }
+
+    public function delete(int $userId): RedirectResponse
+    {
+        // TODO: supprimer un utilisateur
+    }
 }

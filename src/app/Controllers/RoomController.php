@@ -17,17 +17,12 @@ class RoomController extends BaseController
      */
     public function index(): string
     {
-        // TODO: afficher toutes les chambres disponibles, getAvailableRooms() de RoomModel
+        // TODO: afficher toutes les chambres disponibles, getAvailableRooms() de RoomModel, selon les dates et autres critères (nombre de personnes, type, prix, etc.)
     }
 
     public function show(int $roomId): string
     {
         // TODO: afficher les détails d'une chambre spécifique
-    }
-
-    public function search(): string
-    {
-        // TODO: recherche de logements en fonction des critères (dates, nombre de personnes, type, prix, etc.)
     }
 
     /**
