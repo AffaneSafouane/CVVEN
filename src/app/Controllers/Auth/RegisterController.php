@@ -18,36 +18,6 @@ use CodeIgniter\Shield\Validation\ValidationRules;
  */
 class RegisterController extends ShieldRegister
 {
-    use Viewable;
-
-    /**
-     * Displays the registration form.
-     *
-     * @return RedirectResponse|string
-     */
-    public function registerView(): string|RedirectResponse
-    {
-        if (auth()->loggedIn()) {
-            return redirect()->to(config('Auth')->registerRedirect());
-        }
-
-        // Check if registration is allowed
-        if (! setting('Auth.allowRegistration')) {
-            return redirect()->back()->withInput()
-                ->with('error', lang('Auth.registerDisabled'));
-        }
-
-        /** @var Session $authenticator */
-        $authenticator = auth('session')->getAuthenticator();
-
-        // If an action has been defined, start it up.
-        if ($authenticator->hasAction()) {
-            return redirect()->route('auth-action-show');
-        }
-
-        return $this->view(setting('Auth.views')['register']);
-    }
-
     /**
      * Attempts to register the user.
      */
@@ -121,37 +91,5 @@ class RegisterController extends ShieldRegister
         // Success!
         return redirect()->to(config('Auth')->registerRedirect())
             ->with('message', lang('Auth.registerSuccess'));
-    }
-
-    /**
-     * Returns the User provider
-     */
-    protected function getUserProvider(): UserModel
-    {
-        $provider = model(setting('Auth.userProvider'));
-
-        assert($provider instanceof UserModel, 'Config Auth.userProvider is not a valid UserProvider.');
-
-        return $provider;
-    }
-
-    /**
-     * Returns the Entity class that should be used
-     */
-    protected function getUserEntity(): User
-    {
-        return new User();
-    }
-
-    /**
-     * Returns the rules that should be used for validation.
-     *
-     * @return array<string, array<string, list<string>|string>>
-     */
-    protected function getValidationRules(): array
-    {
-        $rules = new ValidationRules();
-
-        return $rules->getRegistrationRules();
     }
 }

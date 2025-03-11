@@ -4,6 +4,7 @@ use App\Controllers\Admin\ReservationController as AdminReservationController;
 use App\Controllers\Admin\RoomController as AdminRoomController;
 use App\Controllers\Admin\UserController as AdminUserController;
 use App\Controllers\Auth\RegisterController;
+use CodeIgniter\Shield\Controllers\RegisterController as ShieldRegister;
 use App\Controllers\RoomController;
 use App\Controllers\UserController;
 use CodeIgniter\Router\RouteCollection;
@@ -15,10 +16,10 @@ use App\Controllers\ReservationController;
 $routes->get('/', 'Home::index');
 
 // Routes auth
-service('auth')->routes($routes, ['except' => ['register']]);; // Routes Shield
+service('auth')->routes($routes, ['except' => ['register']]); // Routes Shield
 // @TODO Ajouter les routes pour la suppression et la mise à jour de l'utilisateur (post)
 $routes->get('users/(:segment)', [UserController::class, 'show']);
-$routes->get('register', [RegisterController::class, 'registerView']);
+$routes->get('register', [ShieldRegister::class, 'registerView']);
 $routes->post('register', [RegisterController::class, 'registerAction']);
 
 // Routes Reservations

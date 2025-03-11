@@ -17,7 +17,7 @@ class RoomController extends BaseController
      */
     public function index(): string
     {
-        // TODO: afficher toutes les chambres disponibles, getAvailableRooms() de RoomModel, selon les dates et autres critères (nombre de personnes, type, prix, etc.)
+        // TODO: afficher toutes les chambres disponibles, getAvailableRooms() de RoomModel, selon les dates (filtre à mettre en place dans Views/rooms/index)
     }
 
     public function show(int $roomId): string
@@ -30,6 +30,6 @@ class RoomController extends BaseController
      */
     public function newReservation(int $roomId): string
     {
-        // TODO: afficher le formulaire pour une chambre (reservations/create)
+        // TODO: afficher le formulaire pour une chambre (Views/reservations/create)
     }
 }

@@ -67,6 +67,8 @@ class RoomModel extends Model
 
     public function isRoomAvailable(int $roomId, string $startDate, string $endDate): bool
     {
+        // TODO vérifier si la chambre est disponible aux dates demandées
+
         // Construire la requête pour rechercher des conflits de réservation
 
         // Joindre la table reservations_rooms avec reservations

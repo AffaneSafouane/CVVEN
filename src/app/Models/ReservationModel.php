@@ -102,7 +102,7 @@ class ReservationModel extends Model
      * @param Room $room
      * @return float
      */
-    public function calculatePrice(Room $room, Reservation $reservation): float
+    private function calculatePrice(Room $room, Reservation $reservation): float
     {
         // TODO: Calculer le prix en fonction du type de pension, du forfait ménage, du prix de la chambre et du quotient familial
         // Prix de base, prix de la chambre * 7 (nb de nuits)
@@ -125,6 +125,7 @@ class ReservationModel extends Model
     public function saveReservation(Reservation $reservation, int $roomId): bool
     {
         // TODO: Enregistrer la réservation en vérifiant la disponibilité et établir le prix
+
         // Vérifier si $roomId est null
         // Si c'est le cas, lever une exception pour empêcher une opération invalide
 

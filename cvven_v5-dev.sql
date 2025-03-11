@@ -106,6 +106,8 @@ CREATE TABLE IF NOT EXISTS `auth_identities` (
 INSERT INTO `auth_identities` (`id`, `user_id`, `type`, `name`, `secret`, `secret2`, `expires`, `extra`, `force_reset`, `last_used_at`, `created_at`, `updated_at`) VALUES
 (1, 1, 'email_password', NULL, 'john.doe@exemple.com', '$2y$12$zg043K4aEZtqK1ZJD9BCQOjVsf0PYnLcpqvgl5b5rOv/ZSOdFbUG.', NULL, NULL, 0, '2024-12-31 10:26:54', '2024-12-29 12:25:57', '2024-12-31 10:26:54'),
 (2, 2, 'email_password', NULL, 'jane.doe@exemple.com', '$2y$12$UvF4Y53VITg1pngkgaWpVu/lOy7vi74e3XfK7tohBdkcqRd7K1H4C', NULL, NULL, 0, NULL, '2024-12-31 14:41:19', '2024-12-31 14:41:19');
+-- john doe secret/mot de passe: Azerty1234
+-- john doe secret/mot de passe: Qwerty1234
 
 -- --------------------------------------------------------
 
@@ -221,7 +223,6 @@ CREATE TABLE IF NOT EXISTS `reservations` (
   `cleaning_option` tinyint(1) DEFAULT NULL,
   `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
   `updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `deleted_at` DATETIME NULL,
   `status` ENUM('En attente', 'Confirmée', 'Annulée') NOT NULL DEFAULT 'En attente',
   `family_quotient` ENUM('less_800', '800-1200', '1200-1800', '1800-2500', 'more_2500') NOT NULL,
   `user_id` INT(10) UNSIGNED NOT NULL,
