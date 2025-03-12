@@ -74,27 +74,33 @@ class ReservationModel extends Model
      */
     public function getReservationsByRoom(int $roomId): ?array
     {
-        // TODO récupérer les réservations d'une chambre via la table jointe reservations_rooms
+        // récupérer les réservations d'une chambre via la table jointe reservations_rooms
+        $query = $this->db('reservations_rooms')
+            ->join('reservations', 'reservations.id = reservations_rooms.reservation_id')
+            ->where('reservations.room_id', $roomId);
+        return $query->get()->getResult('App\Entities\Reservation');
     }
 
     private function getFamilyQuotaDiscount(FamilyQuotient $familyQuotient): float
     {
-        // TODO: Calculer le pourcentage de réduction à partir du quotient familial
-        // match expression (enum)
-        // QF < 800 = -40%
-        // 800 ≤ QF < 1200 = -30%
-        // 1200 ≤ QF < 1800 = -20%
-        // 1800 ≤ QF < 2500 = -10%
-        // < 2500 = pas de réduction
+        // Calculer le pourcentage de réduction à partir du quotient familial
+        return match ($familyQuotient) {
+            FamilyQuotient::LESS_800 => 0.4,
+            FamilyQuotient::BETWEEN_800_1200 => 0.3,
+            FamilyQuotient::BETWEEN_1200_1800 => 0.2,
+            FamilyQuotient::BETWEEN_1800_2500 => 0.1,
+            FamilyQuotient::MORE_2500 => 1,
+        };
     }
 
     private function getPensionExtra(PensionType $pensionType): int
     {
-        // TODO: Calculer l'extra du type de pension
-        // match expression (enum)
-        // Demi-pension = +30
-        // Pension compléte = +50
-        // Sans pension = +0
+        // Calculer l'extra du type de pension
+        return match ($pensionType) {
+            PensionType::FullPension => 50,
+            PensionType::HalfPension => 30,
+            PensionType::NoPension => 0,
+        };
     }
 
     /**
@@ -104,16 +110,21 @@ class ReservationModel extends Model
      */
     private function calculatePrice(Room $room, Reservation $reservation): float
     {
-        // TODO: Calculer le prix en fonction du type de pension, du forfait ménage, du prix de la chambre et du quotient familial
-        // Prix de base, prix de la chambre * 7 (nb de nuits)
+        // Prix de base = prix de la chambre * 7 (nb de nuits)
+        $basePrice = $room->price * 7;
 
-        // Supplément pour pension ($this->getPensionExtra)
+        // Supplément pour pension
+        $pensionExtra = $basePrice + $this->getPensionExtra($reservation->pension);
 
-        // Supplément +30 pour option ménage (if)
+        // Supplément +30 pour option ménage
+        $cleaningFee = $reservation->cleaningOption ? 30 : 0;
 
-        // Réduction en fonction du quotient familial ($this->getFamilyQuotaDiscount)
+        // Réduction en fonction du quotient familial
+        $discountRate = $this->getFamilyQuotaDiscount($reservation->familyQuotient);
+        $discount = $basePrice * $discountRate;
 
-        // Calculer et retourner le prix total (tout additionner moins la réduction)
+        // Calculer et retourner le prix total de la réservation
+        return ($basePrice + $pensionExtra + $cleaningFee) - $discount;
     }
 
     /**
@@ -122,20 +133,32 @@ class ReservationModel extends Model
      * @return bool
      * @throws Exception
      */
-    public function saveReservation(Reservation $reservation, int $roomId): bool
+    private function saveReservation(Reservation $reservation, int $roomId): bool
     {
-        // TODO: Enregistrer la réservation en vérifiant la disponibilité et établir le prix
-
         // Vérifier si $roomId est null
+        $roomModel = new RoomModel();
+
         // Si c'est le cas, lever une exception pour empêcher une opération invalide
+        if (!$roomId) {
+            throw new Exception('Aucune chambre n\'a été sélectionnée pour cette réservation.');
+        }
 
         // Récupérer la chambre et vérifier si elle existe, lever une exception si ce n'est pas le cas
+        $room = $roomModel->find($roomId)->getRow('\App\Entities\Room');
+        if (!$room) {
+            throw new Exception('Chambre non trouvé');
+        }
 
-        // Vérifier la disponibilité de la chambre pour les dates de la réservation (RoomModel->isRoomAvailable())
+        // Vérifier la disponibilité de la chambre pour les dates de la réservation
+        if (!$roomModel->isRoomAvailable($roomId, $reservation->getStartDate(), $reservation->getEndDate())) {
+            throw new Exception('La chambre que vous voulez réserver n\'est pas disponible aux dates demandées.');
+        }
 
-        // Calculer le prix de la réservation ($this->calculatePrice())
+        // Calculer le prix de la réservation
+        $reservation->totalPrice = $this->calculatePrice($room, $reservation);
 
         // Retourner l'enregistrement de la réservation dans la base de données
+        return $this->save($reservation);
     }
 
     /**
@@ -146,22 +169,41 @@ class ReservationModel extends Model
      */
     public function createReservation(Reservation $reservation, int $roomId): bool
     {
-        // TODO: Créer une réservation et insérer le lien réservation chambre dans leur table jointe
+        // Créer une réservation et insérer le lien réservation-chambre dans leur table jointe
         // Démarrer une transaction pour garantir l'intégrité des données
+        $this->db->transStart();
 
-        // Sauvegarder la réservation (saveReservation()) et vérifier si elle est bien enregistrée
-        // Si l'insertion échoue, annuler la transaction pour éviter d'enregistrer des données partielles
-        // Puis lever une exception pour signaler l'échec
+        try {
+            // Sauvegarder la réservation et vérifier si elle est bien enregistrée
+            $reservation = $this->saveReservation($reservation, $roomId);
+            if (!$reservation) {
+                // Si l'insertion échoue, lever une exception pour signaler l'échec
+                throw new Exception(implode('<br>', $this->errors()));
+            }
 
-        // Récupérer l'identifiant de la réservation nouvellement créée
+            // Récupérer l'identifiant de la réservation nouvellement créée
+            $reservationId = $this->db->insertID();
 
-        // Associer la chambre à la réservation (RoomModel->addRoomToReservation())
-        // Si l'insertion échoue, annuler la transaction pour éviter d'enregistrer des données partielles
-        // Puis lever une exception pour signaler l'échec
+            $roomModel = new RoomModel();
+            // Associer la chambre à la réservation
+            $room = $roomModel->addRoomToReservation($reservationId, $roomId);
 
-        // Si toutes les insertions réussissent, valider la transaction pour enregistrer les modifications
+            // Si l'insertion échoue, lever une exception pour signaler l'échec
+            if (!$room) {
+                throw new Exception(implode('<br>', $this->errors()));
+            }
 
-        // Retourner true pour indiquer que l'opération a réussi
+            // Si toutes les insertions réussissent, valider la transaction pour enregistrer les modifications
+            $this->db->transCommit();
+            // Retourner true pour indiquer que l'opération a réussi
+            return true;
+        } catch (Exception $e) {
+            // En cas d'exception levé annuler toutes les modifications effectuées dans la transaction
+            $this->db->transRollback();
+            // Enregistre l'erreur dans les logs pour un suivi ultérieur.
+            log_message('error', "Erreur lors de l'enregistrement de la réservation : " . $e->getMessage());
+            return false;
+        }
     }
 
     /**
@@ -169,28 +211,47 @@ class ReservationModel extends Model
      */
     public function cancelReservation(int $reservationId): bool
     {
-        // TODO: Update status de la réservation et supprimer dans table jointe (admin et utilisateur concerné)
+        // Update status de la réservation et la supprimer dans la table jointe (admin et utilisateur concerné)
         // Début d'une transaction pour garantir l'intégrité des données.
+        $this->db->transStart();
+        try {
+            // Met à jour le statut de la réservation en "Annulée" dans la base de données.
+            $status = $this->update($reservationId, ['status' => 'Annulée']);
+            // Vérifier si la mise à jour a réussi
+            if (!$status) {
+                // Si ce n'est pas le cas, lève une exception avec les erreurs.
+                throw new Exception(implode('<br>', $this->errors()));
+            }
 
-        // Met à jour le statut de la réservation en "Annulée" dans la base de données.
+            // Supprime les entrées associées à cette réservation dans la table de liaison
+            $reservation = $this->db->table('reservations_rooms')
+                ->where('reservations.id', $reservationId)
+                ->delete();
 
-        // Vérifie si la mise à jour a réussi. Si ce n'est pas le cas, lève une exception avec les erreurs.
+            // Vérifie si la suppression a bien été effectuée Sinon, lève une exception.
+            if(!$reservation) {
+                throw new Exception(implode('<br>', $this->errors()));
+            }
 
-        // Supprime les entrées associées à cette réservation dans la table de liaison (ex: réservations et chambres).
-
-        // Vérifie si la suppression a bien été effectuée. Sinon, lève une exception.
-
-        // Si toutes les opérations se sont bien déroulées, valide la transaction et retourne true.
-
-        // En cas d'erreur, annule toutes les modifications effectuées dans la transaction.
-
-        // Enregistre l'erreur dans les logs pour un suivi ultérieur.
-
-        // Retourne false pour indiquer que l'annulation a échoué.
+            // Si toutes les opérations se sont bien déroulées, valide la transaction et retourne true.
+            $this->db->transCommit();
+            return true;
+        } catch (Exception $exception) {
+            // En cas d'erreur, annule toutes les modifications effectuées dans la transaction.
+            $this->db->transRollback();
+            // Enregistre l'erreur dans les logs pour un suivi ultérieur.
+            log_message('error', "Erreur lors de l'annulation de la réservation : " . $exception->getMessage());
+            // Retourne false pour indiquer que l'annulation a échoué.
+            return false;
+        }
     }
 
+    /**
+     * @throws \ReflectionException
+     */
     public function confirmReservation(int $reservationId): bool
     {
-        // TODO: Update status de la réservation (admin)
+        // Update status de la réservation (admin)
+        return $this->update($reservationId, ['status' => 'Confirmée']);
     }
 }

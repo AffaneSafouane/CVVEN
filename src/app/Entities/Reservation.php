@@ -245,19 +245,4 @@ class Reservation extends Entity
         $this->userId = $userId;
         return $this;
     }
-
-    /**
-     * @param int $reservationId
-     * @param string[] $roomsId
-     */
-    public function addRooms(int $reservationId, array $roomsId): void
-    {
-        // TODO appel la méthode addRoomsToReservation() de ReservationModel pour ajouter des chambres à une réservation
-    }
-
-    // Méthode pour calculer le prix total selon le type de pension, le quotient familial et le prix des chambres
-    public function calculatePrice(array $room_id, string $pension, $forfait_menage)
-    {
-        // TODO: Ajouter la logique pour calculer le prix en fonction du logement, des dates et des options
-    }
 }

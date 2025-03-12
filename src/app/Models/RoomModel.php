@@ -57,8 +57,7 @@ class RoomModel extends Model
      */
     public function getRoomByReservation(int $reservationId): ?array
     {
-        // TODO récupérer la chambre d'une réservation via la table de liaison reservations_rooms
-
+        // récupérer la chambre d'une réservation via la table de liaison reservations_rooms
         $query = $this->db->table('reservations_rooms')
             ->join('rooms', 'rooms.id = reservations_rooms.room_id')
             ->where('reservations_rooms.reservation_id', $reservationId);
@@ -67,25 +66,27 @@ class RoomModel extends Model
 
     public function isRoomAvailable(int $roomId, string $startDate, string $endDate): bool
     {
-        // TODO vérifier si la chambre est disponible aux dates demandées
-
         // Construire la requête pour rechercher des conflits de réservation
-
-        // Joindre la table reservations_rooms avec reservations
-        // pour vérifier si la chambre est déjà réservée dans cette période
-
-        // Filtrer les enregistrements pour la chambre spécifiée
-
-        // Début du groupement des conditions de chevauchement des dates
-        // Vérifier si la date de début demandée est comprise dans une réservation existante
-
-        // Vérifier si la date de fin demandée est comprise dans une réservation existante
-
-        // Vérifier si la réservation existante est entièrement contenue dans la période demandée
-
-        // Exécuter la requête
-
+        $query = $this->db->table('reservations_rooms')
+            // Joindre la table reservations_rooms avec reservations
+            // pour vérifier si la chambre est déjà réservée dans cette période
+            ->join('reservations', 'reservations_rooms.reservation_id = reservations.id')
+            // Filtrer les enregistrements pour la chambre spécifiée
+            ->where('reservations_rooms.room_id', $roomId)
+            // Début du groupement des conditions de chevauchement des dates
+            ->groupStart()
+                // Vérifier si la date de début demandée est comprise dans une réservation existante
+                ->where('?', $startDate . ' BETWEEN reservations.start_date AND reservations.end_date', false)
+                // Vérifier si la date de fin demandée est comprise dans une réservation existante
+                ->orWhere('?', $endDate . ' BETWEEN reservations.start_date AND reservations.end_date', false)
+                // Vérifier si la réservation existante est entièrement contenue dans la période demandée
+                ->orWhere("reservations.start_date BETWEEN ? AND ?", [$startDate, $endDate])
+            ->groupEnd()
+            // Exécuter la requête
+            ->get();
         // Si aucune réservation ne chevauche la période demandée, la chambre est disponible
+
+        return $query->getNumRows() === 0;
     }
 
     /**
@@ -95,17 +96,19 @@ class RoomModel extends Model
      */
     public function getAvailableRooms(string $startDate, string $endDate): ?array
     {
-        // TODO: Afficher toutes les chambres disponibles
-
         // Initialise un tableau vide pour stocker les chambres disponibles.
-
+        $availableRooms = [];
         // Récupère toutes les chambres disponibles à partir de la base de données.
-
+        $rooms = $this->findAll();
         // Vérifie pour chaque chambre si elle est disponible pour la période donnée.
-
-        // Si la chambre est disponible, l'ajoute au tableau des chambres disponibles.
-
+        foreach ($rooms as $room) {
+            if ($this->isRoomAvailable($room, $startDate, $endDate)) {
+                // Si la chambre est disponible, l'ajoute au tableau des chambres disponibles.
+                $availableRooms[] = $room;
+            }
+        }
         // Retourne le tableau des chambres disponibles.
+        return $availableRooms;
     }
 
     /**
@@ -117,13 +120,21 @@ class RoomModel extends Model
     public function addRoomToReservation(int $reservationId, int $roomId): bool
     {
         // Vérifier si $roomId ou $reservationId sont null
-        // Si c'est le cas, lever une exception pour empêcher une réservation sans chambre
+        if (!$roomId || !$reservationId) {
+            // Si c'est le cas, lever une exception pour empêcher une réservation sans chambre
+            throw new Exception('Aucune chambre, ou réservation, n\'a été fournie pour la réservation.');
+        }
 
         // Insérer la relation réservation-chambre dans la table reservations_rooms
+        $success = $this->db->table('reservations_rooms')->insert(['reservation_id' => $reservationId, 'room_id' => $roomId]);
 
         // Si l'insertion échoue, annuler immédiatement lever une exception pour indiquer que l'ajout de la chambre a échoué
+        if (!$success) {
+            throw new Exception('Impossible d\'ajouter les chambres à la réservation.' );
+        }
 
         // Retourner true pour confirmer que l'ajout de la chambre à la réservation a réussi
+        return true;
     }
 
     // SELECT COUNT(type) AS RoomType FROM `rooms` WHERE type = "Logements";

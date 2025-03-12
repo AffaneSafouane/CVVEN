@@ -108,6 +108,7 @@ class Room extends Entity
      */
     public function getReservations(): ?array
     {
-        // @TODO Récupérer les réservations d'une chambre
+        $reservationModel = new ReservationModel();
+        $reservationModel->getReservationsByRoom($this->id);
     }
 }
