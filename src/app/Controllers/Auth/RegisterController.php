@@ -2,6 +2,8 @@
 
 namespace App\Controllers\Auth;
 
+use App\Entities\Client;
+use App\Models\ClientModel;
 use CodeIgniter\Events\Events;
 use CodeIgniter\HTTP\RedirectResponse;
 use CodeIgniter\Shield\Authentication\Authenticators\Session;
@@ -11,6 +13,7 @@ use CodeIgniter\Shield\Exceptions\ValidationException;
 use CodeIgniter\Shield\Models\UserModel;
 use CodeIgniter\Shield\Traits\Viewable;
 use CodeIgniter\Shield\Validation\ValidationRules;
+use Exception;
 
 /**
  * Class RegisterController
@@ -23,6 +26,8 @@ class RegisterController extends ShieldRegister
      */
     public function registerAction(): RedirectResponse
     {
+        $validation = service('validation');
+
         if (auth()->loggedIn()) {
             return redirect()->to(config('Auth')->registerRedirect());
         }
@@ -38,15 +43,16 @@ class RegisterController extends ShieldRegister
         // Validate here first, since some things,
         // like the password, can only be validated properly here.
         $rules = $this->getValidationRules();
+        $allowedPostFields = array_keys($rules);
+        $userData = $this->request->getPost($allowedPostFields);
 
-        if (! $this->validateData($this->request->getPost(), $rules, [], config('Auth')->DBGroup)) {
+        if (! $this->validateData($userData, $rules, [], config('Auth')->DBGroup)) {
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
         // Save the user
-        $allowedPostFields = array_keys($rules);
-        $user              = $this->getUserEntity();
-        $user->fill($this->request->getPost($allowedPostFields));
+        $user = $this->getUserEntity();
+        $user->fill($userData);
 
         // Workaround for email only registration/login
         // Changed '=== null' to 'empty()'
@@ -54,14 +60,41 @@ class RegisterController extends ShieldRegister
             $user->username = null;
         }
 
-        if (empty($user->phone)) {
-            $user->phone = null;
+        $clientModel = new ClientModel();
+
+        $clientRules = $validation->getRuleGroup('clientRegistration');
+        $clientPostFields = array_keys($clientRules);
+        $clientData = $this->request->getPost($clientPostFields);
+
+        if (!$validation->run($clientData, 'clientRegistration')) {
+            return redirect()->back()->withInput()->with('errors', $validation->getErrors());
         }
 
+        $client = new Client();
+        $client->fill($clientData);
+
+        if (empty($client->phone)) {
+            $client->phone = null;
+        }
+
+        $db = db_connect();
         try {
+            $db->transStart();
             $users->save($user);
+
+            $client->clientId = $users->getInsertID();
+
+            if (!$clientModel->save($client)) {
+                throw new Exception(implode('<br>', $clientModel->errors()));
+            }
+
+            $db->transCommit();
         } catch (ValidationException $e) {
+            $db->transRollback();
             return redirect()->back()->withInput()->with('errors', $users->errors());
+        } catch (Exception $e) {
+            $db->transRollback();
+            return redirect()->back()->withInput()->with('errors', $e->getMessage());
         }
 
         // To get the complete user object with ID, we need to get from the database

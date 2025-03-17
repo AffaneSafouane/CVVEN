@@ -2,10 +2,10 @@
 
 namespace App\Controllers;
 
+use App\Models\ClientModel;
 use App\Models\UserModel;
 use CodeIgniter\HTTP\RedirectResponse;
 use CodeIgniter\Shield\Exceptions\PermissionException;
-use CodeIgniter\Shield\Exceptions\UserNotFoundException;
 
 /**
  * Description of UserController
@@ -13,17 +13,17 @@ use CodeIgniter\Shield\Exceptions\UserNotFoundException;
  * @author Affane Safouane, Ghouas Ilyes
  */
 class UserController extends BaseController {
-    public function show(int $userId): string
+    public function show(int $clientId): string
     {
-        if (auth()->id() !== $userId) {
+        if (auth()->id() != $clientId) {
             throw new PermissionException('Vous n\'avez pas le droit d\'accéder à cette page.');
         }
 
-        $model = model(UserModel::class);
+        $userModel = new UserModel();
 
         $data = [
-            'user' => $model->find($userId),
-            'title' => "Informations utilisateur",
+            'user' => $userModel->find($clientId),
+            'title' => "Informations client",
         ];
 
         return view('users/view', $data);

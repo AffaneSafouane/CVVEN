@@ -44,41 +44,61 @@ $maxDate = date('Y-m-d', strtotime('18 years ago'));
                         <label for="floatingUsernameInput"><?= lang('Auth.username') ?></label>
                     </div>
 
-                    <!-- Full Name -->
+                    <!-- Last Name -->
                     <div class="form-floating mb-2">
-                        <input class="form-control" type="text" name="full_name" id="floatingFullNameInput" inputmode="text" autocomplete="fullName" placeholder="Nom complet" value="<?= old('full_name'); ?>" minlength="3" maxlength="100" required/>
-                        <label for="floatingFullNameInput">Nom complet*</label>
+                        <input class="form-control" type="text" name="last_name" id="floatingLastNameInput" inputmode="text" autocomplete="family-name" placeholder="Nom de famille" value="<?= old('last_name'); ?>" minlength="3" maxlength="100" required/>
+                        <label for="floatingLastNameInput">Nom de famille*</label>
                     </div>
 
-                    <!-- Address -->
+                    <!-- First Name -->
                     <div class="form-floating mb-2">
-                        <input class="form-control" type="text" name="address" id="floatingAddressInput" inputmode="text" autocomplete="address" placeholder="Adresse" value="<?= old('address'); ?>" minlength="3" maxlength="50" required/>
-                        <label for="floatingAddressInput">Adresse*</label>
+                        <input class="form-control" type="text" name="first_name" id="floatingFirstNameInput" inputmode="text" autocomplete="given-name" placeholder="Prénom" value="<?= old('first_name'); ?>" minlength="3" maxlength="100" required/>
+                        <label for="floatingFirstNameInput">Prénom*</label>
                     </div>
 
-                    <!-- City -->
-                    <div class="form-floating mb-2">
-                        <input class="form-control" type="text" name="city" id="floatingCityInput" inputmode="text" autocomplete="city" placeholder="Ville" value="<?= old('city'); ?>" minlength="1" maxlength="50" required/>
-                        <label for="floatingCityInput">Ville*</label>
-                    </div>
+                    <?php if(!auth()->user()): ?>
+                        <!-- Address -->
+                        <div class="form-floating mb-2">
+                            <input class="form-control" type="text" name="address" id="floatingAddressInput" inputmode="text" autocomplete="street-address" placeholder="Adresse" value="<?= old('address'); ?>" minlength="3" maxlength="50" required/>
+                            <label for="floatingAddressInput">Adresse*</label>
+                        </div>
 
-                    <!-- Postal Code -->
-                    <div class="form-floating mb-2">
-                        <input class="form-control" type="text" name="postal_code" id="floatingPostalCodeInput" inputmode="numeric" autocomplete="postal_code" placeholder="Code Postal" pattern="[0-9]{5}" value="<?= old('postal_code'); ?>" required/>
-                        <label for="floatingPostalCodeInput">Code Postal*</label>
-                    </div>
+                        <!-- City -->
+                        <div class="form-floating mb-2">
+                            <input class="form-control" type="text" name="city" id="floatingCityInput" inputmode="text" autocomplete="address-level2" placeholder="Ville" value="<?= old('city'); ?>" minlength="1" maxlength="50" required/>
+                            <label for="floatingCityInput">Ville*</label>
+                        </div>
 
-                    <!-- Phone -->
-                    <div class="form-floating mb-2">
-                        <input class="form-control" type="tel" name="phone" id="floatingPhoneInput" inputmode="tel" autocomplete="phone" pattern="[0-9]{2}[0-9]{2}[0-9]{2}[0-9]{2}[0-9]{2}" placeholder="Téléphone" value="<?= old('phone'); ?>"/>
-                        <label for="floatingPhoneInput">Téléphone</label>
-                    </div>
+                        <!-- Postal Code -->
+                        <div class="form-floating mb-2">
+                            <input class="form-control" type="text" name="postal_code" id="floatingPostalCodeInput" inputmode="numeric" autocomplete="postal-code" placeholder="Code Postal" pattern="[0-9]{5}" value="<?= old('postal_code'); ?>" required/>
+                            <label for="floatingPostalCodeInput">Code Postal*</label>
+                        </div>
 
-                    <!-- Birth Date -->
-                    <div class="form-floating mb-4">
-                        <input class="form-control" type="date" name="birth_date" id="floatingBirthDateInput" inputmode="text" value="<?= old('birthDate'); ?>" min="<?= $minDate; ?>" max="<?= $maxDate; ?>" required/>
-                        <label for="floatingBirthDateInput">Date de naissance*</label>
-                    </div>
+                        <!-- Quotient familial -->
+                        <div class="form-floating mb-2">
+                            <select id="floatingQfInput" name="family_quotient" class="form-control">
+                                <option value="less_800">Moins de 800€</option>
+                                <option value="800-1200">Entre 800€ et 1200€</option>
+                                <option value="1200-1800">Entre 1200€ et 1800€</option>
+                                <option value="1800-2500">Entre 1800€ et 2500€</option>
+                                <option value="more_2500">Plus de 2500€</option>
+                            </select>
+                            <label for="floatingQfInput">Quotient Familial*</label>
+                        </div>
+
+                        <!-- Phone -->
+                        <div class="form-floating mb-2">
+                            <input class="form-control" type="tel" name="phone" id="floatingPhoneInput" inputmode="tel" autocomplete="tel" pattern="[0-9]{2}[0-9]{2}[0-9]{2}[0-9]{2}[0-9]{2}" placeholder="Téléphone" value="<?= old('phone'); ?>"/>
+                            <label for="floatingPhoneInput">Téléphone</label>
+                        </div>
+
+                        <!-- Birth Date -->
+                        <div class="form-floating mb-4">
+                            <input class="form-control" type="date" name="birth_date" id="floatingBirthDateInput" inputmode="text" value="<?= old('birthDate'); ?>" min="<?= $minDate; ?>" max="<?= $maxDate; ?>" required/>
+                            <label for="floatingBirthDateInput">Date de naissance*</label>
+                        </div>
+                    <?php endif; ?>
 
                     <!-- Password -->
                     <div class="form-floating mb-2">
@@ -96,7 +116,9 @@ $maxDate = date('Y-m-d', strtotime('18 years ago'));
                         <button type="submit" class="btn btn-primary btn-block"><?= lang('Auth.register') ?></button>
                     </div>
 
-                    <p class="text-center"><?= lang('Auth.haveAccount') ?> <a href="<?= url_to('login') ?>"><?= lang('Auth.login') ?></a></p>
+                    <?php if(!auth()->user()): ?>
+                        <p class="text-center"><?= lang('Auth.haveAccount') ?> <a href="<?= url_to('login') ?>"><?= lang('Auth.login') ?></a></p>
+                    <?php endif; ?>
                 </form>
             </div>
         </div>

@@ -3,15 +3,12 @@
 namespace App\Entities;
 
 use App\Entities\Cast\EnumCast;
-use App\Enum\FamilyQuotient;
 use App\Enum\PensionType;
 use App\Enum\ReservationStatus;
 use App\Models\ReservationModel;
-use App\Models\RoomModel;
 use App\Models\UserModel;
 use CodeIgniter\Entity\Entity;
 use CodeIgniter\I18n\Time;
-use CodeIgniter\Shield\Entities\User;
 use Exception;
 
 /**
@@ -22,11 +19,10 @@ use Exception;
  * @property ?Time $updatedAt
  * @property ?bool $cleaningOption
  * @property ?PensionType $pension
- * @property ?FamilyQuotient $familyQuotient
  * @property ?int $numberOfPeople
  * @property ?float $totalPrice
  * @property ?ReservationStatus $status
- * @property ?int $userId
+ * @property ?int $clientId
  */
 
 class Reservation extends Entity
@@ -41,9 +37,8 @@ class Reservation extends Entity
         'startDate'      => 'start_date',
         'endDate'        => 'end_date',
         'cleaningOption' => 'cleaning_option',
-        'familyQuotient' => 'family_quotient',
         'status'         => 'status',
-        'userId'         => 'user_id',
+        'clientId'       => 'client_id',
     ];
     
     protected $dates = ['created_at', 'updated_at', 'start_date', 'end_date'];
@@ -55,8 +50,7 @@ class Reservation extends Entity
         'total_price'     => 'float',
         'status'          => 'enum[App\Enum\ReservationStatus]',
         'cleaning_option' => 'int-bool',
-        'family_quotient' => 'enum[App\Enum\FamilyQuotient]',
-        'user_id'         => 'int',
+        'client_id'       => 'int',
     ];
 
     protected $castHandlers = [
@@ -143,106 +137,22 @@ class Reservation extends Entity
         return $this->status->getLabel();
     }
 
-    public function getFamilyQuotient(): ?string
-    {
-        return $this->status->getLabel();
-    }
-
-    /**
-     * @return array|User|null
-     */
-    public function getUser(): array|User|null
+    public function getClient(): ?Client
     {
         $userModel = new UserModel();
-        return $userModel->find($this->userId);
+        $user = $userModel->find($this->clientId);
     }
 
-    /**
-     * @return ?Room[]
-     */
-    public function getRooms(): ?array
-    {
-        // @TODO appel la méthode getRoomByReservation() de RoomModel pour afficher les chambres d'une réservation
-    }
-
-    /**
-     * @param int $userId
-     * @return ?Reservation[]
-     */
-    public function getReservationsByUser(int $userId): ?array
+    public function getRoom(): ?Room
     {
         $reservationModel = new ReservationModel();
-        return $reservationModel->where('user_id', $userId)->findAll();
+        return $reservationModel->getRoomByReservation($this->id);
     }
 
-    public function setStartDate(?string $startDate): static
+    /** @return ?Reservation[] */
+    public function getReservationsByClient(): ?array
     {
-        try {
-            $this->startDate = new Time($startDate, 'Europe/Paris');
-        } catch (Exception $e) {
-            log_message('error', 'Invalid starting date provided: ' . $e->getMessage());
-            $this->startDate = null;
-        }
-
-        return $this;
-    }
-
-    public function setEndingDate(?string $endingDate): static
-    {
-        try {
-            $this->endDate = new Time($endingDate, 'Europe/Paris');
-        } catch (Exception $e) {
-            log_message('error', 'Invalid ending date provided: ' . $e->getMessage());
-            $this->endDate = null;
-        }
-
-        return $this;
-    }
-
-    public function setPensionType(?PensionType $pension): static
-    {
-        $this->pension = $pension;
-        return $this;
-    }
-
-    public function setNumberOfPeople(?int $numberOfPeople): static
-    {
-        $this->numberOfPeople = $numberOfPeople;
-        return $this;
-    }
-
-    public function setTotalPrice(?float $totalPrice): static
-    {
-        $this->totalPrice = $totalPrice;
-        return $this;
-    }
-
-    public function setStatus(?ReservationStatus $status): static
-    {
-        $this->status = $status;
-        return $this;
-    }
-
-    public function setFamilyQuotient(?FamilyQuotient $familyQuotient): static
-    {
-        $this->familyQuotient = $familyQuotient;
-        return $this;
-    }
-
-    public function getCleaningOption(): ?bool
-    {
-        return $this->cleaningOption;
-    }
-
-    public function setCleaningOption(?bool $cleaningOption): static
-    {
-        $this->cleaningOption = $cleaningOption;
-        return $this;
-    }
-
-    public function setUser(?int $userId): static
-    {
-        $this->userId = $userId;
-        return $this;
+        $reservationModel = new ReservationModel();
+        return $reservationModel->getClientReservations($this->clientId);
     }
 }

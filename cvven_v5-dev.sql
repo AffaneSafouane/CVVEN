@@ -41,21 +41,17 @@ CREATE TABLE IF NOT EXISTS `users` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   `deleted_at` datetime DEFAULT NULL,
-  `phone` varchar(10) DEFAULT NULL,
-  `full_name` varchar(255) NOT NULL,
-  `address` varchar(255) NOT NULL,
-  `city` varchar(255) NOT NULL,
-  `postal_code` varchar(5) NOT NULL,
-  `birth_date` date NOT NULL
+  `last_name` varchar(150) NOT NULL,
+  `first_name` varchar(150) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Déchargement des données de la table `users`
 --
 
-INSERT INTO `users` (`id`, `username`, `status`, `status_message`, `active`, `last_active`, `created_at`, `updated_at`, `deleted_at`, `phone`, `full_name`, `address`, `city`, `postal_code`, `birth_date`) VALUES
-(1, NULL, NULL, NULL, 1, '2024-12-31 10:29:50', '2024-12-29 12:25:56', '2024-12-29 12:25:57', NULL, NULL, 'John Doe', '21 Jump Street', 'Melun', '77000', '2001-02-21'),
-(2, NULL, NULL, NULL, 1, '2024-12-31 14:45:19', '2024-12-31 14:41:18', '2024-12-31 14:41:59', NULL, NULL, 'Jane Doe', '22 Jump Street', 'Melun', '77000', '1988-03-24');
+INSERT INTO `users` (`id`, `username`, `status`, `status_message`, `active`, `last_active`, `created_at`, `updated_at`, `deleted_at`, `first_name`, `last_name`) VALUES
+(1, NULL, NULL, NULL, 1, '2024-12-31 10:29:50', '2024-12-29 12:25:56', '2024-12-29 12:25:57', NULL, 'John', 'Doe'),
+(2, NULL, NULL, NULL, 1, '2024-12-31 14:45:19', '2024-12-31 14:41:18', '2024-12-31 14:41:59', NULL, 'Jane', 'Doe');
 
 -- --------------------------------------------------------
 
@@ -106,8 +102,34 @@ CREATE TABLE IF NOT EXISTS `auth_identities` (
 INSERT INTO `auth_identities` (`id`, `user_id`, `type`, `name`, `secret`, `secret2`, `expires`, `extra`, `force_reset`, `last_used_at`, `created_at`, `updated_at`) VALUES
 (1, 1, 'email_password', NULL, 'john.doe@exemple.com', '$2y$12$zg043K4aEZtqK1ZJD9BCQOjVsf0PYnLcpqvgl5b5rOv/ZSOdFbUG.', NULL, NULL, 0, '2024-12-31 10:26:54', '2024-12-29 12:25:57', '2024-12-31 10:26:54'),
 (2, 2, 'email_password', NULL, 'jane.doe@exemple.com', '$2y$12$UvF4Y53VITg1pngkgaWpVu/lOy7vi74e3XfK7tohBdkcqRd7K1H4C', NULL, NULL, 0, NULL, '2024-12-31 14:41:19', '2024-12-31 14:41:19');
--- john doe secret/mot de passe: Azerty1234
--- john doe secret/mot de passe: Qwerty1234
+-- john doe, secret/mot de passe: Azerty1234
+-- john doe, secret/mot de passe: Qwerty1234
+
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `clients`
+--
+
+CREATE TABLE IF NOT EXISTS `clients` (
+  `client_id` int(10) UNSIGNED NOT NULL,
+  `phone` varchar(10) DEFAULT NULL,
+  `address` varchar(255) NOT NULL,
+  `city` varchar(255) NOT NULL,
+  `postal_code` varchar(5) NOT NULL,
+  `family_quotient` ENUM('less_800', '800-1200', '1200-1800', '1800-2500', 'more_2500') NOT NULL,
+  `birth_date` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Déchargement des données de la table `clients`
+--
+
+INSERT INTO `clients` (`client_id`, `phone`, `address`, `city`, `postal_code`, `family_quotient`, `birth_date`) VALUES
+(1, NULL, '21 Jump Street', 'Melun', '77000', '800-1200', '2001-02-21'),
+(2, NULL, '22 Jump Street', 'Melun', '77000', 'less_800', '1988-03-24');
+
 
 -- --------------------------------------------------------
 
@@ -218,14 +240,13 @@ CREATE TABLE IF NOT EXISTS `reservations` (
   `start_date` DATE NOT NULL,
   `end_date` DATE NOT NULL,
   `total_price` FLOAT NOT NULL CHECK (total_price > 0),
-  `pension_type` ENUM('Pension-Compléte', 'Demi-Pension', 'Sans-Pension') NOT NULL,
+  `pension_type` ENUM('Pension Compléte', 'Demi-Pension', 'Sans Pension') NOT NULL,
   `number_people` INT(11) NOT NULL CHECK (number_people > 0),
-  `cleaning_option` tinyint(1) DEFAULT NULL,
+  `cleaning_option` tinyint(1) DEFAULT 0,
   `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
   `updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `status` ENUM('En attente', 'Confirmée', 'Annulée') NOT NULL DEFAULT 'En attente',
-  `family_quotient` ENUM('less_800', '800-1200', '1200-1800', '1800-2500', 'more_2500') NOT NULL,
-  `user_id` INT(10) UNSIGNED NOT NULL,
+  `client_id` INT(10) UNSIGNED NOT NULL,
   CHECK (end_date > start_date)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -380,7 +401,7 @@ ALTER TABLE `migrations`
 --
 ALTER TABLE `reservations`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `idx_reservations_user_date` (`user_id`,`start_date`,`end_date`);
+  ADD KEY `idx_reservations_user_date` (`client_id`,`start_date`,`end_date`);
 
 --
 -- Index pour la table `reservations_rooms`
@@ -409,7 +430,13 @@ ALTER TABLE `settings`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `username` (`username`),
+  ADD UNIQUE KEY `username` (`username`);
+
+--
+-- Index pour la table `users`
+--
+ALTER TABLE `clients`
+  ADD PRIMARY KEY (`client_id`),
   ADD UNIQUE KEY `phone` (`phone`);
 
 --
@@ -505,10 +532,16 @@ ALTER TABLE `auth_remember_tokens`
   ADD CONSTRAINT `auth_remember_tokens_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 
 --
+-- Contraintes pour la table `clients`
+--
+ALTER TABLE `clients`
+  ADD CONSTRAINT `clients_user_id_foreign` FOREIGN KEY (`client_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+
+--
 -- Contraintes pour la table `reservations`
 --
 ALTER TABLE `reservations`
-  ADD CONSTRAINT `reservations_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `reservations_ibfk_1` FOREIGN KEY (`client_id`) REFERENCES `clients` (`client_id`) ON DELETE CASCADE;
 
 --
 -- Contraintes pour la table `reservations_rooms`

@@ -49,20 +49,13 @@
                     <label for="pensionType" class="form-label">Option repas</label>
                     <select class="form-select" id="pensionType" name="pensionType" required>
                         <option value="" selected disabled>Choisissez une option</option>
-                        <option value="Pension-Compléte">Pension complète</option>
+                        <option value="Pension Compléte">Pension complète</option>
                         <option value="Demi-Pension">Demi-pension</option>
-                        <option value="Sans-Pension">Pas de pension</option>
+                        <option value="Sans Pension">Pas de pension</option>
                     </select>
                 </div>
 
-                <!-- TODO: Ajouter quotient familial (menu déroulant) -->
-                <!-- less_800 -->
-                <!-- 800-1200 -->
-                <!-- 1200-1800 -->
-                <!-- 1800-2500 -->
-                <!-- more_2500 -->
-
-                <!-- Pour les chambres : choisir ou non l'option ménage -->
+                <!-- Choisir ou non l'option ménage -->
                 <fieldset class="form-group border p-3">
                     <legend class="w-auto px-2">Option Ménage</legend>
                     <div class="form-check">

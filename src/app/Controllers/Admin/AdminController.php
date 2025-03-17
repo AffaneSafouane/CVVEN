@@ -22,11 +22,6 @@ class AdminController extends BaseController
         // TODO: afficher les détails d'un admin
     }
 
-    public function create(): RedirectResponse
-    {
-        // TODO: Créer un admin
-    }
-
     public function edit(int $adminId): RedirectResponse
     {
         // TODO: Ajouter la logique pour valider une réservation par un administrateur

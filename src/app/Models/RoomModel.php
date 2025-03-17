@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Entities\Reservation;
 use App\Entities\Room;
 use CodeIgniter\Model;
 use Exception;
@@ -52,16 +53,16 @@ class RoomModel extends Model
     protected $afterDelete    = [];
 
     /**
-     * @param int $reservationId
-     * @return ?Room
+     * @param int $roomId
+     * @return ?Reservation[]
      */
-    public function getRoomByReservation(int $reservationId): ?array
+    public function getReservationsByRoom(int $roomId): ?array
     {
-        // récupérer la chambre d'une réservation via la table de liaison reservations_rooms
-        $query = $this->db->table('reservations_rooms')
-            ->join('rooms', 'rooms.id = reservations_rooms.room_id')
-            ->where('reservations_rooms.reservation_id', $reservationId);
-        return $query->get()->getRow('App\Entities\Room');
+        // récupérer les réservations d'une chambre via la table jointe reservations_rooms
+        $query = $this->db('reservations_rooms')
+            ->join('reservations', 'reservations.id = reservations_rooms.reservation_id')
+            ->where('reservations.room_id', $roomId);
+        return $query->get()->getResult('App\Entities\Reservation');
     }
 
     public function isRoomAvailable(int $roomId, string $startDate, string $endDate): bool
@@ -130,7 +131,7 @@ class RoomModel extends Model
 
         // Si l'insertion échoue, annuler immédiatement lever une exception pour indiquer que l'ajout de la chambre a échoué
         if (!$success) {
-            throw new Exception('Impossible d\'ajouter les chambres à la réservation.' );
+            throw new Exception('Impossible d\'ajouter la chambre à la réservation.' );
         }
 
         // Retourner true pour confirmer que l'ajout de la chambre à la réservation a réussi

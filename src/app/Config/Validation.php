@@ -43,7 +43,7 @@ class Validation extends BaseConfig
     ];
 
     // --------------------------------------------------------------------
-    // Rules
+    // Rules for admins
     // --------------------------------------------------------------------
     public array $registration = [
         'username' => [
@@ -54,16 +54,6 @@ class Validation extends BaseConfig
                 'min_length[3]',
                 'regex_match[/\A[a-zA-Z0-9\.]+\z/]',
                 'is_unique[users.username]',
-            ],
-        ],
-        'phone' => [
-            'label' => 'Téléphone',
-            'rules' => [
-                'permit_empty',
-                'max_length[10]',
-                'min_length[10]',
-                'regex_match[/\A[0-9]+\z/]',
-                'is_unique[users.phone]',
             ],
         ],
         'email' => [
@@ -90,8 +80,8 @@ class Validation extends BaseConfig
             'label' => 'Auth.passwordConfirm',
             'rules' => 'required|matches[password]',
         ],
-        'full_name' => [
-            'label' => 'Nom complet',
+        'last_name' => [
+            'label' => 'Nom de famille',
             'rules' => [
                 'required',
                 'max_length[150]',
@@ -99,39 +89,26 @@ class Validation extends BaseConfig
                 'regex_match[/^[a-zA-Zàâäéèêëîïôöùûüç\'\- ]+$/]',
             ]
         ],
-        'address' => [
-            'label' => 'Adresse',
+        'first_name' => [
+            'label' => 'Prénom',
             'rules' => [
                 'required',
-                'max_length[100]',
-                'min_length[5]',
+                'max_length[150]',
+                'min_length[3]',
+                'regex_match[/^[a-zA-Zàâäéèêëîïôöùûüç\'\- ]+$/]',
             ]
         ],
-        'city' => [
-            'label' => 'Ville',
-            'rules' => [
-                'required',
-                'max_length[100]',
-                'min_length[1]',
-                'regex_match[/^[a-zA-Zàâäéèêëîïôöùûüç\'\-]+$/]',
-            ]
-        ],
-        'postal_code' => [
-            'label' => 'Code postal',
-            'rules' => [
-                'required',
-                'max_length[5]',
-                'min_length[5]',
-                'regex_match[/\A[0-9]+\z/]',
-            ]
-        ],
-        'birth_date' => [
-            'label' => 'Date de naissance',
-            'rules' => [
-                'required',
-                'valid_date',
-                'isValidBirthDate',
-            ]
-        ],
+    ];
+
+    // --------------------------------------------------------------------
+    // Rules for clients
+    // --------------------------------------------------------------------
+    public array $clientRegistration = [
+        'family_quotient' => 'required|in_list[less_800,800-1200,1200-1800,1800-2500,more_2500]',
+        'phone'           => 'permit_empty|max_length[10]|min_length[10]|regex_match[/\A[0-9]+\z/]|is_unique[users.phone]',
+        'address'         => 'required|max_length[150]|min_length[5]',
+        'city'            => 'required|max_length[150]|min_length[1]|regex_match[/^[a-zA-Zàâäéèêëîïôöùûüç\'\- ]+$/]',
+        'postal_code'     => 'required|max_length[5]|min_length[5]|regex_match[/\A[0-9]+\z/]',
+        'birth_date'      => 'required|valid_date|isValidBirthDate',
     ];
 }
