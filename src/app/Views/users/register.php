@@ -29,7 +29,7 @@ $maxDate = date('Y-m-d', strtotime('18 years ago'));
                     </div>
                 <?php endif ?>
 
-                <form action="<?= url_to('register') ?>" method="post">
+                <form action="<?= auth()->loggedIn() ? url_to('admin/register') : url_to('register'); ?>" method="post">
                     <?= csrf_field() ?>
 
                     <!-- Email -->
@@ -56,7 +56,7 @@ $maxDate = date('Y-m-d', strtotime('18 years ago'));
                         <label for="floatingFirstNameInput">Prénom*</label>
                     </div>
 
-                    <?php if(!auth()->user()): ?>
+                    <?php if(!auth()->loggedIn()): ?>
                         <!-- Address -->
                         <div class="form-floating mb-2">
                             <input class="form-control" type="text" name="address" id="floatingAddressInput" inputmode="text" autocomplete="street-address" placeholder="Adresse" value="<?= old('address'); ?>" minlength="3" maxlength="50" required/>
@@ -94,14 +94,14 @@ $maxDate = date('Y-m-d', strtotime('18 years ago'));
                         </div>
 
                         <!-- Birth Date -->
-                        <div class="form-floating mb-4">
+                        <div class="form-floating mb-2">
                             <input class="form-control" type="date" name="birth_date" id="floatingBirthDateInput" inputmode="text" value="<?= old('birthDate'); ?>" min="<?= $minDate; ?>" max="<?= $maxDate; ?>" required/>
                             <label for="floatingBirthDateInput">Date de naissance*</label>
                         </div>
                     <?php endif; ?>
 
                     <!-- Password -->
-                    <div class="form-floating mb-2">
+                    <div class="form-floating mb-2 mt-4">
                         <input type="password" class="form-control" id="floatingPasswordInput" name="password" inputmode="text" autocomplete="new-password" placeholder="<?= lang('Auth.password') ?>" required>
                         <label for="floatingPasswordInput"><?= lang('Auth.password') ?>*</label>
                     </div>
@@ -116,7 +116,7 @@ $maxDate = date('Y-m-d', strtotime('18 years ago'));
                         <button type="submit" class="btn btn-primary btn-block"><?= lang('Auth.register') ?></button>
                     </div>
 
-                    <?php if(!auth()->user()): ?>
+                    <?php if(!auth()->loggedIn()): ?>
                         <p class="text-center"><?= lang('Auth.haveAccount') ?> <a href="<?= url_to('login') ?>"><?= lang('Auth.login') ?></a></p>
                     <?php endif; ?>
                 </form>

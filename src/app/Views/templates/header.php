@@ -9,13 +9,27 @@
                 <li class="nav-item"><a class="nav-link" href="<?= site_url('/'); ?>">Accueil</a></li>
                 <li><a class="nav-link" href="#">Chambres</a></li>
                 <?php if (auth()->loggedIn()): ?>
-                    <li class="nav-item dropdown">
-                        <span class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">Utilisateur</span>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Réservations</a></li>
-                            <li><a class="dropdown-item" href="<?= site_url('users/' . auth()->id()); ?>">Profil</a></li>
-                        </ul>
-                    </li>
+                    <?php if(auth()->user()->inGroup('user')): ?>
+                        <li class="nav-item dropdown">
+                            <span class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">Utilisateur</span>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#">Réservations</a></li>
+                                <li><a class="dropdown-item" href="<?= site_url('users/' . auth()->id()); ?>">Profil</a></li>
+                            </ul>
+                        </li>
+                    <?php endif; ?>
+                    <?php if(auth()->user()->inGroup('admin')): ?>
+                        <li class="nav-item dropdown">
+                            <span class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">Admin</span>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="<?= site_url('admin/dashboard'); ?>">Dashboard</a></li>
+                                <li><a class="dropdown-item" href="<?= site_url('admin/users/'); ?>">Utilisateurs</a></li>
+                                <li><a class="dropdown-item" href="<?= site_url('admin/register'); ?>">Créer Admin</a></li>
+                                <li><a class="dropdown-item" href="<?= site_url('admin/rooms'); ?>">Chambres</a></li>
+                                <li><a class="dropdown-item" href="<?= site_url('admin/reservations'); ?>">Réservations</a></li>
+                            </ul>
+                        </li>
+                    <?php endif; ?>
                 <?php endif; ?>
             </ul>
             <ul class="navbar-nav d-flex">

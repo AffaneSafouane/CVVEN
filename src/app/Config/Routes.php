@@ -4,6 +4,7 @@ use App\Controllers\Admin\ReservationController as AdminReservationController;
 use App\Controllers\Admin\RoomController as AdminRoomController;
 use App\Controllers\Admin\UserController as AdminUserController;
 use App\Controllers\Auth\RegisterController;
+use App\Controllers\Admin\Auth\RegisterController as AdminRegisterController;
 use CodeIgniter\Shield\Controllers\RegisterController as ShieldRegister;
 use App\Controllers\RoomController;
 use App\Controllers\UserController;
@@ -32,8 +33,9 @@ $routes->post('reservations/create', [ReservationController::class, 'create']);
 // Routes admin
 $routes->get('admin/users', [AdminUserController::class, 'index']);
 $routes->get('admin/rooms', [AdminRoomController::class, 'index']);
-$routes->get('admin/rooms', [AdminRoomController::class, 'index']);
 $routes->get('admin/reservations', [ReservationController::class, 'index']);
+$routes->get('admin/register', [AdminRegisterController::class, 'registerView']);
+$routes->post('admin/register', [AdminRegisterController::class, 'registerAction']);
 
 // Test mailpit
 $routes->get('test/mail', [\App\Controllers\TestMailpit::class, 'index']);
