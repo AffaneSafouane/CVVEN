@@ -34,9 +34,15 @@ L’utilisateur mysql est *root* et le mot de passe est : *adminSQL*
 
 ATTENTION: Il ne faut pas que les ports utiliser par les conteneurs soient déjà occupés, par XAMPP par exemple. 
 
+IMPORTANT: Pour faire fonctionner le projet il faut s'assurer que les fichiers de configurations soient bien pris en compte :
+- Tout d'abords, aller dans le dossier docker et copier le fichier ".exemple.env" dans la racine du projet et le renommer en ".env"
+- Ensuite, aller dans le dossier "src/app/public/" puis copier le fichier ".exemple.htaccess" dans le même dossier et le renommer en ".htaccess".
+- Enfin, aller dans le dossier "src/" et copier le fichier ".exemple.env" dans le même dossier et le renommer en ".env"
+
+## Accéder au site internet
 Pour facilement accéder aux pages web de phpmyadmin ou du projet cvven, il suffit d'aller dans l'application docker desktop : 
 - Cliquer sur le compose (cvven dans notre cas)
-![alt text](image-4.png)
+![alt text](.image-4.png)
 
 - Cliquer sur le lien web contenant les ports (8080:80 pour cvven, 80:80 pour phpmyadmin)
 ![alt text](.image-7.png)
