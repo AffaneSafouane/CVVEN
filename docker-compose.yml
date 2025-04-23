@@ -43,7 +43,7 @@ services:
             PMA_PASSWORD: ${MYSQL_ROOT_PASSWORD}
         networks: 
             - sf
-
+            
     mailpit:
         image: axllent/mailpit
         container_name: mailpit

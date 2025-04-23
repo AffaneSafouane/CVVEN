@@ -73,6 +73,7 @@ class RegisterController extends ShieldRegister
         $client = new Client();
         $client->fill($clientData);
 
+        // Changed '=== null' to 'empty()'
         if (empty($client->phone)) {
             $client->phone = null;
         }

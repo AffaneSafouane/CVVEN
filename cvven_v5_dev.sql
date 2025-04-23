@@ -52,9 +52,6 @@ INSERT INTO `users` (`id`, `username`, `status`, `status_message`, `active`, `la
 (1, NULL, NULL, NULL, 1, '2025-03-17 17:04:48', '2024-12-29 12:25:56', '2024-12-29 12:25:57', NULL, 'Doe', 'John'),
 (2, NULL, NULL, NULL, 1, '2024-12-31 14:45:19', '2024-12-31 14:41:18', '2024-12-31 14:41:59', NULL, 'Doe', 'Jane'),
 (3, NULL, NULL, NULL, 1, NULL, '2025-03-17 17:04:49', '2025-03-17 17:04:49', NULL, 'Istrateur', 'Admin');
--- john doe, secret/mot de passe: Azerty1234
--- john doe, secret/mot de passe: Qwerty1234
--- admin, secret/mot de passe: adminCVVEN
 
 -- --------------------------------------------------------
 
@@ -107,6 +104,9 @@ INSERT INTO `auth_identities` (`id`, `user_id`, `type`, `name`, `secret`, `secre
 (1, 1, 'email_password', NULL, 'john.doe@exemple.com', '$2y$12$zg043K4aEZtqK1ZJD9BCQOjVsf0PYnLcpqvgl5b5rOv/ZSOdFbUG.', NULL, NULL, 0, '2025-03-17 16:53:53', '2024-12-29 12:25:57', '2025-03-17 16:53:53'),
 (2, 2, 'email_password', NULL, 'jane.doe@exemple.com', '$2y$12$UvF4Y53VITg1pngkgaWpVu/lOy7vi74e3XfK7tohBdkcqRd7K1H4C', NULL, NULL, 0, NULL, '2024-12-31 14:41:19', '2024-12-31 14:41:19'),
 (3, 3, 'email_password', NULL, 'admin@exemple.com', '$2y$12$Emr.SqYbGZSUynf34o.GAuEmATTvN.vvoijH2wp0nwoSRgC7yJSZO', NULL, NULL, 0, NULL, '2025-03-17 17:04:50', '2025-03-17 17:04:50');
+-- john doe, secret/mot de passe: Azerty1234
+-- john doe, secret/mot de passe: Qwerty1234
+-- admin, secret/mot de passe: adminCVVEN
 
 -- --------------------------------------------------------
 
