@@ -16,7 +16,7 @@ class RoomModel extends Model
     protected $returnType       = Room::class;
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['room_number', 'type', 'description', 'price', 'available', 'capacity'];
+    protected $allowedFields    = ['room_number', 'type', 'description', 'price', 'available', 'capacity', 'img_url'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -35,7 +35,8 @@ class RoomModel extends Model
         'description'     => 'required|min_length[5]|max_length[255]',
         'price'           => 'decimal|greater_than[0]|required',
         'available'       => 'required|in_list[0,1]',
-        'capacity'        => 'required|integer|greater_than[0]'
+        'capacity'        => 'required|integer|greater_than[0]',
+        'img_url'         => 'permit_empty|min_length[5]|max_length[50]',
     ];
     protected $validationMessages   = [];
     protected $skipValidation       = false;

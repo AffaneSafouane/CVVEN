@@ -23,7 +23,13 @@ class RoomController extends BaseController
 
     public function show(int $roomId): string
     {
-        // TODO: afficher les détails d'une chambre spécifique
+        $roomModel = new RoomModel();
+        $data = [
+            'room' => $roomModel->find($roomId),
+            'title' => 'Informations chambre',
+        ];
+
+        return view('admin/rooms/show', $data);
     }
 
     public function create(): RedirectResponse
@@ -33,7 +39,13 @@ class RoomController extends BaseController
 
     public function update(int $roomId): RedirectResponse
     {
-        // TODO: Mettre à jour les infos d'une chambre
+        $roomModel = new RoomModel();
+        $data = [
+            'room' => $roomModel->find($roomId),
+            'title' => 'Informations chambre',
+        ];
+
+        return view('admin/rooms/edit', $data);
     }
 
     public function delete(int $roomId): RedirectResponse

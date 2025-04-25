@@ -14,18 +14,20 @@ use CodeIgniter\Entity\Entity;
  * @property ?float $price
  * @property ?bool $available
  * @property ?int $capacity
+ * @property ?string $imgUrl
  */
 
 class Room extends Entity
 {
     protected $datamap = [
         'id'             => 'id',
-        'roomNumber'     => 'room_number',
+        'num'            => 'room_number',
         'type'           => 'type',
         'description'    => 'description',
         'price'          => 'price',
         'available'      => 'available',
         'capacity'       => 'capacity',
+        'imgUrl'         => 'img_url',
     ];
 
     protected $casts   = [
@@ -36,6 +38,7 @@ class Room extends Entity
         'price'           => 'float',
         'available'       => 'int-bool',
         'capacity'        => 'int',
+        'img_url'         => 'string',
     ];
 
     /** 
@@ -45,5 +48,20 @@ class Room extends Entity
     {
         $roomModel = new RoomModel();
         $roomModel->getReservationsByRoom($this->id);
+    }
+
+    public function getImgUrl(): ?string
+    {
+        return base_url(esc($this->attributes['img_url']));
+    }
+
+    public function getPrice(): ?string
+    {
+        return esc($this->attributes['price']) . "€";
+    }
+
+    public function getCapacity(): ?string
+    {
+        return esc($this->attributes['capacity']) . " personnes";
     }
 }

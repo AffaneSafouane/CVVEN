@@ -32,8 +32,12 @@ $routes->post('reservations/create', [ReservationController::class, 'create']);
 
 // Routes admin
 $routes->get('admin/users', [AdminUserController::class, 'index']);
+
 $routes->get('admin/rooms', [AdminRoomController::class, 'index']);
+$routes->get('admin/rooms/(:segment)', [AdminRoomController::class, 'show']);
+
 $routes->get('admin/reservations', [ReservationController::class, 'index']);
+
 $routes->get('admin/register', [AdminRegisterController::class, 'registerView']);
 $routes->post('admin/register', [AdminRegisterController::class, 'registerAction']);
 
