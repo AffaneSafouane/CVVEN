@@ -1,6 +1,6 @@
 # CVVEN
 
-Il s'agit d'une application web développée développé dans le contexte d'un projet scolaire et permet la réservation de séjour dans le Jura durant les vacances scolaires.
+Il s'agit d'une application web développée dans le contexte d'un projet scolaire et permet la réservation de séjour dans le Jura durant les vacances scolaires.
 
 ## Tech Stack
 
