@@ -28,7 +28,7 @@ class User extends ShieldUserEntity
 
     public function getFullName(): string
     {
-        return $this->lastName . ' ' . $this->firstName;
+        return $this->attributes['last_name'] . ' ' . $this->attributes['first_name'];
     }
 
     public function getCreatedAt(string $format = 'd/m/Y - H:i:s'): ?string

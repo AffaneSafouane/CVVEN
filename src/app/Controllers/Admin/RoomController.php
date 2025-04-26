@@ -13,12 +13,29 @@ class RoomController extends BaseController
 {
     public function index(): string
     {
-        $model = model(RoomModel::class);
+        // Récupérer les filtres
+        $available = $this->request->getGet('available');
+        $type = $this->request->getGet('type');
 
+        // Initialiser le modèle de chambres
+        $roomModel = new RoomModel();
+
+        // Appliquer les filtres si nécessaire
+        if ($available !== null && $available !== '') {
+            $roomModel->where('available', $available);
+        }
+
+        if ($type !== null && $type !== '') {
+            $roomModel->where('type', $type);
+        }
+
+        // Construire les données à passer à la vue
         $data = [
-            'rooms' => $model->paginate(10),
-            'pager' => $model->pager,
-            'title' => 'Liste des chambres'
+            'rooms'     => $roomModel->paginate(10),
+            'pager'     => $roomModel->pager,
+            'title'     => 'Liste des chambres',
+            'available' => $available,
+            'type'      => $type,
         ];
 
         return view('admin/rooms/index', $data);
@@ -35,9 +52,10 @@ class RoomController extends BaseController
         return view('admin/rooms/show', $data);
     }
 
-    public function roomForm(?int $roomId): string
+    public function roomForm(?int $roomId = null): string
     {
         helper('form');
+        helper('entity');
 
         if ($roomId) {
             $roomModel = new RoomModel();
@@ -49,7 +67,12 @@ class RoomController extends BaseController
             return view('admin/rooms/create', $data);
         }
 
-        return view('admin/rooms/create', ['title' => 'Ajout d\'une chambre']);
+        $data = [
+            'room'  => null,
+            'title' => 'Ajouter une chambre',
+        ];
+
+        return view('admin/rooms/create', $data);
     }
 
     public function create(): string|RedirectResponse
@@ -124,7 +147,7 @@ class RoomController extends BaseController
             return redirect()->back()->withInput()->with('errors', $roomModel->errors());
         }
 
-        return redirect()->to('/admin/rooms/' . $roomId)->with('success', 'Chambre mise à jour avec succés');
+        return redirect()->to('/admin/rooms/' . $roomId)->with('success', 'Chambre mise à jour avec succès');
     }
 
     public function delete(int $roomId): RedirectResponse
@@ -132,7 +155,7 @@ class RoomController extends BaseController
         $roomModel = new RoomModel();
         $room = $roomModel->find($roomId);
         if (!$room) {
-            return redirect()->back()->with('error', 'Room not found');
+            return redirect()->back()->with('error', 'Chambre non trouvée');
         }
 
 //        if (!empty($room->imgUrl) && file_exists(FCPATH . $room->imgUrl)) {

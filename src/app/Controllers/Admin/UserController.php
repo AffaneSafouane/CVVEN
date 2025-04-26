@@ -26,10 +26,16 @@ class UserController extends BaseController
         return view('admin/users/index', $data);
     }
 
-    // @TODO Ajouter les méthodes show(), updateRole(), delete(), suspend()
     public function show(int $userId): string
     {
-        // TODO: afficher les infos d'un utilisateur
+        $userModel = new UserModel();
+
+        $data = [
+            'user' => $userModel->find($userId),
+            'title' => "Informations client",
+        ];
+
+        return view('admin/users/show', $data);
     }
 
     public function updateRole(): RedirectResponse

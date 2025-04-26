@@ -29,7 +29,7 @@ class Reservation extends Entity
 {
     protected $datamap = [
         'id'             => 'id',
-        'pension'        => 'pension',
+        'pension'        => 'pension_type',
         'numberOfPeople' => 'number_people',
         'totalPrice'     => 'total_price',
         'createdAt'      => 'created_at',
@@ -45,7 +45,7 @@ class Reservation extends Entity
 
     protected $casts   = [
         'id'              => 'int',
-        'meal_option'     => 'enum[App\Enum\PensionType]',
+        'pension_type'    => 'enum[App\Enum\PensionType]',
         'number_people'   => 'int',
         'total_price'     => 'float',
         'status'          => 'enum[App\Enum\ReservationStatus]',
@@ -59,13 +59,13 @@ class Reservation extends Entity
 
     public function getStartDate(): ?string
     {
-        if (!$this->startDate) {
+        if (!$this->attributes["start_date"]) {
             return null;
         }
 
         $format = 'd/m/Y';
         try {
-            $date = $this->mutateDate($this->startDate);
+            $date = $this->mutateDate($this->attributes["start_date"]);
             $timezone = $this->timezone ?? app_timezone();
             $date->setTimezone($timezone);
             return $date->format($format);
@@ -77,13 +77,13 @@ class Reservation extends Entity
 
     public function getEndDate(): ?string
     {
-        if (!$this->endDate) {
+        if (!$this->attributes["end_date"]) {
             return null;
         }
 
         $format = 'd/m/Y';
         try {
-            $date = $this->mutateDate($this->endDate);
+            $date = $this->mutateDate($this->attributes["end_date"]);
             $timezone = $this->timezone ?? app_timezone();
             $date->setTimezone($timezone);
             return $date->format($format);
@@ -95,12 +95,12 @@ class Reservation extends Entity
 
     public function getCreatedAt(): ?string
     {
-        if (!$this->createdAt) {
+        if (!$this->attributes["created_at"]) {
             return null;
         }
         $format = 'Y/m/d - H:i:s';
         try {
-            $date = $this->mutateDate($this->createdAt);
+            $date = $this->mutateDate($this->attributes["created_at"]);
             $timezone = $this->timezone ?? app_timezone();
             $date->setTimezone($timezone);
             return $date->format($format);
@@ -112,12 +112,12 @@ class Reservation extends Entity
 
     public function getUpdatedAt(): ?string
     {
-        if (!$this->updatedAt) {
+        if (!$this->attributes["updated_at"]) {
             return null;
         }
         $format = 'Y/m/d - H:i:s';
         try {
-            $date = $this->mutateDate($this->updatedAt);
+            $date = $this->mutateDate($this->attributes["updated_at"]);
             $timezone = $this->timezone ?? app_timezone();
             $date->setTimezone($timezone);
             return $date->format($format);
@@ -127,20 +127,10 @@ class Reservation extends Entity
         }
     }
 
-    public function getPensionType(): ?string
-    {
-        return $this->pension->getLabel();
-    }
-
-    public function getStatus(): ?string
-    {
-        return $this->status->getLabel();
-    }
-
-    public function getClient(): ?Client
+    public function getUser(): User|array|null
     {
         $userModel = new UserModel();
-        $user = $userModel->find($this->clientId);
+        return $userModel->find($this->clientId);
     }
 
     public function getRoom(): ?Room

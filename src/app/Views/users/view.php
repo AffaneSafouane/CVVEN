@@ -34,9 +34,9 @@
                             <li class="list-group-item text-white">
                                 Date de naissance: <?= $user->getClient()->getBirthDate(); ?>
                             </li>
-                            <?php if (!empty($user->phone)): ?>
+                            <?php if (!empty($user->getClient()->phone)): ?>
                                 <li class="list-group-item text-white">
-                                    Téléphone: <?= esc($user->phone); ?>
+                                    Téléphone: <?= esc($user->getClient()->phone); ?>
                                 </li>
                             <?php endif; ?>
                         </ul>

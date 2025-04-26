@@ -9,7 +9,6 @@ use CodeIgniter\Shield\Controllers\RegisterController as ShieldRegister;
 use App\Controllers\RoomController;
 use App\Controllers\UserController;
 use CodeIgniter\Router\RouteCollection;
-use App\Controllers\ReservationController;
 
 /**
  * @var RouteCollection $routes
@@ -30,6 +29,7 @@ $routes->post('register', [RegisterController::class, 'registerAction']);
 $routes->group('admin', function ($routes) {
     // Users
     $routes->get('users', [AdminUserController::class, 'index']);
+    $routes->get('users/(:num)', [AdminUserController::class, 'show']);
 
     // Rooms
     $routes->get('rooms', [AdminRoomController::class, 'index']);
@@ -41,7 +41,11 @@ $routes->group('admin', function ($routes) {
     $routes->get('rooms/(:num)', [AdminRoomController::class, 'show']);
 
     // Réservations
-    $routes->get('reservations', [ReservationController::class, 'index']);
+    $routes->get('reservations', [AdminReservationController::class, 'index']);
+    $routes->post('reservations/confirm/(:num)', [AdminReservationController::class, 'confirm']);
+    $routes->post('reservations/cancel/(:num)', [AdminReservationController::class, 'cancel']);
+    $routes->delete('reservations/delete/(:num)', [AdminReservationController::class, 'delete']);
+    $routes->get('reservations/(:num)', [AdminReservationController::class, 'show']);
 
     // Admin User
     $routes->get('register', [AdminRegisterController::class, 'registerView']);

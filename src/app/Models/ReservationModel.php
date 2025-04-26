@@ -63,10 +63,12 @@ class ReservationModel extends Model
     public function getRoomByReservation(int $reservationId): ?Room
     {
         // récupérer la chambre d'une réservation via la table de liaison reservations_rooms
-        $query = $this->db->table('reservations_rooms')
+        return $this->db->table('reservations_rooms')
+            ->select('rooms.*')
             ->join('rooms', 'rooms.id = reservations_rooms.room_id')
-            ->where('reservations_rooms.reservation_id', $reservationId);
-        return $query->get()->getRow('App\Entities\Room');
+            ->where('reservations_rooms.reservation_id', $reservationId)
+            ->get()
+            ->getCustomRowObject(0, \App\Entities\Room::class);
     }
 
     /**
@@ -211,7 +213,7 @@ class ReservationModel extends Model
 
             // Supprime les entrées associées à cette réservation dans la table de liaison
             $reservation = $this->db->table('reservations_rooms')
-                ->where('reservations.id', $reservationId)
+                ->where('reservation_id', $reservationId)
                 ->delete();
 
             // Vérifie si la suppression a bien été effectuée Sinon, lève une exception.

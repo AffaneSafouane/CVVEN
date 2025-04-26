@@ -56,16 +56,20 @@ class RoomModel extends Model
 
     /**
      * @param int $roomId
-     * @return ?Reservation[]
+     * @return Reservation[]|null
      * Récupére les Réservations d'une chambre
      */
     public function getReservationsByRoom(int $roomId): ?array
     {
         // récupérer les réservations d'une chambre via la table jointe reservations_rooms
-        $query = $this->db('reservations_rooms')
+        $query = $this->db->table('reservations_rooms')
+            ->select('reservations.*')
             ->join('reservations', 'reservations.id = reservations_rooms.reservation_id')
-            ->where('reservations.room_id', $roomId);
-        return $query->get()->getResult('App\Entities\Reservation');
+            ->where('reservations_rooms.room_id', $roomId);
+
+        $result = $query->get()->getResult('App\Entities\Reservation');
+
+        return $result ?: null;
     }
 
     /** Vérifie si une chambre est disponible aux dates demandées */

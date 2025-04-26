@@ -26,6 +26,7 @@ class Client extends Entity
         'familyQuotient' => 'family_quotient',
         'birthDate'      => 'birth_date',
     ];
+
     protected $casts   = [
         'client_id'      => 'int',
         'phone'          => 'string',
