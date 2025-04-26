@@ -10,6 +10,11 @@
 <?= $this->section('title'); ?><?= esc($title); ?><?= $this->endSection(); ?>
 <?= $this->section('main'); ?>
 <section class="container px-4">
+    <?php if (session('success')) : ?>
+        <div class="alert alert-success mt-3" role="alert">
+            <?= session('success'); ?>
+        </div>
+    <?php endif; ?>
     <h1 class="mb-3 mt-3"><?= esc($title); ?></h1>
     <?php if ($rooms !== []): ?>
         <?php foreach ($rooms as $room): ?>

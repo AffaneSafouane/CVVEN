@@ -24,22 +24,29 @@ $routes->get('register', [ShieldRegister::class, 'registerView']);
 $routes->post('register', [RegisterController::class, 'registerAction']);
 
 // Routes Reservations
-// @TODO Ajouter les routes pour les réservations
-$routes->get('rooms', [RoomController::class, 'index']);
-$routes->get('rooms/(:segment)', [RoomController::class, 'show']);
-$routes->get('rooms/new/(:segment)', [RoomController::class, 'new']);
-$routes->post('reservations/create', [ReservationController::class, 'create']);
+// @TODO Ajouter les routes pour les réservations et les chambres
 
 // Routes admin
-$routes->get('admin/users', [AdminUserController::class, 'index']);
+$routes->group('admin', function ($routes) {
+    // Users
+    $routes->get('users', [AdminUserController::class, 'index']);
 
-$routes->get('admin/rooms', [AdminRoomController::class, 'index']);
-$routes->get('admin/rooms/(:segment)', [AdminRoomController::class, 'show']);
+    // Rooms
+    $routes->get('rooms', [AdminRoomController::class, 'index']);
+    $routes->get('rooms/form', [AdminRoomController::class, 'roomForm']);
+    $routes->get('rooms/form/(:num)', [AdminRoomController::class, 'roomForm']);
+    $routes->post('rooms/create', [AdminRoomController::class, 'create']);
+    $routes->put('rooms/edit/(:num)', [AdminRoomController::class, 'edit']);
+    $routes->delete('rooms/delete/(:num)', [AdminRoomController::class, 'delete']);
+    $routes->get('rooms/(:num)', [AdminRoomController::class, 'show']);
 
-$routes->get('admin/reservations', [ReservationController::class, 'index']);
+    // Réservations
+    $routes->get('reservations', [ReservationController::class, 'index']);
 
-$routes->get('admin/register', [AdminRegisterController::class, 'registerView']);
-$routes->post('admin/register', [AdminRegisterController::class, 'registerAction']);
+    // Admin User
+    $routes->get('register', [AdminRegisterController::class, 'registerView']);
+    $routes->post('register', [AdminRegisterController::class, 'registerAction']);
+});
 
 // Test mailpit
 $routes->get('test/mail', [\App\Controllers\TestMailpit::class, 'index']);

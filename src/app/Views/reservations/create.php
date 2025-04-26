@@ -56,8 +56,8 @@
                 </div>
 
                 <!-- Choisir ou non l'option ménage -->
-                <fieldset class="form-group border p-3">
-                    <legend class="w-auto px-2">Option Ménage</legend>
+                <fieldset class="form-group w-auto px-2 border p-3">
+                    <legend>Option Ménage</legend>
                     <div class="form-check">
                         <input type="radio" class="form-check-input" id="cleaning--yes" name="cleaningOption" value="1"/>
                         <label for="cleaning--yes" class="form-check-label">Oui</label>

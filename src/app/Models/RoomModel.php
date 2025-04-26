@@ -30,7 +30,8 @@ class RoomModel extends Model
 
     // Validation
     protected $validationRules      = [
-        'room_number'     => 'required|is_unique[rooms.room_number]|regex_match[/^B[0-9]{3}$/]|min_length[4]|max_length[4]',
+        'id'              => 'required|is_natural_no_zero',
+        'room_number'     => 'required|is_unique[rooms.room_number,id,{id}]|regex_match[/^B[0-9]{3}$/]|min_length[4]|max_length[4]',
         'type'            => 'required|min_length[1]',
         'description'     => 'required|min_length[5]|max_length[255]',
         'price'           => 'decimal|greater_than[0]|required',
@@ -56,6 +57,7 @@ class RoomModel extends Model
     /**
      * @param int $roomId
      * @return ?Reservation[]
+     * Récupére les Réservations d'une chambre
      */
     public function getReservationsByRoom(int $roomId): ?array
     {
@@ -66,6 +68,7 @@ class RoomModel extends Model
         return $query->get()->getResult('App\Entities\Reservation');
     }
 
+    /** Vérifie si une chambre est disponible aux dates demandées */
     public function isRoomAvailable(int $roomId, string $startDate, string $endDate): bool
     {
         // Construire la requête pour rechercher des conflits de réservation
@@ -95,6 +98,7 @@ class RoomModel extends Model
      * @param string $startDate
      * @param string $endDate
      * @return ?Room[]
+     * Récupére la liste des chambres disponibles selon les dates demandées
      */
     public function getAvailableRooms(string $startDate, string $endDate): ?array
     {
@@ -118,6 +122,7 @@ class RoomModel extends Model
      * @param int $roomId
      * @return bool
      * @throws Exception
+     * Ajoute la relation chambre/réservation dans la table de liaison
      */
     public function addRoomToReservation(int $reservationId, int $roomId): bool
     {

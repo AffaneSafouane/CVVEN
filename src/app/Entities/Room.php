@@ -49,19 +49,4 @@ class Room extends Entity
         $roomModel = new RoomModel();
         $roomModel->getReservationsByRoom($this->id);
     }
-
-    public function getImgUrl(): ?string
-    {
-        return base_url(esc($this->attributes['img_url']));
-    }
-
-    public function getPrice(): ?string
-    {
-        return esc($this->attributes['price']) . "€";
-    }
-
-    public function getCapacity(): ?string
-    {
-        return esc($this->attributes['capacity']) . " personnes";
-    }
 }

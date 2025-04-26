@@ -111,4 +111,17 @@ class Validation extends BaseConfig
         'postal_code'     => 'required|max_length[5]|min_length[5]|regex_match[/\A[0-9]+\z/]',
         'birth_date'      => 'required|valid_date|isValidBirthDate',
     ];
+
+    // --------------------------------------------------------------------
+    // Rules for rooms
+    // --------------------------------------------------------------------
+    public array $roomValidation = [
+        'room_number' => 'required|regex_match[/^B[0-9]{3}$/]|min_length[4]|max_length[4]',
+        'type'        => 'required|min_length[1]|max_length[50]',
+        'description' => 'required|min_length[5]|max_length[255]',
+        'price'       => 'decimal|greater_than[0]|required',
+        'available'   => 'required|in_list[0,1]',
+        'capacity'    => 'required|integer|greater_than[0]',
+        'img_url'     => 'permit_empty|is_image[img_url]|mime_in[img_url,image/jpg,image/jpeg,image/png]|max_size[img_url,1024]',
+    ];
 }
