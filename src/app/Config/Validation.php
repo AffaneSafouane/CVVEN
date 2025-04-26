@@ -42,10 +42,8 @@ class Validation extends BaseConfig
         'single' => 'CodeIgniter\Validation\Views\single',
     ];
 
-    // --------------------------------------------------------------------
-    // Rules for admins
-    // --------------------------------------------------------------------
     public array $registration = [
+        'id'       => 'required|is_natural_no_zero',
         'username' => [
             'label' => 'Auth.username',
             'rules' => [
@@ -53,7 +51,7 @@ class Validation extends BaseConfig
                 'max_length[100]',
                 'min_length[3]',
                 'regex_match[/\A[a-zA-Z0-9\.]+\z/]',
-                'is_unique[users.username]',
+                'is_unique[users.username,id,{id}]',
             ],
         ],
         'email' => [
@@ -62,7 +60,7 @@ class Validation extends BaseConfig
                 'required',
                 'max_length[254]',
                 'valid_email',
-                'is_unique[auth_identities.secret]',
+                'is_unique[auth_identities.secret,id,{id}]',
             ],
         ],
         'password' => [
@@ -105,7 +103,7 @@ class Validation extends BaseConfig
     // --------------------------------------------------------------------
     public array $clientRegistration = [
         'family_quotient' => 'required|in_list[less_800,800-1200,1200-1800,1800-2500,more_2500]',
-        'phone'           => 'permit_empty|max_length[10]|min_length[10]|regex_match[/\A[0-9]+\z/]|is_unique[users.phone]',
+        'phone'           => 'permit_empty|max_length[10]|min_length[10]|regex_match[/\A[0-9]+\z/]|is_unique[clients.phone]',
         'address'         => 'required|max_length[150]|min_length[5]',
         'city'            => 'required|max_length[150]|min_length[1]|regex_match[/^[a-zA-Zàâäéèêëîïôöùûüç\'\- ]+$/]',
         'postal_code'     => 'required|max_length[5]|min_length[5]|regex_match[/\A[0-9]+\z/]',

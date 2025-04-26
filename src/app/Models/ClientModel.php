@@ -34,9 +34,9 @@ class ClientModel extends Model
 
     // Validation
     protected $validationRules      = [
-        'client_id'       => 'required|is_natural_no_zero|is_unique[clients.client_id]',
+        'client_id'       => 'required|is_natural_no_zero',
         'family_quotient' => 'required|in_list[less_800,800-1200,1200-1800,1800-2500,more_2500]',
-        'phone'           => 'permit_empty|min_length[10]|max_length[10]|regex_match[/\A[0-9]+\z/]|is_unique[clients.phone]',
+        'phone'           => 'permit_empty|min_length[10]|max_length[10]|regex_match[/\A[0-9]+\z/]|is_unique[clients.phone,client_id,{client_id}]',
         'address'         => 'required|min_length[5]|max_length[200]',
         'city'            => 'required|min_length[1]|max_length[150]',
         'postal_code'     => 'required|min_length[5]|max_length[5]|regex_match[/\A[0-9]+\z/]',

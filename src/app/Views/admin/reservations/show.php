@@ -20,6 +20,17 @@
             <?= session('error') ?>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
         </div>
+    <?php elseif (session('errors') !== null) : ?>
+        <div class="alert alert-danger" role="alert">
+            <?php if (is_array(session('errors'))) : ?>
+                <?php foreach (session('errors') as $error) : ?>
+                    <?= $error ?>
+                    <br>
+                <?php endforeach ?>
+            <?php else : ?>
+                <?= session('errors') ?>
+            <?php endif ?>
+        </div>
     <?php endif ?>
 
     <!-- Header -->

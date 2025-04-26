@@ -17,8 +17,14 @@ $routes->get('/', 'Home::index');
 
 // Routes auth
 service('auth')->routes($routes, ['except' => ['register']]); // Routes Shield
-// @TODO Ajouter les routes pour la suppression et la mise à jour de l'utilisateur (post)
-$routes->get('users/(:segment)', [UserController::class, 'show']);
+
+// User
+$routes->get('users/form/(:num)', [UserController::class, 'userForm']);
+$routes->put('users/edit/(:num)', [UserController::class, 'edit']);
+$routes->delete('users/delete/(:num)', [UserController::class, 'delete']);
+$routes->get('users/(:num)', [UserController::class, 'show']);
+
+// Register
 $routes->get('register', [ShieldRegister::class, 'registerView']);
 $routes->post('register', [RegisterController::class, 'registerAction']);
 

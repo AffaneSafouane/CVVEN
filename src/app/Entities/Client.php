@@ -41,21 +41,32 @@ class Client extends Entity
         'enum' => EnumCast::class,
     ];
 
-    public function getFamilyQuotient(): ?string
-    {
-        return $this->familyQuotient->getLabel();
-    }
-
     public function getBirthDate(string $format = 'd/m/Y'): ?string
     {
-        // Convert to CodeIgniter\I18n\Time object
-        $this->attributes['birth_date'] = $this->mutateDate($this->attributes['birth_date']);
+        if($this->attributes['birth_date']) {
+            $this->attributes['birth_date'] = $this->mutateDate($this->attributes['birth_date']);
 
-        $timezone = $this->timezone ?? app_timezone();
+            $timezone = $this->timezone ?? app_timezone();
 
-        $this->attributes['birth_date']->setTimezone($timezone);
+            $this->attributes['birth_date']->setTimezone($timezone);
 
-        return $this->attributes['birth_date']->format($format);
+            return $this->attributes['birth_date']->format($format);
+        }
+        return null;
+    }
+
+    public function getFormattedBirthDate(string $format = 'Y-m-d'): ?string
+    {
+        if($this->attributes['birth_date']) {
+            $this->attributes['birth_date'] = $this->mutateDate($this->attributes['birth_date']);
+
+            $timezone = $this->timezone ?? app_timezone();
+
+            $this->attributes['birth_date']->setTimezone($timezone);
+
+            return $this->attributes['birth_date']->format($format);
+        }
+        return null;
     }
 
     /** @return ?Reservation[] */

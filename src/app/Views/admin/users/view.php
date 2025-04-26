@@ -42,7 +42,18 @@
                         </ul>
                         <p><small><?= $user->getIsActive(); ?></small></p>
                     </div>
-                    <!-- TODO Ajouter les boutons pour la suppression et la modification du compte -->
+                    <div class="row mb-3">
+                        <div class="col">
+                            <a href="<?= site_url('admin/users/edit' . $user->id); ?>" class="btn btn-warning">Éditer</a>
+                        </div>
+                        <div class="col">
+                            <form action="<?= site_url('admin/users/delete' . $user->id); ?>" method="POST" id="delete-form" class="float-end">
+                                <?= csrf_field(); ?>
+                                <input type="hidden" name="_method" value="DELETE">
+                                <button type="submit" class="btn btn-danger" onclick="return confirmDelete()">Supprimer</button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
         <?php else: ?>
@@ -51,4 +62,9 @@
             </div>
         <?php endif; ?>
     </section>
+    <script>
+        function confirmDelete() {
+            return confirm('Êtes vous sûr de vouloir supprimer l\'utilisateur ?');
+        }
+    </script>
 <?= $this->endSection(); ?>
