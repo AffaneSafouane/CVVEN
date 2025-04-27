@@ -17,43 +17,45 @@ use CodeIgniter\Router\RouteCollection;
  */
 $routes->get('/', 'Home::index');
 
-// Routes auth
+// Authentication (Shield)
 service('auth')->routes($routes, ['except' => ['register']]);
 
-// User (profil)
+// User profile
 $routes->get('users/form/(:num)', [UserController::class, 'userForm']);
 $routes->put('users/edit/(:num)', [UserController::class, 'edit']);
 $routes->delete('users/delete/(:num)', [UserController::class, 'delete']);
 $routes->get('users/(:num)', [UserController::class, 'show']);
 
-// Public — Chambres
+// Public — Rooms
 $routes->get('rooms', [RoomController::class, 'index']);
 $routes->get('rooms/(:num)', [RoomController::class, 'show']);
 $routes->get('rooms/(:num)/reservation', [RoomController::class, 'newReservation']);
 $routes->post('rooms/(:num)/reservation', [RoomController::class, 'submitReservation']);
 
-// Public — Réservations (utilisateur)
+// Public — Reservations (user)
 $routes->get('reservations', [ReservationController::class, 'index']);
 $routes->get('reservations/(:num)', [ReservationController::class, 'show']);
+$routes->get('reservations/confirm', [ReservationController::class, 'confirm']);
 $routes->post('reservations/create', [ReservationController::class, 'create']);
 $routes->get('reservations/cancel/(:num)', [ReservationController::class, 'cancel']);
 $routes->get('reservations/delete/(:num)', [ReservationController::class, 'delete']);
 
-// Register (Shield, override)
+// Registration (override Shield)
 $routes->get('register', [ShieldRegister::class, 'registerView']);
 $routes->post('register', [RegisterController::class, 'registerAction']);
 
-// Routes admin
+// Admin group
 $routes->group('admin', function ($routes) {
+    // Dashboard
     $routes->get('dashboard', [AdminController::class, 'dashboard']);
 
-    // Users
+    // Admin — Users
     $routes->get('users', [AdminUserController::class, 'index']);
     $routes->put('users/edit/(:num)', [AdminUserController::class, 'edit']);
     $routes->delete('users/delete/(:num)', [AdminUserController::class, 'delete']);
     $routes->get('users/(:num)', [AdminUserController::class, 'show']);
 
-    // Rooms
+    // Admin — Rooms
     $routes->get('rooms', [AdminRoomController::class, 'index']);
     $routes->get('rooms/form', [AdminRoomController::class, 'roomForm']);
     $routes->get('rooms/form/(:num)', [AdminRoomController::class, 'roomForm']);
@@ -62,17 +64,17 @@ $routes->group('admin', function ($routes) {
     $routes->delete('rooms/delete/(:num)', [AdminRoomController::class, 'delete']);
     $routes->get('rooms/(:num)', [AdminRoomController::class, 'show']);
 
-    // Réservations
+    // Admin — Reservations
     $routes->get('reservations', [AdminReservationController::class, 'index']);
     $routes->post('reservations/confirm/(:num)', [AdminReservationController::class, 'confirm']);
     $routes->post('reservations/cancel/(:num)', [AdminReservationController::class, 'cancel']);
     $routes->delete('reservations/delete/(:num)', [AdminReservationController::class, 'delete']);
     $routes->get('reservations/(:num)', [AdminReservationController::class, 'show']);
 
-    // Admin Auth
+    // Admin registration
     $routes->get('register', [AdminRegisterController::class, 'registerView']);
     $routes->post('register', [AdminRegisterController::class, 'registerAction']);
 });
 
-// Test mailpit
+// Test Mailpit
 $routes->get('test/mail', [\App\Controllers\TestMailpit::class, 'index']);

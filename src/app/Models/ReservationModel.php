@@ -136,7 +136,7 @@ class ReservationModel extends Model
         $roomModel = new RoomModel();
 
         // Récupérer la chambre et vérifier si elle existe, lever une exception si ce n'est pas le cas
-        $room = $roomModel->find($roomId)->getRow('\App\Entities\Room');
+        $room = $roomModel->find($roomId);
         if (!$room) {
             throw new Exception('Chambre non trouvé');
         }

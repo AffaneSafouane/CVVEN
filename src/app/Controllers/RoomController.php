@@ -8,9 +8,6 @@ use CodeIgniter\HTTP\RedirectResponse;
 
 class RoomController extends BaseController
 {
-    /**
-     * Affiche la liste des chambres (avec filtre optionnel par dates)
-     */
     public function index(): string
     {
         $start = $this->request->getGet('start');
@@ -19,24 +16,19 @@ class RoomController extends BaseController
         $roomModel = new RoomModel();
 
         if ($start && $end) {
-            // Filtre par disponibilité
             $rooms = $roomModel->getAvailableRooms($start, $end) ?: [];
         } else {
-            // Sans filtre : toutes les chambres
             $rooms = $roomModel->findAll();
         }
 
         return view('rooms/index', [
-            'title'  => 'Chambres disponibles',
-            'rooms'  => $rooms,
-            'start'  => $start,
-            'end'    => $end,
+            'title' => 'Chambres disponibles',
+            'rooms' => $rooms,
+            'start' => $start,
+            'end'   => $end,
         ]);
     }
 
-    /**
-     * Affiche les détails d'une chambre
-     */
     public function show(int $roomId): string|RedirectResponse
     {
         $roomModel = new RoomModel();
@@ -52,9 +44,6 @@ class RoomController extends BaseController
         ]);
     }
 
-    /**
-     * Affiche le formulaire de réservation pour une chambre donnée
-     */
     public function newReservation(int $roomId): string|RedirectResponse
     {
         $roomModel = new RoomModel();
@@ -72,25 +61,31 @@ class RoomController extends BaseController
     }
 
     /**
-     * Traite la soumission du formulaire de réservation,
-     * stocke les données en session et redirige vers la confirmation
+     * Récupère start_date, calcule end_date = start_date + 7 jours,
+     * puis stocke tout en session et redirige vers la confirmation.
      */
     public function submitReservation(int $roomId): RedirectResponse
     {
-        // Récupère les données POST
-        $data = $this->request->getPost([
+        $post = $this->request->getPost([
             'start_date',
-            'end_date',
             'adults',
             'children',
             'animals',
+            'meal_option',
+            'cleaning_option',
         ]);
 
-        // On inclut l'ID de la chambre
-        $data['room_id'] = $roomId;
+        // cleaning_option binaire
+        $post['cleaning_option'] = ! empty($post['cleaning_option']) ? 1 : 0;
 
-        // Stocke en session pour la confirmation ultérieure
-        session()->set('reservation_data', $data);
+        // Calcul automatique de la date de fin
+        $dtStart = new \DateTime($post['start_date']);
+        $dtEnd   = (clone $dtStart)->modify('+7 days');
+        $post['end_date'] = $dtEnd->format('Y-m-d');
+
+        $post['room_id'] = $roomId;
+
+        session()->set('reservation_data', $post);
 
         return redirect()->to('/reservations/confirm');
     }
