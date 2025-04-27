@@ -26,12 +26,10 @@ class Database extends Config
      */
     public array $default = [
         'DSN'          => '',
-        // Le service MySQL s'appelle "db" dans docker-compose
-        'hostname'     => env('database.default.hostname', 'db'),
-        // Ces variables existent déjà dans ton .env
-        'username'     => env('MYSQL_USER',       'root'),
-        'password'     => env('MYSQL_ROOT_PASSWORD', 'adminSQL'),
-        'database'     => env('MYSQL_DATABASE',   'cvven'),
+        'hostname'     => 'database.default.hostname',
+        'username'     => 'root',
+        'password'     => 'adminSQL',
+        'database'     => 'cvven',
         'DBDriver'     => 'MySQLi',
         'DBPrefix'     => '',
         'pConnect'     => false,
