@@ -43,7 +43,7 @@ class Validation extends BaseConfig
     ];
 
     public array $registration = [
-        'id'       => 'required|is_natural_no_zero',
+        'id'       => 'permit_empty|is_natural_no_zero',
         'username' => [
             'label' => 'Auth.username',
             'rules' => [
@@ -102,8 +102,9 @@ class Validation extends BaseConfig
     // Rules for clients
     // --------------------------------------------------------------------
     public array $clientRegistration = [
+        'client_id'       => 'permit_empty|is_natural_no_zero',
         'family_quotient' => 'required|in_list[less_800,800-1200,1200-1800,1800-2500,more_2500]',
-        'phone'           => 'permit_empty|max_length[10]|min_length[10]|regex_match[/\A[0-9]+\z/]|is_unique[clients.phone]',
+        'phone'           => 'permit_empty|max_length[10]|min_length[10]|regex_match[/\A[0-9]+\z/]|is_unique[clients.phone,client_id,{client_id}]',
         'address'         => 'required|max_length[150]|min_length[5]',
         'city'            => 'required|max_length[150]|min_length[1]|regex_match[/^[a-zA-Zàâäéèêëîïôöùûüç\'\- ]+$/]',
         'postal_code'     => 'required|max_length[5]|min_length[5]|regex_match[/\A[0-9]+\z/]',

@@ -251,6 +251,17 @@ CREATE TABLE `reservations` (
   `client_id` int UNSIGNED NOT NULL
 ) ;
 
+--
+-- Déchargement des données de la table `reservations`
+--
+
+INSERT INTO `reservations` (`id`, `start_date`, `end_date`, `total_price`, `pension_type`, `number_people`, `cleaning_option`, `created_at`, `updated_at`, `status`, `client_id`) VALUES
+(1, '2025-07-01', '2025-07-07', 1200.50, 'Pension-Compléte', 2, 1, '2025-06-15 10:23:45', '2025-06-15 10:23:45', 'Confirmée', 1),
+(2, '2025-08-10', '2025-08-15', 850.00, 'Demi-Pension', 1, 0, '2025-07-01 09:12:30', '2025-07-01 09:12:30', 'En attente', 2),
+(3, '2025-09-05', '2025-09-12', 1500.75, 'Sans-Pension', 4, 1, '2025-08-01 14:45:00', '2025-08-01 14:45:00', 'Confirmée', 2),
+(4, '2025-10-01', '2025-10-05', 600.00, 'Demi-Pension', 2, NULL, '2025-09-15 11:00:00', '2025-09-15 11:00:00', 'Annulée', 2),
+(5, '2025-12-20', '2025-12-27', 2100.00, 'Pension-Compléte', 5, 1, '2025-11-10 16:30:00', '2025-11-10 16:30:00', 'Confirmée', 1);
+
 -- --------------------------------------------------------
 
 --
@@ -261,6 +272,22 @@ CREATE TABLE `reservations_rooms` (
   `reservation_id` int NOT NULL,
   `room_id` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+--
+-- Déchargement des données de la table `reservations_rooms`
+--
+
+INSERT INTO `reservations_rooms` (`reservation_id`, `room_id`) VALUES
+(1, 1),
+(1, 2),
+(2, 3),
+(3, 4),
+(3, 5),
+(4, 6),
+(5, 7),
+(5, 8),
+(5, 9);
 
 -- --------------------------------------------------------
 
@@ -275,42 +302,43 @@ CREATE TABLE `rooms` (
   `description` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
   `price` float NOT NULL,
   `available` tinyint(1) NOT NULL,
-  `capacity` int NOT NULL
-) ;
+  `capacity` int NOT NULL,
+  `img_url` VARCHAR(255)
+);
 
 --
 -- Déchargement des données de la table `rooms`
 --
 
-INSERT INTO `rooms` (`id`, `room_number`, `type`, `description`, `price`, `available`, `capacity`) VALUES
-(1, 'B101', 'Logement', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120, 1, 4),
-(2, 'B102', 'Logement', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120, 1, 4),
-(3, 'B103', 'Logement', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120, 1, 4),
-(4, 'B104', 'Logement', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120, 1, 4),
-(5, 'B105', 'Logement', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120, 1, 4),
-(6, 'B106', 'Logement', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120, 1, 4),
-(7, 'B107', 'Logement', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120, 1, 4),
-(8, 'B108', 'Logement', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120, 1, 4),
-(9, 'B109', 'Logement', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120, 1, 4),
-(10, 'B110', 'Logement', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120, 1, 4),
-(11, 'B201', 'Chambre Double', 'Entrée, douche et WC, 1 lit double', 100, 1, 2),
-(12, 'B202', 'Chambre Double', 'Entrée, douche et WC, 1 lit double', 100, 1, 2),
-(13, 'B203', 'Chambre Double', 'Entrée, douche et WC, 1 lit double', 100, 1, 2),
-(14, 'B204', 'Chambre Double', 'Entrée, douche et WC, 1 lit double', 100, 1, 2),
-(15, 'B205', 'Chambre Double', 'Entrée, douche et WC, 1 lit double', 100, 1, 2),
-(16, 'B206', 'Chambre Double', 'Entrée, douche et WC, 1 lit double', 100, 1, 2),
-(17, 'B207', 'Chambre Double', 'Entrée, douche et WC, 1 lit double', 100, 1, 2),
-(18, 'B301', 'Chambre Triple', 'Trois lits séparés par une cloison mobile avec coin toilette, WC, douche', 110, 1, 3),
-(19, 'B302', 'Chambre Triple', 'Trois lits séparés par une cloison mobile avec coin toilette, WC, douche', 110, 1, 3),
-(20, 'B303', 'Chambre Triple', 'Trois lits séparés par une cloison mobile avec coin toilette, WC, douche', 110, 1, 3),
-(21, 'B304', 'Chambre Triple', 'Trois lits séparés par une cloison mobile avec coin toilette, WC, douche', 110, 1, 3),
-(22, 'B401', 'Chambre Quadruple', 'Quatre lits séparés par une cloison mobile avec douche, WC et balcon', 140, 1, 4),
-(23, 'B402', 'Chambre Quadruple', 'Quatre lits séparés par une cloison mobile avec douche, WC et balcon', 140, 1, 4),
-(24, 'B403', 'Chambre Quadruple', 'Quatre lits séparés par une cloison mobile avec douche, WC et balcon', 140, 1, 4),
-(25, 'B404', 'Chambre Quadruple', 'Quatre lits séparés par une cloison mobile avec douche, WC et balcon', 140, 1, 4),
-(26, 'B405', 'Chambre Quadruple', 'Quatre lits séparés par une cloison mobile avec douche, WC et balcon', 140, 1, 4),
-(27, 'B406', 'Chambre Quadruple', 'Quatre lits séparés par une cloison mobile avec douche, WC et balcon', 140, 1, 4),
-(28, 'B001', 'Chambre Accessible', 'Adapté pour les personnes à mobilité réduite', 130, 1, 2);
+INSERT INTO `rooms` (`id`, `room_number`, `type`, `description`, `price`, `available`, `capacity`, `img_url`) VALUES
+(1, 'B101', 'Logement', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120, 1, 4, 'images/logement.png'),
+(2, 'B102', 'Logement', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120, 1, 4, 'images/logement.png'),
+(3, 'B103', 'Logement', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120, 1, 4, 'images/logement.png'),
+(4, 'B104', 'Logement', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120, 1, 4, 'images/logement.png'),
+(5, 'B105', 'Logement', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120, 1, 4, 'images/logement.png'),
+(6, 'B106', 'Logement', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120, 1, 4, 'images/logement.png'),
+(7, 'B107', 'Logement', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120, 1, 4, 'images/logement.png'),
+(8, 'B108', 'Logement', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120, 1, 4, 'images/logement.png'),
+(9, 'B109', 'Logement', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120, 1, 4, 'images/logement.png'),
+(10, 'B110', 'Logement', 'Entrée, douche et WC, 2 chambres à 2 lits avec coin toilette et balcon', 120, 1, 4, 'images/logement.png'),
+(11, 'B201', 'Chambre Double', 'Entrée, douche et WC, 1 lit double', 100, 1, 2, 'images/chambre_double.jpg'),
+(12, 'B202', 'Chambre Double', 'Entrée, douche et WC, 1 lit double', 100, 1, 2, 'images/chambre_double.jpg'),
+(13, 'B203', 'Chambre Double', 'Entrée, douche et WC, 1 lit double', 100, 1, 2, 'images/chambre_double.jpg'),
+(14, 'B204', 'Chambre Double', 'Entrée, douche et WC, 1 lit double', 100, 1, 2, 'images/chambre_double.jpg'),
+(15, 'B205', 'Chambre Double', 'Entrée, douche et WC, 1 lit double', 100, 1, 2, 'images/chambre_double.jpg'),
+(16, 'B206', 'Chambre Double', 'Entrée, douche et WC, 1 lit double', 100, 1, 2, 'images/chambre_double.jpg'),
+(17, 'B207', 'Chambre Double', 'Entrée, douche et WC, 1 lit double', 100, 1, 2, 'images/chambre_double.jpg'),
+(18, 'B301', 'Chambre Triple', 'Trois lits séparés par une cloison mobile avec coin toilette, WC, douche', 110, 1, 3, 'images/chambre_triple.jpg'),
+(19, 'B302', 'Chambre Triple', 'Trois lits séparés par une cloison mobile avec coin toilette, WC, douche', 110, 1, 3, 'images/chambre_triple.jpg'),
+(20, 'B303', 'Chambre Triple', 'Trois lits séparés par une cloison mobile avec coin toilette, WC, douche', 110, 1, 3, 'images/chambre_triple.jpg'),
+(21, 'B304', 'Chambre Triple', 'Trois lits séparés par une cloison mobile avec coin toilette, WC, douche', 110, 1, 3, 'images/chambre_triple.jpg'),
+(22, 'B401', 'Chambre Quadruple', 'Quatre lits séparés par une cloison mobile avec douche, WC et balcon', 140, 1, 4, 'images/chambre_quadruple.jpg'),
+(23, 'B402', 'Chambre Quadruple', 'Quatre lits séparés par une cloison mobile avec douche, WC et balcon', 140, 1, 4, 'images/chambre_quadruple.jpg'),
+(24, 'B403', 'Chambre Quadruple', 'Quatre lits séparés par une cloison mobile avec douche, WC et balcon', 140, 1, 4, 'images/chambre_quadruple.jpg'),
+(25, 'B404', 'Chambre Quadruple', 'Quatre lits séparés par une cloison mobile avec douche, WC et balcon', 140, 1, 4, 'images/chambre_quadruple.jpg'),
+(26, 'B405', 'Chambre Quadruple', 'Quatre lits séparés par une cloison mobile avec douche, WC et balcon', 140, 1, 4, 'images/chambre_quadruple.jpg'),
+(27, 'B406', 'Chambre Quadruple', 'Quatre lits séparés par une cloison mobile avec douche, WC et balcon', 140, 1, 4, 'images/chambre_quadruple.jpg'),
+(28, 'B001', 'Chambre Accessible', 'Adapté pour les personnes à mobilité réduite', 130, 1, 2, 'images/chambre_accessible.jpg');
 
 -- --------------------------------------------------------
 
