@@ -3,33 +3,59 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
+use App\Models\RoomModel;
 use CodeIgniter\HTTP\ResponseInterface;
 
-/**
- * Description of RoomController
- *
- * @author Sisakoun Matthew, Krouch Kellyann
- */
 class RoomController extends BaseController
 {
-    /**
-     * Réservations uniquement pendant les vacances scolaires.
-     */
     public function index(): string
     {
-        // TODO: afficher toutes les chambres disponibles, getAvailableRooms() de RoomModel, selon les dates (filtre à mettre en place dans Views/rooms/index)
+        $start = $this->request->getGet('start');
+        $end   = $this->request->getGet('end');
+
+        $model = new RoomModel();
+
+        // Si dates fournies, on filtre, sinon on affiche tout
+        if ($start && $end) {
+            $rooms = $model->getAvailableRooms($start, $end);
+        } else {
+            $rooms = $model->findAll();
+        }
+
+        return view('rooms/index', [
+            'title' => 'Nos chambres',
+            'rooms' => $rooms,
+            'start' => $start,
+            'end'   => $end,
+        ]);
     }
 
     public function show(int $roomId): string
     {
-        // TODO: afficher les détails d'une chambre spécifique
+        $room = (new RoomModel())->find($roomId);
+
+        if (! $room) {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound("Chambre #{$roomId} introuvable");
+        }
+
+        return view('rooms/show', [
+            'title' => "Chambre {$room->num}",
+            'room'  => $room,
+        ]);
     }
 
-    /**
-     * Donner un objet de type Room au formulaire
-     */
     public function newReservation(int $roomId): string
     {
-        // TODO: afficher le formulaire pour une chambre (Views/reservations/create)
+        $room = (new RoomModel())->find($roomId);
+
+        if (! $room) {
+            return redirect()->to('rooms')->with('error', 'Chambre non trouvée');
+        }
+
+        return view('reservations/create', [
+            'title'           => "Réserver la chambre {$room->num}",
+            'id'              => $room->id,
+            'capacity'        => $room->capacity,
+        ]);
     }
 }

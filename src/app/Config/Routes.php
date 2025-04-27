@@ -1,15 +1,16 @@
 <?php
 
+use App\Controllers\RoomController;
+use App\Controllers\ReservationController;
 use App\Controllers\Admin\ReservationController as AdminReservationController;
 use App\Controllers\Admin\RoomController as AdminRoomController;
 use App\Controllers\Admin\UserController as AdminUserController;
 use App\Controllers\Auth\RegisterController;
 use App\Controllers\Admin\Auth\RegisterController as AdminRegisterController;
 use CodeIgniter\Shield\Controllers\RegisterController as ShieldRegister;
-use App\Controllers\RoomController;
 use App\Controllers\UserController;
-use CodeIgniter\Router\RouteCollection;
 use App\Controllers\Admin\AdminController;
+use CodeIgniter\Router\RouteCollection;
 
 /**
  * @var RouteCollection $routes
@@ -17,24 +18,34 @@ use App\Controllers\Admin\AdminController;
 $routes->get('/', 'Home::index');
 
 // Routes auth
-service('auth')->routes($routes, ['except' => ['register']]); // Routes Shield
+service('auth')->routes($routes, ['except' => ['register']]);
 
-// User
+// User (profil)
 $routes->get('users/form/(:num)', [UserController::class, 'userForm']);
 $routes->put('users/edit/(:num)', [UserController::class, 'edit']);
 $routes->delete('users/delete/(:num)', [UserController::class, 'delete']);
 $routes->get('users/(:num)', [UserController::class, 'show']);
 
-// Register
+// Public — Chambres
+$routes->get('rooms', [RoomController::class, 'index']);
+$routes->get('rooms/(:num)', [RoomController::class, 'show']);
+$routes->get('rooms/(:num)/reservation', [RoomController::class, 'newReservation']);
+
+// Public — Réservations (utilisateur)
+$routes->get('reservations', [ReservationController::class, 'index']);
+$routes->get('reservations/(:num)', [ReservationController::class, 'show']);
+$routes->post('reservations/create', [ReservationController::class, 'create']);
+$routes->get('reservations/cancel/(:num)', [ReservationController::class, 'cancel']);
+$routes->get('reservations/delete/(:num)', [ReservationController::class, 'delete']);
+
+// Register (Shield, override)
 $routes->get('register', [ShieldRegister::class, 'registerView']);
 $routes->post('register', [RegisterController::class, 'registerAction']);
-
-// Routes Reservations
-// @TODO Ajouter les routes pour les réservations et les chambres
 
 // Routes admin
 $routes->group('admin', function ($routes) {
     $routes->get('dashboard', [AdminController::class, 'dashboard']);
+
     // Users
     $routes->get('users', [AdminUserController::class, 'index']);
     $routes->put('users/edit/(:num)', [AdminUserController::class, 'edit']);
@@ -57,7 +68,7 @@ $routes->group('admin', function ($routes) {
     $routes->delete('reservations/delete/(:num)', [AdminReservationController::class, 'delete']);
     $routes->get('reservations/(:num)', [AdminReservationController::class, 'show']);
 
-    // Admin User
+    // Admin Auth
     $routes->get('register', [AdminRegisterController::class, 'registerView']);
     $routes->post('register', [AdminRegisterController::class, 'registerAction']);
 });

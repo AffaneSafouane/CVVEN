@@ -1,32 +1,29 @@
-<?php /** @var $title string */ ?>
-
 <?= $this->extend('layout'); ?>
 
-<?= $this->section('title') ?><?= esc($title) ?><?= $this->endSection() ?>
+<?= $this->section('title'); ?>
+<?= esc($title); ?>
+<?= $this->endSection(); ?>
 
 <?= $this->section('main'); ?>
 <style>
     #intro {
-        background-image: url('<?=(base_url('images/summer.jpg'));?>');
-        background-repeat: no-repeat;
+        background-image: url('<?= base_url('images/summer.jpg'); ?>');
         background-size: cover;
         background-position: center;
-        height: 100%;
+        height: 100vh;
     }
 </style>
 
-<!-- Header-->
 <header id="intro" class="bg-image shadow-2-strong">
-    <div style="background-color: rgba(0, 0, 0, 0.8);" class="py-5">
-        <div class="container px-4 text-center py-5">
+    <div class="d-flex align-items-center justify-content-center h-100" style="background-color: rgba(0,0,0,0.6);">
+        <div class="text-center text-white p-4">
             <h1 class="fw-bolder">CVVEN</h1>
-            <p class="lead">Site de vacance</p>
-            <a href="#" class="btn btn-success">Parcourez nos offres</a> <!-- TODO: lien vers les chambres disponibles -->
+            <p class="lead mb-4">Site de vacances</p>
+            <a href="<?= site_url('rooms'); ?>" class="btn btn-success btn-lg">Parcourez nos offres</a>
         </div>
     </div>
 </header>
 
-<!-- Definition section-->
 <section class="py-5">
     <div class="container px-4">
         <div class="row gx-4 justify-content-center py-5">
@@ -38,7 +35,6 @@
     </div>
 </section>
 
-<!-- Services section-->
 <section class="py-5 bg-body-tertiary">
     <div class="container px-4">
         <div class="row gx-4 justify-content-center py-5">
@@ -54,5 +50,4 @@
         </div>
     </div>
 </section>
-
 <?= $this->endSection(); ?>
