@@ -117,7 +117,7 @@ class ReservationController extends BaseController
         $reservation = new Reservation();
         $reservation->startDate      = $data['start_date'];
         $reservation->endDate        = $data['end_date'];
-        $reservation->mealOption     = $data['meal_option'];
+        $reservation->pension     = $data['meal_option'];
         $reservation->cleaningOption = ! empty($data['cleaning_option']);
         $reservation->numberOfPeople = $data['adults'] + $data['children'] + $data['animals'];
         $reservation->status         = 'En attente';
