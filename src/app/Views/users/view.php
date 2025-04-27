@@ -64,7 +64,7 @@
                                 </li>
                             <?php endif; ?>
                         </ul>
-                        <p><small><?= $user->active ? 'Votre compte est activé' : 'Votrce compte n\'est pas activé'; ?></small></p>
+                        <p><small><?= $user->active ? 'Votre compte est activé' : 'Votre compte n\'est pas activé'; ?></small></p>
                     </div>
                     <div class="row mb-3">
                         <div class="col">

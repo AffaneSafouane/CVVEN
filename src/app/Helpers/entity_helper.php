@@ -2,5 +2,5 @@
 
 function safe($value)
 {
-    return is_null($value) ? '' : $value;
+    return is_null($value) ? '' : esc($value);
 }

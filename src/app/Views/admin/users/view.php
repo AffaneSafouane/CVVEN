@@ -8,6 +8,30 @@
 
 <?= $this->section('main'); ?>
     <section class="container px-4">
+        <!-- Notifications -->
+        <?php if (session('success') !== null) : ?>
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <?= session('success') ?>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
+            </div>
+        <?php endif ?>
+        <?php if (session('error') !== null) : ?>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <?= session('error') ?>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
+            </div>
+        <?php elseif (session('errors') !== null) : ?>
+            <div class="alert alert-danger" role="alert">
+                <?php if (is_array(session('errors'))) : ?>
+                    <?php foreach (session('errors') as $error) : ?>
+                        <?= $error ?>
+                        <br>
+                    <?php endforeach ?>
+                <?php else : ?>
+                    <?= session('errors') ?>
+                <?php endif ?>
+            </div>
+        <?php endif ?>
         <div class="d-flex justify-content-between">
             <h1><?= esc($title); ?></h1>
             <span class="align-content-center">
@@ -15,10 +39,10 @@
             </span>
         </div>
         <?php if ($user): ?>
-            <div class="card mb-1 m-auto text-white">
+            <div class="card mb-1 m-auto bg-dark-subtle text-white">
                 <div class="card-body">
                     <div class="card-title d-flex justify-content-between">
-                        <h4 class="mb-1"><?= esc($user->getFullName()); ?></h4>
+                        <h4 class="mb-1"><?= esc($user->last_name . ' ' . $user->first_name); ?></h4>
                         <small class="text-muted"><?= esc($user->getEmail()); ?></small>
                         <?php if (!empty($user->username)): ?>
                             <small class="text-muted"><?= esc($user->username); ?></small>
@@ -26,25 +50,30 @@
                     </div>
                     <div class="d-flex justify-content-between card-text">
                         <ul class="list-group list-group-flush">
-                            <li class="list-group-item text-white">Date d'inscription: <?= $user->getCreatedAt(); ?></li>
-                            <li class="list-group-item text-white">Dernière connexion: <?= date("d/m/y - h:i:s", strtotime($user->last_active)); ?></li>
-                            <li class="list-group-item text-white">
-                                Adresse: <?= esc($user->getClient()->address); ?>
-                            </li>
-                            <li class="list-group-item text-white">
-                                Date de naissance: <?= $user->getClient()->getBirthDate(); ?>
-                            </li>
-                            <?php if (!empty($user->phone)): ?>
-                                <li class="list-group-item text-white">
-                                    Téléphone: <?= esc($user->phone); ?>
+                            <li class="list-group-item bg-dark-subtle text-white">Date d'inscription: <?= $user->getCreatedAt(); ?></li>
+                            <li class="list-group-item bg-dark-subtle text-white">Dernière connexion: <?= date("d/m/y - h:i:s", strtotime($user->last_active)); ?></li>
+                            <?php if ($user->getClient()): ?>
+                                <li class="list-group-item bg-dark-subtle text-white">
+                                    Adresse: <?= esc($user->getClient()->address); ?>
                                 </li>
+                                <li class="list-group-item bg-dark-subtle text-white">
+                                    Date de naissance: <?= $user->getClient()->getBirthDate(); ?>
+                                </li>
+                                <?php if (!empty($user->getClient()->phone)): ?>
+                                    <li class="list-group-item bg-dark-subtle text-white">
+                                        Téléphone: <?= esc($user->getClient()->phone); ?>
+                                    </li>
+                                <?php endif; ?>
                             <?php endif; ?>
+                            <li class="list-group-item bg-dark-subtle text-white">
+                                Groupe: <?= implode(', ', $user->getGroups()); ?>
+                            </li>
                         </ul>
-                        <p><small><?= $user->getIsActive(); ?></small></p>
+                        <p><small><?= $user->active ? 'Votre compte est activé' : 'Votrce compte n\'est pas activé'; ?></small></p>
                     </div>
                     <div class="row mb-3">
                         <div class="col">
-                            <a href="<?= site_url('admin/users/edit' . $user->id); ?>" class="btn btn-warning">Éditer</a>
+                            <a href="<?= site_url('users/form/' . $user->id); ?>" class="btn btn-warning">Éditer</a>
                         </div>
                         <div class="col">
                             <form action="<?= site_url('admin/users/delete' . $user->id); ?>" method="POST" id="delete-form" class="float-end">

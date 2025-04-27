@@ -9,6 +9,7 @@ use CodeIgniter\Shield\Controllers\RegisterController as ShieldRegister;
 use App\Controllers\RoomController;
 use App\Controllers\UserController;
 use CodeIgniter\Router\RouteCollection;
+use App\Controllers\Admin\AdminController;
 
 /**
  * @var RouteCollection $routes
@@ -33,8 +34,11 @@ $routes->post('register', [RegisterController::class, 'registerAction']);
 
 // Routes admin
 $routes->group('admin', function ($routes) {
+    $routes->get('dashboard', [AdminController::class, 'dashboard']);
     // Users
     $routes->get('users', [AdminUserController::class, 'index']);
+    $routes->put('users/edit/(:num)', [AdminUserController::class, 'edit']);
+    $routes->delete('users/delete/(:num)', [AdminUserController::class, 'delete']);
     $routes->get('users/(:num)', [AdminUserController::class, 'show']);
 
     // Rooms

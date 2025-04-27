@@ -32,7 +32,7 @@ $maxDate = date('Y-m-d', strtotime('18 years ago'));
                 </div>
             <?php endif ?>
 
-            <form action="<?= $user->inGroup('admin') ? site_url("admin/users/edit/" . $user->id) : site_url("users/edit/" . $user->id); ?>" method="post">
+            <form action="<?= auth()->user()->inGroup('admin') ? site_url("admin/users/edit/" . $user->id) : site_url("users/edit/" . $user->id); ?>" method="post">
                 <?= csrf_field() ?>
 
                 <input type="hidden" name="_method" value="PUT">
@@ -83,11 +83,11 @@ $maxDate = date('Y-m-d', strtotime('18 years ago'));
                     <!-- Quotient familial -->
                     <div class="form-floating mb-2">
                         <select id="floatingQfInput" name="family_quotient" class="form-control">
-                            <option value="less_800" <?= ($user->getClient() && safe($user->getClient()->familyQuotient) == "less_800") ? 'selected' : ''; ?>>Moins de 800€</option>
-                            <option value="800-1200" <?= ($user->getClient() && safe($user->getClient()->familyQuotient) == "800-1200") ? 'selected' : ''; ?>>Entre 800€ et 1200€</option>
-                            <option value="1200-1800" <?= ($user->getClient() && safe($user->getClient()->familyQuotient) == "1200-1800") ? 'selected' : ''; ?>>Entre 1200€ et 1800€</option>
-                            <option value="1800-2500" <?= ($user->getClient() && safe($user->getClient()->familyQuotient) == "1800-2500") ? 'selected' : ''; ?>>Entre 1800€ et 2500€</option>
-                            <option value="more_2500" <?= ($user->getClient() && safe($user->getClient()->familyQuotient) == "more_2500") ? 'selected' : ''; ?>>Plus de 2500€</option>
+                            <option value="less_800" <?= (old('family_quotient', ($user->getClient() && safe($user->getClient()->familyQuotient) == "less_800")) == "less_800") ? 'selected' : ''; ?>>Moins de 800€</option>
+                            <option value="800-1200" <?= (old('family_quotient', ($user->getClient() && safe($user->getClient()->familyQuotient) == "800-1200")) == "800-1200") ? 'selected' : ''; ?>>Entre 800€ et 1200€</option>
+                            <option value="1200-1800" <?= (old('family_quotient', ($user->getClient() && safe($user->getClient()->familyQuotient) == "1200-1800")) == "1200-1800") ? 'selected' : ''; ?>>Entre 1200€ et 1800€</option>
+                            <option value="1800-2500" <?= (old('family_quotient', ($user->getClient() && safe($user->getClient()->familyQuotient) == "1800-2500")) == "1800-2500") ? 'selected' : ''; ?>>Entre 1800€ et 2500€</option>
+                            <option value="more_2500" <?= (old('family_quotient', ($user->getClient() && safe($user->getClient()->familyQuotient) == "more_2500")) == "more_2500") ? 'selected' : ''; ?>>Plus de 2500€</option>
                         </select>
                         <label for="floatingQfInput">Quotient Familial*</label>
                     </div>
@@ -105,8 +105,17 @@ $maxDate = date('Y-m-d', strtotime('18 years ago'));
                     </div>
                 <?php endif; ?>
 
-                <?php if(!$user->inGroup('admin')) : ?>
-                    <!-- TODO: Ajouter champs groupe -->
+                <?php if(auth()->user()->inGroup('admin')) : ?>
+                    <!-- Groupe User -->
+                    <div class="form-floating mb-2">
+                        <select id="floatingGroupInput" name="group" class="form-control">
+                            <option value="admin" <?= old('group', ($user && in_array('admin', (array) $user->getGroups())) ? 'selected' : ''); ?>>Admin</option>
+                            <option value="developer" <?= old('group', ($user && in_array('developer', (array) $user->getGroups())) ? 'selected' : ''); ?>>Développeur</option>
+                            <option value="user" <?= old('group', ($user && in_array('user', (array) $user->getGroups())) ? 'selected' : ''); ?>>Utilisateur</option>
+                            <option value="beta" <?= old('group', ($user && in_array('beta', (array) $user->getGroups())) ? 'selected' : ''); ?>>Beta</option>
+                        </select>
+                        <label for="floatingGroupInput">Groupe*</label>
+                    </div>
                 <?php endif; ?>
 
                 <!-- Password -->

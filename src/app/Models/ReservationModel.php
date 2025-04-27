@@ -242,4 +242,17 @@ class ReservationModel extends Model
         // Update status de la réservation (admin)
         return $this->update($reservationId, ['status' => 'Confirmée']);
     }
+
+    /** @return ?Reservation[] */
+    public function getUpcomingReservations($limit = 5): ?array
+    {
+        return $this->select('reservations.*, rooms.room_number as room_num, users.last_name')
+            ->join('reservations_rooms', 'reservations_rooms.reservation_id = reservations.id')
+            ->join('rooms', 'rooms.id = reservations_rooms.room_id')
+            ->join('users', 'users.id = reservations.client_id')
+            ->where('start_date >=', date('Y-m-d'))
+            ->orderBy('start_date ASC')
+            ->limit($limit)
+            ->find();
+    }
 }

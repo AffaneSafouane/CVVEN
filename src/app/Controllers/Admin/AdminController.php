@@ -3,32 +3,30 @@
 namespace App\Controllers\Admin;
 
 use App\Controllers\BaseController;
+use App\Models\ReservationModel;
+use App\Models\RoomModel;
+use App\Models\UserModel;
 use CodeIgniter\HTTP\RedirectResponse;
+use CodeIgniter\Shield\Exceptions\ValidationException;
 
 class AdminController extends BaseController
 {
     public function dashboard(): string
     {
-        // TODO: affiche le panel admin
-    }
+        $reservationModel = new ReservationModel();
+        $roomModel = new RoomModel();
 
-    public function index(): string
-    {
-        // TODO: Affiche une liste des administrateurs
-    }
+        // Get dashboard statistics
+        $data = [
+            'todayBookings' => $reservationModel->where('DATE(start_date)', date('Y-m-d'))->countAllResults(),
+            'weekBookings' => $reservationModel->where('YEARWEEK(start_date)', date('YW'))->countAllResults(),
+            'monthBookings' => $reservationModel->where('MONTH(start_date)', date('m'))
+                ->where('YEAR(start_date)', date('Y'))->countAllResults(),
+            'totalRooms' => $roomModel->countAllResults(),
+            'upcomingBookings' => $reservationModel->getUpcomingReservations(5), // Get next 5 bookings
+            'popularRooms' => $roomModel->getPopularRooms(5), // Get top 5 popular rooms
+        ];
 
-    public function show($adminId): string
-    {
-        // TODO: afficher les détails d'un admin
-    }
-
-    public function edit(int $adminId): RedirectResponse
-    {
-        // TODO: Ajouter la logique pour valider une réservation par un administrateur
-    }
-
-    public function delete(int $adminId): RedirectResponse
-    {
-        // TODO: Ajouter la logique pour gérer les logements (ajouter, modifier, supprimer) en appelant RoomController du dossier Admin
+        return view('admin/dashboard', $data);
     }
 }

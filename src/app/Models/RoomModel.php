@@ -148,6 +148,17 @@ class RoomModel extends Model
         return true;
     }
 
+    /** @return ?Room[] */
+    public function getPopularRooms($limit = 5): ?array
+    {
+        return $this->select('rooms.*, COUNT(reservations_rooms.reservation_id) as booking_count')
+            ->join('reservations_rooms', 'reservations_rooms.room_id = rooms.id', 'left')
+            ->groupBy('rooms.id')
+            ->orderBy('booking_count', 'DESC')
+            ->limit($limit)
+            ->find();
+    }
+
     // SELECT COUNT(type) AS RoomType FROM `rooms` WHERE type = "Logements";
     // SELECT COUNT(type) AS RoomType FROM `rooms` WHERE type = "Chambre Double";
     // SELECT COUNT(type) AS RoomType FROM `rooms` WHERE type = "Chambre Triple";

@@ -63,6 +63,10 @@ class UserController extends BaseController {
             return redirect()->to('login');
         }
 
+        if (auth()->id() != $userId) {
+            throw new PermissionException('Vous n\'avez pas le droit d\'accéder à cette page.');
+        }
+
         $users = auth()->getProvider();
 
         $user = $users->findById($userId);
@@ -150,6 +154,10 @@ class UserController extends BaseController {
         $user = $userModel->find($userId);
         if (!$user) {
             return redirect()->back()->with('error', 'Chambre non trouvée');
+        }
+
+        if (auth()->id() != $userId) {
+            throw new PermissionException('Vous n\'avez pas le droit d\'accéder à cette page.');
         }
 
         if (!$userModel->delete($userId)) {
