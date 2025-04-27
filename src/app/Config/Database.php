@@ -26,10 +26,12 @@ class Database extends Config
      */
     public array $default = [
         'DSN'          => '',
-        'hostname'     => 'database.default.hostname',
-        'username'     => 'root',
-        'password'     => 'adminSQL',
-        'database'     => 'cvven',
+        // Le service MySQL s'appelle "db" dans docker-compose
+        'hostname'     => env('database.default.hostname', 'db'),
+        // Ces variables existent déjà dans ton .env
+        'username'     => env('MYSQL_USER',       'root'),
+        'password'     => env('MYSQL_ROOT_PASSWORD', 'adminSQL'),
+        'database'     => env('MYSQL_DATABASE',   'cvven'),
         'DBDriver'     => 'MySQLi',
         'DBPrefix'     => '',
         'pConnect'     => false,
@@ -42,13 +44,13 @@ class Database extends Config
         'strictOn'     => false,
         'failover'     => [],
         'port'         => 3306,
-        'numberNative' => false,
         'dateFormat'   => [
             'date'     => 'Y-m-d',
             'datetime' => 'Y-m-d H:i:s',
             'time'     => 'H:i:s',
         ],
     ];
+    
 
     //    /**
     //     * Sample database connection for SQLite3.
