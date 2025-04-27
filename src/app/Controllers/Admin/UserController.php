@@ -14,12 +14,33 @@ class UserController extends BaseController
 {
     public function index(): string
     {
+        $active = $this->request->getGet('active');
+        $group  = $this->request->getGet('group');
+
         $model = model(UserModel::class);
 
+        // Apply filters
+        if ($active !== null && $active !== '') {
+            $model->where('active', $active);
+        }
+
+        if ($group !== null && $group !== '') {
+            $model->select('users.*')
+                ->join('auth_groups_users agu', 'agu.user_id = users.id');
+
+            if (is_array($group)) {
+                $model->whereIn('agu.group', $group);
+            } else {
+                $model->where('agu.group', $group);
+            }
+        }
+
         $data = [
-            'users'     => $model->paginate(10),
-            'pager'     => $model->pager,
-            'title'     => 'Liste des utilisateurs',
+            'users'    => $model->paginate(10),
+            'pager'    => $model->pager,
+            'group'    => $group,
+            'active'   => $active,
+            'title'    => 'Liste des utilisateurs',
         ];
 
         return view('admin/users/index', $data);

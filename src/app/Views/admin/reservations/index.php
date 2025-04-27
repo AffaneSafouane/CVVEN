@@ -93,10 +93,10 @@
                                 </div>
                                 <div>
                                     <h6 class="mb-0">
-                                        <?= isset($reservation->getUser) ? esc($reservation->getUser()->getFullName()) : 'Client'; ?>
+                                        <?= !is_null($reservation->getUser) ? esc($reservation->getUser()->last_name) . ' ' . esc($reservation->getUser()->last_name) : 'Client'; ?>
                                     </h6>
                                     <span class="badge bg-info text-dark">
-                                        <?= isset($reservation->numberOfPeople) ? $reservation->numberOfPeople : '?'; ?> personnes
+                                        <?= !is_null($reservation->numberOfPeople) ? $reservation->numberOfPeople : '?'; ?> personnes
                                     </span>
                                 </div>
                             </div>
@@ -111,7 +111,7 @@
                                 </p>
                             </div>
 
-                            <?php if (isset($reservation->totalPrice)) : ?>
+                            <?php if (!is_null($reservation->totalPrice)) : ?>
                                 <div class="mb-0">
                                     <div class="d-flex align-items-center mb-2">
                                         <i class="bi bi-cash-coin text-primary me-2"></i>
