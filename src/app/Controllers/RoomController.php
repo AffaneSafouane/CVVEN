@@ -4,38 +4,46 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use App\Models\RoomModel;
-use CodeIgniter\HTTP\ResponseInterface;
+use CodeIgniter\HTTP\RedirectResponse;
 
 class RoomController extends BaseController
 {
+    /**
+     * Affiche la liste des chambres (avec filtre optionnel par dates)
+     */
     public function index(): string
     {
         $start = $this->request->getGet('start');
         $end   = $this->request->getGet('end');
 
-        $model = new RoomModel();
+        $roomModel = new RoomModel();
 
-        // Si dates fournies, on filtre, sinon on affiche tout
         if ($start && $end) {
-            $rooms = $model->getAvailableRooms($start, $end);
+            // Filtre par disponibilité
+            $rooms = $roomModel->getAvailableRooms($start, $end) ?: [];
         } else {
-            $rooms = $model->findAll();
+            // Sans filtre : toutes les chambres
+            $rooms = $roomModel->findAll();
         }
 
         return view('rooms/index', [
-            'title' => 'Nos chambres',
-            'rooms' => $rooms,
-            'start' => $start,
-            'end'   => $end,
+            'title'  => 'Chambres disponibles',
+            'rooms'  => $rooms,
+            'start'  => $start,
+            'end'    => $end,
         ]);
     }
 
-    public function show(int $roomId): string
+    /**
+     * Affiche les détails d'une chambre
+     */
+    public function show(int $roomId): string|RedirectResponse
     {
-        $room = (new RoomModel())->find($roomId);
+        $roomModel = new RoomModel();
+        $room      = $roomModel->find($roomId);
 
         if (! $room) {
-            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound("Chambre #{$roomId} introuvable");
+            return redirect()->to('rooms')->with('error', 'Chambre introuvable');
         }
 
         return view('rooms/show', [
@@ -44,18 +52,46 @@ class RoomController extends BaseController
         ]);
     }
 
-    public function newReservation(int $roomId): string
+    /**
+     * Affiche le formulaire de réservation pour une chambre donnée
+     */
+    public function newReservation(int $roomId): string|RedirectResponse
     {
-        $room = (new RoomModel())->find($roomId);
+        $roomModel = new RoomModel();
+        $room      = $roomModel->find($roomId);
 
         if (! $room) {
-            return redirect()->to('rooms')->with('error', 'Chambre non trouvée');
+            return redirect()->to('rooms')->with('error', 'Chambre introuvable');
         }
 
         return view('reservations/create', [
-            'title'           => "Réserver la chambre {$room->num}",
-            'id'              => $room->id,
-            'capacity'        => $room->capacity,
+            'title'    => "Réserver la chambre {$room->num}",
+            'roomId'   => $room->id,
+            'capacity' => $room->capacity,
         ]);
+    }
+
+    /**
+     * Traite la soumission du formulaire de réservation,
+     * stocke les données en session et redirige vers la confirmation
+     */
+    public function submitReservation(int $roomId): RedirectResponse
+    {
+        // Récupère les données POST
+        $data = $this->request->getPost([
+            'start_date',
+            'end_date',
+            'adults',
+            'children',
+            'animals',
+        ]);
+
+        // On inclut l'ID de la chambre
+        $data['room_id'] = $roomId;
+
+        // Stocke en session pour la confirmation ultérieure
+        session()->set('reservation_data', $data);
+
+        return redirect()->to('/reservations/confirm');
     }
 }

@@ -5,59 +5,85 @@
 <?= $this->endSection(); ?>
 
 <?= $this->section('main'); ?>
-<section class="container px-4 py-4">
-    <?php if (session('error')): ?>
-        <div class="alert alert-danger"><?= session('error'); ?></div>
-    <?php endif; ?>
-    <?php if (session('errors')): ?>
-        <div class="alert alert-danger">
-            <?php if (is_array(session('errors'))): ?>
-                <?php foreach (session('errors') as $error): ?>
-                    <?= esc($error) ?><br>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <?= esc(session('errors')) ?>
-            <?php endif; ?>
+<section class="container py-4">
+    <h2 class="mb-4"><?= esc($title); ?></h2>
+
+    <!-- Formulaire en HTML pur -->
+    <form action="<?= site_url("rooms/{$roomId}/reservation") ?>" method="post">
+        <?= csrf_field() ?>
+
+        <input type="hidden" name="room_id" value="<?= esc($roomId); ?>">
+
+        <div class="mb-3">
+            <label for="start_date" class="form-label">Date d'arrivée</label>
+            <input
+                type="text"
+                id="start_date"
+                name="start_date"
+                class="form-control datepicker"
+                placeholder="YYYY-MM-DD"
+                required
+                autocomplete="off"
+            />
         </div>
-    <?php endif; ?>
 
-    <div class="bg-light p-4 rounded">
-        <h2 class="mb-4"><?= esc($title); ?></h2>
-        <?= form_open('reservations/create'); ?>
-            <?= csrf_field(); ?>
-            <input type="hidden" name="id"    value="<?= esc($id); ?>">
-            <input type="hidden" name="start" value="<?= esc($start ?? ''); ?>">
-            <input type="hidden" name="end"   value="<?= esc($end ?? ''); ?>">
+        <div class="mb-3">
+            <label for="end_date" class="form-label">Date de départ</label>
+            <input
+                type="text"
+                id="end_date"
+                name="end_date"
+                class="form-control datepicker"
+                placeholder="YYYY-MM-DD"
+                required
+                autocomplete="off"
+            />
+        </div>
 
-            <div class="mb-3">
-                <label for="nbPeople" class="form-label">Nombre de personnes</label>
-                <input type="number" id="nbPeople" name="nbPeople" min="1" max="<?= esc($capacity); ?>" class="form-control" placeholder="1 à <?= esc($capacity); ?>" required>
-            </div>
-
-            <div class="mb-3">
-                <label for="pensionType" class="form-label">Option repas</label>
-                <select id="pensionType" name="pensionType" class="form-select" required>
-                    <option value="" disabled selected>Choisissez une option</option>
-                    <option value="Pension Compléte">Pension complète</option>
-                    <option value="Demi-Pension">Demi-pension</option>
-                    <option value="Sans-Pension">Pas de pension</option>
-                </select>
-            </div>
-
-            <fieldset class="mb-3">
-                <legend>Option ménage</legend>
-                <div class="form-check">
-                    <input type="radio" id="cleaningYes" name="cleaningOption" value="1" class="form-check-input" checked>
-                    <label class="form-check-label" for="cleaningYes">Oui</label>
+        <fieldset class="mb-4">
+            <legend class="form-label">Nombre de personnes</legend>
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label for="adults" class="form-label">Adultes</label>
+                    <input
+                        type="number"
+                        id="adults"
+                        name="adults"
+                        class="form-control"
+                        min="1"
+                        max="<?= esc($capacity); ?>"
+                        value="1"
+                        required
+                    />
                 </div>
-                <div class="form-check">
-                    <input type="radio" id="cleaningNo" name="cleaningOption" value="0" class="form-check-input">
-                    <label class="form-check-label" for="cleaningNo">Non</label>
+                <div class="col-md-4">
+                    <label for="children" class="form-label">Enfants</label>
+                    <input
+                        type="number"
+                        id="children"
+                        name="children"
+                        class="form-control"
+                        min="0"
+                        max="<?= esc($capacity); ?>"
+                        value="0"
+                    />
                 </div>
-            </fieldset>
+                <div class="col-md-4">
+                    <label for="animals" class="form-label">Animaux</label>
+                    <input
+                        type="number"
+                        id="animals"
+                        name="animals"
+                        class="form-control"
+                        min="0"
+                        max="2"
+                        value="0"
+                    />
+                </div>
+            </div>
+        </fieldset>
 
-            <button type="submit" class="btn btn-primary">Soumettre</button>
-        <?= form_close(); ?>
-    </div>
+        <button type="submit" class="btn btn-primary">Suivant</button>
+    </form>
 </section>
 <?= $this->endSection(); ?>

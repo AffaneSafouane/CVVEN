@@ -30,6 +30,7 @@ $routes->get('users/(:num)', [UserController::class, 'show']);
 $routes->get('rooms', [RoomController::class, 'index']);
 $routes->get('rooms/(:num)', [RoomController::class, 'show']);
 $routes->get('rooms/(:num)/reservation', [RoomController::class, 'newReservation']);
+$routes->post('rooms/(:num)/reservation', [RoomController::class, 'submitReservation']);
 
 // Public — Réservations (utilisateur)
 $routes->get('reservations', [ReservationController::class, 'index']);

@@ -3,18 +3,20 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
-use App\Models\ReservationModel;
 use App\Entities\Reservation;
+use App\Models\ReservationModel;
 use CodeIgniter\HTTP\RedirectResponse;
 
 class ReservationController extends BaseController
 {
+    /**
+     * Affiche la liste des réservations de l'utilisateur connecté
+     */
     public function index(): string
     {
-        $userId = auth()->id();
-        $model  = new ReservationModel();
-
-        $reservations = $model->getClientReservations($userId);
+        $userId            = auth()->id();
+        $reservationModel  = new ReservationModel();
+        $reservations      = $reservationModel->getClientReservations($userId) ?: [];
 
         return view('reservations/index', [
             'title'        => 'Mes réservations',
@@ -22,76 +24,99 @@ class ReservationController extends BaseController
         ]);
     }
 
-    public function show(int $reservationId): string
+    /**
+     * Affiche le détail d'une réservation, si elle appartient bien à l'utilisateur
+     */
+    public function show(int $reservationId): string|RedirectResponse
     {
-        $reservation = (new ReservationModel())->find($reservationId);
+        $reservationModel = new ReservationModel();
+        $reservation      = $reservationModel->find($reservationId);
 
         if (! $reservation || $reservation->clientId !== auth()->id()) {
-            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound("Réservation introuvable");
+            return redirect()->back()->with('error', 'Réservation introuvable ou accès refusé');
         }
 
         return view('reservations/show', [
-            'title'       => "Réservation #{$reservation->id}",
+            'title'       => 'Détails de la réservation',
             'reservation' => $reservation,
         ]);
     }
 
+    /**
+     * Crée une nouvelle réservation à partir des données en session
+     */
     public function create(): RedirectResponse
     {
-        $post = $this->request->getPost();
-        $model = new ReservationModel();
-
-        if ($model->createReservation(
-            new Reservation([
-                'start_date'     => $post['start'],
-                'end_date'       => $post['end'],
-                'meal_option'    => $post['pensionType'],
-                'cleaning_option'=> $post['cleaningOption'],
-                'number_people'  => $post['nbPeople'],
-                'status'         => 'En attente',
-                'client_id'      => auth()->id(),
-            ]),
-            (int)$post['id'],
-            auth()->id()
-        )) {
-            return redirect()->to('reservations')->with('success', 'Réservation créée.');
+        $data = session('reservation_data');
+        if (! $data) {
+            return redirect()->to('rooms')->with('error', 'Données de réservation manquantes');
         }
 
-        return redirect()->back()->withInput()->with('error', 'Échec de la réservation.');
-    }
+        // Prépare l'entité Reservation
+        $reservation = new Reservation();
+        $reservation->startDate      = $data['start_date'];
+        $reservation->endDate        = $data['end_date'];
+        $reservation->mealOption     = $data['meal_option']     ?? 'Sans-Pension';
+        $reservation->cleaningOption = $data['cleaning_option'] ?? false;
+        $reservation->numberOfPeople = $data['adults'] + $data['children'] + $data['animals'];
+        $reservation->status         = 'En attente';
+        $reservation->clientId       = auth()->id();
 
-    public function edit(int $reservationId): RedirectResponse
-    {
-        // à implémenter (similaire à create mais en update)
-    }
+        $reservationModel = new ReservationModel();
 
-    public function delete(int $reservationId): RedirectResponse
-    {
-        $model = new ReservationModel();
-        $res   = $model->find($reservationId);
-
-        if (! $res || $res->clientId !== auth()->id()) {
-            return redirect()->back()->with('error', 'Accès refusé');
+        try {
+            $reservationModel->createReservation(
+                $reservation,
+                $data['room_id'],
+                auth()->id()
+            );
+            session()->remove('reservation_data');
+            return redirect()->to('reservations')
+                             ->with('success', 'Votre réservation a bien été enregistrée !');
+        } catch (\Exception $e) {
+            return redirect()->back()
+                             ->with('error', $e->getMessage())
+                             ->withInput();
         }
-
-        $model->delete($reservationId);
-        return redirect()->to('reservations')->with('success', 'Réservation supprimée.');
     }
 
+    /**
+     * Annule une réservation (si elle appartient à l'utilisateur)
+     */
     public function cancel(int $reservationId): RedirectResponse
     {
-        $model = new ReservationModel();
-        $res   = $model->find($reservationId);
+        $reservationModel = new ReservationModel();
+        $reservation      = $reservationModel->find($reservationId);
 
-        if (! $res || $res->clientId !== auth()->id()) {
+        if (! $reservation || $reservation->clientId !== auth()->id()) {
             return redirect()->back()->with('error', 'Accès refusé');
         }
 
-        if ($model->cancelReservation($reservationId)) {
-            return redirect()->to("reservations/{$reservationId}")
-                   ->with('success', 'Réservation annulée.');
+        if ($reservationModel->cancelReservation($reservationId)) {
+            return redirect()->to('reservations')
+                             ->with('success', 'Réservation annulée avec succès');
         }
 
-        return redirect()->back()->with('error', 'Impossible d’annuler.');
+        return redirect()->back()->with('error', 'Impossible d’annuler la réservation');
+    }
+
+    /**
+     * Supprime une réservation définitivement (si elle appartient à l'utilisateur)
+     */
+    public function delete(int $reservationId): RedirectResponse
+    {
+        $reservationModel = new ReservationModel();
+        $reservation      = $reservationModel->find($reservationId);
+
+        if (! $reservation || $reservation->clientId !== auth()->id()) {
+            return redirect()->back()->with('error', 'Accès refusé');
+        }
+
+        if ($reservationModel->delete($reservationId)) {
+            return redirect()->to('reservations')
+                             ->with('success', 'Réservation supprimée avec succès');
+        }
+
+        return redirect()->back()->with('error', 'Impossible de supprimer la réservation');
     }
 }
