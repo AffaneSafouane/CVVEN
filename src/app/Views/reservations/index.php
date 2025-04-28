@@ -22,9 +22,9 @@
                     <div class="card-title d-flex justify-content-between">
                         <ul class="list-group list-group-flush">
                             <!-- TODO: Ajouter le type de chambre -->
-                            <li class="list-group-item bg-dark-subtle"><?= $reservation->getPensionType(); ?></li>
-                            <li class="list-group-item bg-dark-subtle"><?= $reservation->getStartingDate() . ' - ' . $reservation->getEndingDate(); ?></li>
-                            <li class="list-group-item bg-dark-subtle"><?= $reservation->getUser()->full_name; ?></li>
+                            <li class="list-group-item bg-dark-subtle"><?= $reservation->pension->getLabel(); ?></li>
+                            <li class="list-group-item bg-dark-subtle"><?= $reservation->getStartDate() . ' - ' . $reservation->getEndDate(); ?></li>
+                            <li class="list-group-item bg-dark-subtle"><?= $reservation->getUser()->last_name." ".$reservation->getUser()->first_name; ?></li>
                         </ul>
                     </div>
                     <!-- TODO: ajouter un lien vers détails réservation (show() ReservationController) -->
