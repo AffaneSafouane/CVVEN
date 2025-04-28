@@ -79,9 +79,12 @@
                                 <i class="bi <?= $statusIcon; ?> me-1"></i>
                                 <?= $statusLabel; ?>
                             </div>
+                            <?php if (!is_null($reservation->getRoom())) : ?>
                             <h5 class="text-primary mb-1">
+                                
                                 <i class="bi bi-buildings me-2"></i>Chambre #<?= $reservation->getRoom()->num; ?>
                             </h5>
+                            <?php endif ?>
                             <p class="text-muted small mb-3">Réservation #<?= esc($reservation->id); ?></p>
                         </div>
 
