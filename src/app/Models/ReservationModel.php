@@ -48,7 +48,7 @@ class ReservationModel extends Model
     protected $validationRules = [
         'start_date'      => 'required|valid_date',
         'end_date'        => 'required|valid_date',
-        'meal_option'     => 'required|in_list[Pension-Compléte,Demi-Pension,Sans-Pension]',
+        'pension_type'    => 'required|in_list[Pension-Compléte,Demi-Pension,Sans-Pension]',
         'number_people'   => 'required|integer|greater_than[0]|less_than[50]',
         'cleaning_option' => 'required|in_list[0,1]',
         'total_price'     => 'required|decimal|greater_than[0]|less_than[1000]',
@@ -181,7 +181,7 @@ class ReservationModel extends Model
         } catch (Exception $e) {
             $this->db->transRollback();
             log_message('error', 'Erreur réservation : ' . $e->getMessage());
-            return false;
+            throw $e;
         }
     }
 

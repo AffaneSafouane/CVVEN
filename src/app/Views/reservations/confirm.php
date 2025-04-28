@@ -3,7 +3,21 @@
 <?= $this->section('title'); ?><?= esc($title); ?><?= $this->endSection(); ?>
 
 <?= $this->section('main'); ?>
+
+
 <section class="container py-4">
+    <?php if (session()->getFlashdata('success')): ?>
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <?= esc(session()->getFlashdata('success')) ?>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        <?php endif; ?>
+    <?php if (session()->getFlashdata('error')): ?>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <?= esc(session()->getFlashdata('error')) ?>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        <?php endif; ?>
     <h2 class="mb-4"><?= esc($title); ?></h2>
 
     <div class="card mb-4">
