@@ -59,7 +59,9 @@
                                 <i class="bi bi-person-circle fs-3"></i>
                             </div>
                             <div>
-                                <h4 class="mb-0"><a href="<?= base_url('admin/user/' . $reservation->getUser()->id); ?>" class="text-decoration-none"><?= esc($reservation->getUser()->last_name." ".$reservation->getUser()->first_name); ?></a></h4>
+
+                                <h4 class="mb-0"><a href="<?= base_url('admin/user/' . $reservation->getUser()->id); ?>" class="text-decoration-none"><?= esc($reservation->getUser()->last_name . ' ' . $reservation->getUser()->first_name); ?></a></h4>
+
                                 <small class="text-muted">Client</small>
                             </div>
                         </div>
