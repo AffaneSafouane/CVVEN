@@ -42,6 +42,39 @@ class Validation extends BaseConfig
         'single' => 'CodeIgniter\Validation\Views\single',
     ];
 
+    //--------------------------------------------------------------------
+// Rules For Login
+//--------------------------------------------------------------------
+    public array $login = [
+        // 'username' => [
+        //     'label' => 'Auth.username',
+        //     'rules' => [
+        //         'required',
+        //         'max_length[30]',
+        //         'min_length[3]',
+        //         'regex_match[/\A[a-zA-Z0-9\.]+\z/]',
+        //     ],
+        // ],
+        'email' => [
+            'label' => 'Auth.email',
+            'rules' => [
+                'required',
+                'max_length[254]',
+                'valid_email'
+            ],
+        ],
+        'password' => [
+            'label' => 'Auth.password',
+            'rules' => [
+                'required',
+                'max_byte[72]',
+            ],
+            'errors' => [
+                'max_byte' => 'Auth.errorPasswordTooLongBytes',
+            ]
+        ],
+    ];
+
     public array $registration = [
         'id'       => 'permit_empty|is_natural_no_zero',
         'username' => [
@@ -109,6 +142,7 @@ class Validation extends BaseConfig
         'city'            => 'required|max_length[150]|min_length[1]|regex_match[/^[a-zA-Zàâäéèêëîïôöùûüç\'\- ]+$/]',
         'postal_code'     => 'required|max_length[5]|min_length[5]|regex_match[/\A[0-9]+\z/]',
         'birth_date'      => 'required|valid_date|isValidBirthDate',
+        'answer'          => 'required|max_length[150]|min_length[5]',
     ];
 
     // --------------------------------------------------------------------

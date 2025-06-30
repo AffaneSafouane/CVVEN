@@ -73,7 +73,7 @@ class Filters extends BaseFilters
         'before' => [
             // 'honeypot',
             'csrf', // Ajouter ['except' => ['api/record/save']], en cas d'implémentation d'une api
-            'session' => ['except' => ['login*', 'register', 'auth/a/*', '/', 'test*']],
+            'session' => ['except' => ['login*', 'register', 'auth/a/*', '/', 'rooms', 'rooms/(:num)']],
             // 'invalidchars',
         ],
         'after' => [

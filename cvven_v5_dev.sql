@@ -20,9 +20,9 @@ SET time_zone = "+00:00";
 --
 -- Base de données : `cvven`
 --
-CREATE DATABASE IF NOT EXISTS cvven;
+-- CREATE DATABASE IF NOT EXISTS cvven;
 
-USE cvven;
+-- USE cvven;
 
 -- --------------------------------------------------------
 
@@ -65,6 +65,16 @@ CREATE TABLE `auth_groups_users` (
   `group` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
   `created_at` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+-- CREATE TABLE `comments` (
+--   `id` int UNSIGNED PRIMARY KEY NOT NULL,
+--   `client_id` int UNSIGNED NOT NULL,
+--   `room_id` int NOT NULL,
+--   `review` int NOT NULL,
+--   FOREIGN KEY (`client_id`) REFERENCES clients(`client_id`),
+--   FOREIGN KEY (`room_id`) REFERENCES rooms(`id`)
+-- );
 
 --
 -- Déchargement des données de la table `auth_groups_users`

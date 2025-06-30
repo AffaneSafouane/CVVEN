@@ -54,7 +54,7 @@
           <div class="card h-100">
             <?php if ($room->imgUrl): ?>
               <img
-                src="<?= base_url('images/' . $room->imgUrl); ?>"
+                src="<?= base_url($room->imgUrl); ?>"
                 class="card-img-top"
                 alt="Chambre <?= esc($room->num); ?>"
               />

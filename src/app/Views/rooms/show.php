@@ -1,3 +1,9 @@
+<?php
+/**
+ * @var ?App\Entities\Room $room
+ * @var string $title
+ */
+?>
 <?= $this->extend('layout'); ?>
 
 <?= $this->section('title'); ?>
@@ -11,7 +17,7 @@
     <div class="row">
         <?php if ($room->imgUrl): ?>
             <div class="col-md-6">
-                <img src="<?= base_url('images/' . $room->imgUrl); ?>" class="img-fluid" alt="Chambre <?= esc($room->num); ?>">
+                <img src="<?= base_url($room->imgUrl); ?>" class="img-fluid" alt="Chambre <?= esc($room->num); ?>">
             </div>
         <?php endif; ?>
         <div class="col-md-6">
@@ -33,6 +39,7 @@
                 <a href="<?= site_url("rooms/{$room->id}/reservation"); ?>" class="btn btn-success">Réserver</a>
             <?php endif; ?>
         </div>
+        <a href="<?= base_url('comments/form/' . $room->id); ?>" class="btn btn-primary">Ajouter commentaire</a>
     </div>
 </section>
 <?= $this->endSection(); ?>

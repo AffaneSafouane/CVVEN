@@ -1,5 +1,6 @@
 <?php
 
+use App\Controllers\LoginController;
 use App\Controllers\RoomController;
 use App\Controllers\ReservationController;
 use App\Controllers\Admin\ReservationController as AdminReservationController;
@@ -11,6 +12,8 @@ use CodeIgniter\Shield\Controllers\RegisterController as ShieldRegister;
 use App\Controllers\UserController;
 use App\Controllers\Admin\AdminController;
 use CodeIgniter\Router\RouteCollection;
+use CodeIgniter\Shield\Controllers\LoginController as ShieldLoginController;
+use App\Controllers\CommentController;
 
 /**
  * @var RouteCollection $routes
@@ -18,7 +21,9 @@ use CodeIgniter\Router\RouteCollection;
 $routes->get('/', 'Home::index');
 
 // Authentication (Shield)
-service('auth')->routes($routes, ['except' => ['register']]);
+service('auth')->routes($routes, ['except' => ['register', 'login']]);
+$routes->get('login', [ShieldLoginController::class, 'loginView']);
+$routes->post('login', [LoginController::class, 'loginAction']);
 
 // User profile
 $routes->get('users/form/(:num)', [UserController::class, 'userForm']);
@@ -39,6 +44,10 @@ $routes->get('reservations/confirm', [ReservationController::class, 'confirm']);
 $routes->post('reservations/create', [ReservationController::class, 'create']);
 $routes->get('reservations/cancel/(:num)', [ReservationController::class, 'cancel']);
 $routes->get('reservations/delete/(:num)', [ReservationController::class, 'delete']);
+
+$routes->get('comments/index/(:num)', [CommentController::class, 'index']);
+$routes->post('comments/create/(:num)', [CommentController::class, 'create']);
+$routes->get('comments/form/(:num)', [CommentController::class, 'form']);
 
 // Registration (override Shield)
 $routes->get('register', [ShieldRegister::class, 'registerView']);

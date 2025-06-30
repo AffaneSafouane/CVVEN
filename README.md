@@ -1,28 +1,25 @@
 # CVVEN
 
-Il s'agit d'une application web développée dans le contexte d'un projet scolaire et permet la réservation de séjour dans le Jura durant les vacances scolaires.
+CVVEN est une application web de réservation de séjours dans un village de vacances situé dans le Jura, développée dans le cadre d’un projet scolaire. Elle permet aux utilisateurs de réserver des hébergements pendant les vacances scolaires.
 
-## Tech Stack
+## 🚀 Stack Technique
 
-**Client:** HTML, Bootstrap, Javascript
+**Frontend:** HTML, Bootstrap, Javascript
 
-**Server:** PHP, Codeigniter 4
+**Backend:** PHP, Codeigniter 4
 
-**Database:** MySQL
+**base de données:** MySQL
 
-## Installation
+**Conteneurisation:** Docker & Docker Compose
 
-Installer le projet avec docker desktop.
+## 📦 Installation rapide avec Docker
 
-Pour linux : 
+### Prérequis
+- Docker Desktop
+  - [Installer Docker sur Ubuntu](https://docs.docker.com/desktop/setup/install/linux/ubuntu/)
+  - [Installer Docker sur Windows](https://docs.docker.com/desktop/setup/install/windows-install/)
 
-[Ubuntu](https://docs.docker.com/desktop/setup/install/linux/ubuntu/)
-
-Pour Windows : 
-
-[Windows](https://docs.docker.com/desktop/setup/install/windows-install/)
-
-## Importer projet Docker
+### Étapes d'installation
 
 ```bash
 git clone https://github.com/AffaneSafouane/CVVEN.git 
@@ -30,48 +27,87 @@ cd CVVEN
 docker compose up -d
 ```
 
-L’utilisateur mysql est *root* et le mot de passe est : *adminSQL*
+⚠️ Assurez-vous que les ports utilisés par les conteneurs (ex: 80, 8080, 3306) ne soient pas occupés (par XAMPP ou autre).
 
-ATTENTION: Il ne faut pas que les ports utiliser par les conteneurs soient déjà occupés, par XAMPP par exemple. 
+### Configuration Requise
 
-IMPORTANT: Pour faire fonctionner le projet il faut s'assurer que les fichiers de configurations soient bien pris en compte :
-- Tout d'abords, aller dans le dossier docker et copier le fichier ".exemple.env" dans la racine du projet et le renommer en ".env"
-- Ensuite, aller dans le dossier "src/app/public/" puis copier le fichier ".exemple.htaccess" dans le même dossier et le renommer en ".htaccess".
-- Enfin, aller dans le dossier "src/" et copier le fichier ".exemple.env" dans le même dossier et le renommer en ".env"
+Pour que le projet fonctionne correctement, vous devez renommer certains fichiers de configuration :
+1. Depuis le dossier docker, copier .exemple.env à la racine du projet et renommer en .env.
+2. Dans src/app/public/, copier .exemple.htaccess et renommer en .htaccess
+3. Dans src/, copier .exemple.env et renommer en .env.
 
-## Accéder au site internet
-Pour facilement accéder aux pages web de phpmyadmin ou du projet cvven, il suffit d'aller dans l'application docker desktop : 
-- Cliquer sur le compose (cvven dans notre cas)
+### Accès MySQL
+- Utilisateur : root
+- Mot de passe : adminSQL
+
+## 🌐 Accès à l'application
+Vous pouvez accéder à l’application et à phpMyAdmin via Docker Desktop :
+1. Ouvrir Docker Desktop
+2. Cliquer sur le projet cvven
+
 ![alt text](.image-4.png)
 
-- Cliquer sur le lien web contenant les ports (8080:80 pour cvven, 80:80 pour phpmyadmin)
+3. Cliquer sur le lien correspondant au port :
+   - http://localhost:8080 : Application web
+   - http://localhost:80 : phpMyAdmin
+
 ![alt text](.image-7.png)
   
-## Debuggage ou commandes internes
+## 🛠️ Commandes utiles pour le débogage
 Si vous souhaitez exécuter des commandes depuis le terminal d'un conteneur vous devez exécuter les commandes suivantes : 
 
-- Pour php
+- Serveur web (PHP)
 ```bash
 docker exec -it php_web sh
 ```
 
-- Pour mysql
+- Base de données (MySQL)
 ```bash
 docker exec -it mysql_db sh
 ```
 
-- Pour phpmyadmin
+- phpmyadmin
 ```bash
 docker exec -it cvven-phpmyadmin sh
 ```
 
-Vous pouvez également accéder à la console depuis l'application docker desktop : 
-- Cliquer sur le compose
+Ou via l'interface Docker Desktop :
+1. Cliquer sur le projet (cvven)
+
 ![alt text](.image-4.png)
 
-- Cliquer sur le conteneur depuis lequel vous voulez utiliser le terminal de commmande (php_web pour le serveur web, ou mysql_db pour la base de données)
+2. Sélectionner le conteneur voulu (ex: php_web ou mysql_db)
 
 ![alt text](.image-8.png)
 
-- Enfin cliquer sur l'onglet exec et exécuter la commande souhaiter
+3. Aller dans l’onglet Exec pour ouvrir un terminal interactif
+
 ![alt text](.image-3.png)
+
+## ✅ Fonctionnalités principales
+- Recherche et réservation de logements disponibles
+
+- Interface d’administration (gestion des utilisateurs, réservations, logements…)
+
+- Authentification utilisateurs
+
+- Connexion à une base de données MySQL
+
+- Interface utilisateur responsive grâce à Bootstrap
+
+## 🙋‍♂️ Équipe projet
+Projet réalisé dans le cadre d’un module scolaire avec la participation de plusieurs étudiants.
+N'hésitez pas à consulter le dépôt GitHub pour plus de détails sur les contributeurs.
+
+## 💡 À améliorer (pistes futures)
+- Ajouter des tests automatisés (unitaires et fonctionnels)
+
+- Améliorer la sécurité de l’authentification (ex: jetons CSRF)
+
+- Mettre en place une API REST pour les réservations
+
+- Ajouter une interface mobile plus responsive
+
+- Intégrer un système de paiment
+
+- Ajouter des commentaires
