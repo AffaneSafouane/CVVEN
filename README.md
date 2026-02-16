@@ -104,8 +104,6 @@ N'hésitez pas à consulter le dépôt GitHub pour plus de détails sur les cont
 
 - Améliorer la sécurité de l’authentification (ex: jetons CSRF)
 
-- Mettre en place une API REST pour les réservations
-
 - Ajouter une interface mobile plus responsive
 
 - Intégrer un système de paiment
